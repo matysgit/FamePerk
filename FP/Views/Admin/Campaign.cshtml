@@ -1,0 +1,452 @@
+﻿
+@{
+    ViewBag.Title = "Campaign";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/Scripts/app/controllers/AdminCampaignController.js"></script>
+<div class="container" ng-controller="ProjectController" ng-init="fn_DefaultProjectSettings()" ng-cloak>
+
+
+    <!---->
+    <div class="">
+       
+        <div class="card card-full">
+            <div class="card-head filter-bar rounded-0">
+                <div class="form-inline my-2 my-lg-0">
+                    <div class="input-group col-4 p-0">
+                        <h4 class="m-0">Campaign </h4>
+                    </div>
+                    @*<div class="input-group ml-auto col-4 p-0">
+                <input type="text" class="form-control" placeholder="Title" ng-model="ProjectsSearch" aria-label="Text" aria-describedby="basic-addon1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text fa fa-search" id="basic-addon1" ng-click="fn_SearchProjects()"></span>
+                </div>
+            </div>*@
+
+
+                </div>
+                
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <div class="top-tab-holder">
+
+                            <ul class="nav nav-pills" id="myTab" role="tablist">
+
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="aPending" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllProjects('Pending')">Pending </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="aApproved" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllProjects('Approved')">Approved</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="aRejected" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllProjects('Rejected')">Rejected</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="table-responsive" id="divCampaignList">
+
+
+                            <table class="table table-inbox table-hover" id="tblCampaign">
+                                <thead class=" text-primary" >
+                                    <tr>
+                                        <th onclick="sortTable(0)">
+                                            Title
+                                        </th>
+                                        <th onclick="sortTable(1)">
+                                            Duration
+                                        </th>
+                                        <th onclick="sortTable(2)">
+                                            Product Category
+                                        </th>
+                                        <th onclick="sortTable(3)">
+                                            Budget
+                                        </th>
+                                        <th onclick="sortTable(4)">
+                                            Status
+                                        </th>
+
+                                        <th onclick="sortTable(5)">
+                                            Date
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="lst in lstProjects" ng-show="!gridLoader" class="unread">
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">  {{lst.CampaignTitle}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CampaignDuration}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">  {{lst.ProductCategory}}</a>
+                                        </td>
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Budget}}</a>
+                                        </td>
+
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Status}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreatedDate}}</a>
+                                        </td>
+
+                                        @*<td>
+                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
+                        </td>*@
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        
+                        <!--End-->
+                        <!--Tab pannel 1-->
+
+                        <div id="divViewProject" role="tabpanel" aria-labelledby="v-pills-2-tab" novalidate ng-model="CampaignModal">
+                            <div class="form-horizontal border p-4 mb-4 mt-4 viewInfoPage" id="divProposalDetail">
+
+                                <h4 class="border-bottom mb-4 pb-3">Campaign Detail</h4>
+
+                                <div class="">
+                                    <div class="tab-pane-body">
+                                        <div class="ccpg-yt-chnl ">
+                                            <h4> Targeted YouTube Campaign</h4>
+
+                                            <div class="custom-control custom-checkbox custom-checkbox-icon">
+                                                @*<input type="checkbox" class="custom-control-input" id="twitterChnlCheck">*@
+                                                <input type="checkbox" class="custom-control-input" id="YouTubeCheck1" ng-model="chkYouTube" ng-change="fn_ShowYouTubeVideoType()" disabled>
+                                                <label class="custom-control-label" for="YouTubeCheck1"><img class="rounded-circle" width="65" src="~/images/famebot.png" /></label>
+                                            </div>
+                                        </div>
+                                        <div id="divYouTubeVideoType" style="display:none;">
+                                            <div class="ccpg-yt-chnl-type mt-5">
+                                                <h4>YouTube Video Types</h4>
+
+                                                <div class="row justify-content-between m-0">
+
+
+                                                    <div class="col-6 ccpg-yt-chnl-type-box " ng-repeat="obj in YouTubeVideoTypeModal">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" disabled class="custom-control-input" ng-checked="obj.isChecked" name="chkYouTubeType" id="aud_{{$index}}" ng-model="obj.checked">
+                                                            <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}}</label>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="ccpg-supplemental-chnls mt-5">
+                                            <h4> Supplemental Channels</h4>
+
+
+                                            <ul class="list-inline">
+
+                                                <li class="list-inline-item " ng-repeat="obj in SupplementalChannelModal">
+                                                    <div class="custom-control custom-checkbox custom-checkbox-icon" name="{{obj.path}}">
+                                                        <input type="checkbox" disabled ng-checked="obj.isChecked" class="custom-control-input" name="chkSupplementalChannel" id="aud_{{$index}}" ng-model="obj.checked">
+                                                        <label class="custom-control-label" for="aud_{{$index}}"><img class="rounded-circle" width="65" ng-src="{{obj.Path}}" /></label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                    @*<section 2*@
+
+                                    <div class="tab-pane-body">
+                                        <h4 class="mt-5"> Product Details</h4>
+                                        <div class="form-horizontal full-width p-0">
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Product Category *</label>
+                                                    <p class="view-value">{{CampaignModal.ProductCategory}}</p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Product URL *</label>
+                                                    <p class="view-value">{{CampaignModal.ProductURL}}</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Product Photo *</label>
+
+                                                    <a href="javascript:void(0)" title="View" class="btn btn-primary" style="cursor:pointer" target="_blank" ng-click="fn_DownloadDocument(CampaignModal.ProductPhoto)">View Photo</a>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Shipping Products?</label>
+                                                    <div class="d-flex">
+                                                        <div class="custom-control custom-radio mr-3">
+                                                            <input type="radio" disabled class="custom-control-input" id="radioShippingProductsYes" value="true" ng-model="CreateCampaignModal.ShippingProduct" checked name="ShippingProduct">
+                                                            <label class="custom-control-label" for="radioShippingProductsYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio mr-3">
+                                                            <input type="radio" disabled class="custom-control-input" id="radioShippingProductsNo" value="false" ng-model="CreateCampaignModal.ShippingProduct" name="ShippingProduct">
+                                                            <label class="custom-control-label" for="radioShippingProductsNo">No</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-11">
+                                                    <label class="control-label">About Your Product/Service *</label>
+                                                    <p class="view-value">{{CampaignModal.AboutYourProduct}}</p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    @*section 3*@
+                                    <div class="tab-pane-body">
+                                        <h4>Campaign Details</h4>
+                                        <div class="form-horizontal full-width p-0">
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Campaign Title *</label>
+                                                    <p class="view-value">{{CampaignModal.CampaignTitle}}" </p>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">About Your Brand *</label>
+                                                    <p class="view-value">{{CampaignModal.AboutYourBrand}}</p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Campaign Goals*</label>
+                                                    <p class="view-value">{{CampaignModal.CampaignGoal}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-11">
+                                                    <label class="control-label">Campaign Listing Duration *</label>
+
+                                                    <p class="view-value">{{CampaignModal.CampaignDuration}}</p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row mx-0">
+                                                <div class="form-group custom-form-group">
+
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" disabled class="custom-control-input" value="True" id="chkPrivateCampaign" ng-model="PrivateCampaign">
+                                                        <label class="custom-control-label" for="chkPrivateCampaign">Private Campaign (not recommended)</label>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    @*section 4*@
+
+                                    <div class="tab-pane-body">
+
+                                        <h4 class="mb-2">Target Audience</h4>
+
+                                        <div class="form-horizontal full-width p-0">
+                                            <label class="custom-label">Audience Gender</label>
+
+                                            <div class="form-group custom-form-group ">
+                                                <div class="d-flex">
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderAll" ng-model="AudienceGender" checked value="All" name="radio-stacked" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderAll"> All</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderFemale" name="radio-stacked" value="Female" ng-model="AudienceGender" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderFemale">Female</label>
+
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderMale" value="Male" name="radio-stacked" ng-model="AudienceGender" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderMale">Male</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <label class="custom-label">Audience Age</label>
+
+                                            <div class="form-group custom-form-group ">
+                                                <div class="row m-0">
+                                                    <div class="custom-control custom-checkbox col-3 mb-3">
+                                                        <input type="checkbox" disabled class="custom-control-input" name="chkAudienceAge" id="chkAudienceAge1" ng-model="chkAudienceAge1">
+                                                        <label class="custom-control-label" for="chkAudienceAge1">Any Age</label>
+                                                    </div>
+                                                    <div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
+
+                                                        <input type="checkbox" disabled ng-checked="obj.isChecked" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked">
+                                                        <label class="custom-control-label" for="aud_{{$index}}">{{obj.MinValue}} - {{obj.MaxValue}}</label>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                            <h4 class="mb-2">Budget</h4>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Maximum Budget per Content</label>
+                                                    <p class="view-value">{{CampaignModal.Budget}}</p>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    @* End section *@
+
+                                    <div class="form-group text-right" id="divButton">
+                                        <button class="btn btn-primary " ng-click="fn_UpdateCampaign(CampaignModal.CampaignId, 'Approved', 'Pending')"> Approve</button>
+                                        <button class="btn btn-primary " ng-click="fn_UpdateCampaign(CampaignModal.CampaignId, 'Rejected', 'Pending')"> Reject</button>
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_GetHomePage()"> Back </button>
+                                    </div>
+
+
+                                    <div class="form-group text-right" id="divButtonApproved">
+                                        <button class="btn btn-primary " ng-click="fn_UpdateCampaign(CampaignModal.CampaignId, 'Rejected', 'Approved')"> Reject</button>
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_GetAllProjects('Approved')"> Back </button>
+                                    </div>
+
+                                    <div class="form-group text-right" id="divButtonRejected">
+                                        <button class="btn btn-primary " ng-click="fn_UpdateCampaign(CampaignModal.CampaignId, 'Approved', 'Rejected')"> Approve</button>
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_GetAllProjects('Rejected')"> Back </button>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+                            
+                            <!--End-->
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("tblCampaign");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+</script>
+

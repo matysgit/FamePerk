@@ -1,0 +1,123 @@
+﻿@model FP.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+
+    <div class="login-box login-md-box text-left">
+        <a href="#" class="logo">@*<h2>@ViewBag.Title.</h2>*@ Fame Perks</a>
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal full-width", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <h5 class="mt-5">Account Information:</h5>
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class=" row">
+
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.BrandName, new { @class = "form-control", placeholder = "Brand Name" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.Website, new { @class = "form-control", placeholder = "Website" })
+                </div>
+
+            </div>
+
+            <div class=" row">
+
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
+                </div>
+
+            </div>
+
+
+
+            <h5 class="mt-5">Address:</h5>
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.AddressLine1, new { @class = "form-control", placeholder = "Address Line 1" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.AddressLine2, new { @class = "form-control", placeholder = "Address Line 2" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "City" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.State, new { @class = "form-control", placeholder = "State" })
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    @Html.TextBoxFor(m => m.Zip, new { @class = "form-control", placeholder = "Zip" })
+                </div>
+                <div class="form-group col-md-6">
+                    @*@Html.DropDownListFor(m => m.Country, ViewData["Countries"] as SelectList, new
+                   {
+                       @class = "form-control",
+                        placeholder = "Country"
+                   })*@
+
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.Country, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Country, new { @class = "form-control" })
+                </div>
+            </div>*@
+
+
+
+
+
+
+            <h5 class="mt-5">Contact</h5>
+
+            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+            <div class="form-group row">
+                <div class="col-md-12">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
+                </div>
+            </div>
+            <p class="reg-TC-text text-center mt-3"> By signing up you confirm that you accept the <a>Terms & Conditions</a>.</p>
+            <ul class="btn-list text-center">
+                <li><input type="submit" class="btn btn-red" value="Sign Up" /></li>
+
+                <li class="">Already have an account?</li>
+                <li><input type="submit" class="btn " value="Sign in" /></li>
+            </ul>
+
+
+        }
+
+    </div>
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }

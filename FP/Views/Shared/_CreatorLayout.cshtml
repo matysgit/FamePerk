@@ -1,0 +1,98 @@
+﻿
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/angular")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/multiselect")
+
+    @Scripts.Render("~/bundles/safpApp")
+    @{Html.RenderPartial("~/Views/Shared/_UrlVariables.cshtml");}
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+
+    @*@Scripts.Render("~/bundles/jqueryui")*@
+</head>
+<body class="" ng-app="fpApp">
+    <div class="header-backdrop"> </div>
+    <div class="header-main">
+	   <div class=" container top-main-menu text-right"> @Html.Partial("_LoginPartial")</div>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                @Html.ActionLink("Logo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand white" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item d-block d-md-none">
+                            <button class="btn btn-success " type="button">Create Profile</button>
+                        </li>
+                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Creator", new { @class = "nav-link" })</li>
+                        <li class="nav-item mr-3">@Html.ActionLink("Messages", "CreatorMailbox", "Creator", new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Project", "Projects", "Creator", new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Wallet", "Wallet", "Creator", new { @class = "nav-link" })</li>
+                    </ul>
+                    
+                    <ul class="navbar-nav d-none">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" tabindex="-1"><i class="fa fa-2x fa-envelope"></i></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Contact Us</a>
+                                <a class="dropdown-item" href="#">FAQs</a>
+                                <a class="dropdown-item" href="#">Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="body-content">
+        @RenderBody()
+    </div>
+    <script src="~/assets/js/core/jquery.min.js"></script>
+    <script src="~/assets/js/core/popper.min.js"></script>
+    <script src="~/assets/js/core/bootstrap.min.js"></script>
+    <script src="~/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+	
+	  <script>$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+
+$('#YouTubeCheck1').change(function() {
+    $('.ccpg-yt-chnl-type').toggle();
+});
+</script>
+
+    <!--  Notifications Plugin    -->
+    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/paper-dashboard.min.js?v=2.0.0" type="text/javascript"></script>
+    <link href="~/assets/css/bootstrap-dialog.css" rel="stylesheet" />
+    <link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/assets/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/assets/js/bootstrap-dialog.js"></script>
+    <script src="~/assets/js/toastr.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Channel";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/Scripts/app/controllers/ChannelController.js"></script>
+<div class="container-fluid" ng-controller="ChannelController" ng-init="fn_DefaultChannelSettings()" ng-cloak>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="border-bottom: 1px solid #51cbce;">
+                    <h4 class="card-title">Product Category</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <form name="frmChannel" ng-submit="frmChannel.$valid && fn_SaveChannel(ChannelModal)" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Channel Name</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="ChannelModal.Name" placeholder="Category Name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmChannel.$valid">Save</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <hr />
+                    <div class="table-responsive" style="overflow:hidden">
+                        <table class="table" style="border: 1px solid lightgrey;">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                        Category Name
+                                    </th>
+                                    <th>
+                                        Created Date
+                                    </th>
+                                    <th style="text-align:center">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="lst in lstChannel" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Name}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditChannel(lst.ChannelId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveChannel(lst.ChannelId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>
+                                @*<tr ng-repeat="lst in lstChannel" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Name}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditChannel(lst.ChannelId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveChannel(lst.ChannelId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>*@
+                                <tr ng-show="lstChannel.length < 1 && !gridLoader">
+                                    <td colspan="3">
+                                        <span>No record found</span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="gridLoader">
+                                    <td colspan="3">
+                                        <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
