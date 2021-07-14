@@ -1,0 +1,63 @@
+/* CSS Document */
+
+
+
+@mixin respond-to($media) {
+  @if $media == xxsmall {
+     @media only screen  and (max-width: 575px) { @content; }
+  }
+
+  @else if $media == xsmall {
+  @media only screen and (min-width: 576px) and (max-width: 767px) { @content; }
+  }
+  @else if $media == small-screens {
+    @media only screen and (min-width: 768px) and (max-width: 991px) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: 992px) and (max-width: 1023px) { @content; }
+  }
+  @else if $media == large-screens {
+    @media only screen and (min-width: 1024px) and (max-width: 1200px) { @content; }
+  }
+  @else if $media == web-mscreens {
+    @media only screen and (min-width: 992px) { @content; }
+  }
+   @else if $media == web-screens {
+    @media only screen and (min-width: 768px) { @content; }
+  }
+  @else if $media == mobile-md-screens{
+	   @media only screen and (max-width: 767px) { @content; }
+  }
+  
+}
+
+
+
+/*for coment style for tag and its psudo class */
+@mixin setLinkSelectorStyle { 
+  &:hover,  &:active, &:visited , &:focus, &:active:focus{
+        @content;
+    }
+}
+
+/* Sets the style to pseudo selectors AND base default anchor*/
+@mixin setLinkStyleAll {
+  &, &:hover,  &:active, &:visited, &:focus, &:active:focus {
+        @content;
+    }
+}
+/*end*/
+
+
+@mixin prefix($declarations, $prefixes: ()) {
+  @each $property, $value in $declarations {
+    @each $prefix in $prefixes {
+      #{'-' + $prefix + '-' + $property}: $value;
+    }
+  
+    #{$property}: $value;
+  }
+}
+
+
+

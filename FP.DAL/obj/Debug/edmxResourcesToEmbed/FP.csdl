@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="City">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="City1" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ClientInfoes" Relationship="Self.FK_ClientInfo_City" FromRole="City" ToRole="ClientInfo" />
+  </EntityType>
+  <EntityType Name="ClientInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="BrandName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="WebsiteURL" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="StateID" Type="Int32" />
+    <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryID" Type="Int32" />
+    <NavigationProperty Name="City" Relationship="Self.FK_ClientInfo_City" FromRole="ClientInfo" ToRole="City" />
+    <NavigationProperty Name="User" Relationship="Self.FK_ClientInfo_ClientInfo" FromRole="ClientInfo" ToRole="User" />
+    <NavigationProperty Name="Country" Relationship="Self.FK_ClientInfo_Country" FromRole="ClientInfo" ToRole="Country" />
+    <NavigationProperty Name="State" Relationship="Self.FK_ClientInfo_State" FromRole="ClientInfo" ToRole="State" />
+  </EntityType>
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Country1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ClientInfoes" Relationship="Self.FK_ClientInfo_Country" FromRole="Country" ToRole="ClientInfo" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="State1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ClientInfoes" Relationship="Self.FK_ClientInfo_State" FromRole="State" ToRole="ClientInfo" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="RoleID" Type="Int32" />
+    <NavigationProperty Name="ClientInfoes" Relationship="Self.FK_ClientInfo_ClientInfo" FromRole="User" ToRole="ClientInfo" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+  </EntityType>
+  <Association Name="FK_ClientInfo_City">
+    <End Role="City" Type="Self.City" Multiplicity="0..1" />
+    <End Role="ClientInfo" Type="Self.ClientInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ClientInfo">
+        <PropertyRef Name="CityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientInfo_ClientInfo">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="ClientInfo" Type="Self.ClientInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ClientInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientInfo_Country">
+    <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="ClientInfo" Type="Self.ClientInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ClientInfo">
+        <PropertyRef Name="CountryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientInfo_State">
+    <End Role="State" Type="Self.State" Multiplicity="0..1" />
+    <End Role="ClientInfo" Type="Self.ClientInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="State">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ClientInfo">
+        <PropertyRef Name="StateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FPEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cities" EntityType="Self.City" />
+    <EntitySet Name="ClientInfoes" EntityType="Self.ClientInfo" />
+    <EntitySet Name="Countries" EntityType="Self.Country" />
+    <EntitySet Name="Roles" EntityType="Self.Role" />
+    <EntitySet Name="States" EntityType="Self.State" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_ClientInfo_City" Association="Self.FK_ClientInfo_City">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="ClientInfo" EntitySet="ClientInfoes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientInfo_ClientInfo" Association="Self.FK_ClientInfo_ClientInfo">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ClientInfo" EntitySet="ClientInfoes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientInfo_Country" Association="Self.FK_ClientInfo_Country">
+      <End Role="Country" EntitySet="Countries" />
+      <End Role="ClientInfo" EntitySet="ClientInfoes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientInfo_State" Association="Self.FK_ClientInfo_State">
+      <End Role="State" EntitySet="States" />
+      <End Role="ClientInfo" EntitySet="ClientInfoes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Campaign Duration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/Scripts/app/controllers/CampaignDurationController.js"></script>
+<div class="container-fluid" ng-controller="CampaignDurationController" ng-init="fn_DefaultCampaignDurationSettings()" ng-cloak>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="border-bottom: 1px solid #51cbce;">
+                    <h4 class="card-title">Campaign Duration</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <form name="frmCampaignDuration" ng-submit="frmCampaignDuration.$valid && fn_SaveCampaignDuration(CampaignDurationModal)" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Campaign Duration</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="CampaignDurationModal.Duration" placeholder="Campaign Duration" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmCampaignDuration.$valid">Save</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <hr />
+                    <div class="table-responsive" style="overflow:hidden">
+                        <table class="table" style="border: 1px solid lightgrey;">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                        Campaign Duration
+                                    </th>
+                                    <th>
+                                        Created Date
+                                    </th>
+                                    <th style="text-align:center">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="lst in lstCampaignDuration" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Duration}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditCampaignDuration(lst.CampaignDurationId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveCampaignDuration(lst.CampaignDurationId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>
+                           <!-- <tr ng-repeat="lst in lstCampaignDuration" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Duration}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditCampaignDuration(lst.CampaignDurationId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveProductCategory(lst.CampaignDurationId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr> -->
+                                <tr ng-show="lstCampaignDuration.length < 1 && !gridLoader">
+                                    <td colspan="3">
+                                        <span>No record found</span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="gridLoader">
+                                    <td colspan="3">
+                                        <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

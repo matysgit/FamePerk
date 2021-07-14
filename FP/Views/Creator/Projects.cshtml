@@ -1,0 +1,864 @@
+﻿
+@{
+    ViewBag.Title = "Projects";
+    Layout = "~/Views/Shared/_CreatorLayout.cshtml";
+}
+
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+        margin: 10px;
+    }
+
+        .fileUpload input.upload {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+
+    .imgDivProfile {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .imgProfile {
+        border: 1px solid gray;
+        border-radius: 100px;
+        height: 130px;
+        width: 130px;
+    }
+</style>
+
+
+<script src="~/Scripts/app/controllers/ProjectController.js"></script>
+
+<div class="container position-relative" ng-controller="ProjectController" ng-init="fn_DefaultProjectSettings()" ng-cloak>
+    <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
+
+    <!---->
+    <div class="">
+        <div class="page-header">
+            <div class="top-tab-holder">
+
+            </div>
+
+            <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+                @*<li class="nav-item ">
+                        <button class="btn btn-success " type="button">Create Campaign</button>
+                    </li>*@
+
+            </ul>
+
+        </div>
+        <div class="card card-full">
+            <div class="card-head filter-bar rounded-0">
+                <div class="form-inline my-2 my-lg-0">
+                    <div class="input-group col-4 p-0">
+                        <h4 class="m-0">Projects</h4>
+                    </div>
+                    <div class="input-group ml-auto col-4 p-0">
+                        <input type="text" class="form-control" placeholder="Title" id="txtSearch" ng-model="ProjectsSearch" aria-label="Text" aria-describedby="basic-addon1" onclick="fn_SearchProjects()">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fa fa-search" id="basic-addon1" onclick="fn_SearchProjects()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 ">
+
+                        <div class="table-responsive" id="v-pills-1">
+                            <table id="tblProjList" class="table table-inbox table-hover">
+                                <thead class=" text-primary">
+                                    <tr>
+                                        <th onclick="sortTable(0)">
+                                            Title
+                                        </th>
+                                        <th onclick="sortTable(1)">
+                                            Duration
+                                        </th>
+                                        <th onclick="sortTable(2)">
+                                            Product Category
+                                        </th>
+                                        <th onclick="sortTable(3)">
+                                            Budget
+                                        </th>
+
+                                        <th onclick="sortTable(4)">
+                                            Project Status
+                                        </th>
+
+                                        <th onclick="sortTable(5)">
+                                            Proposal Status
+                                        </th>
+
+                                        <th onclick="sortTable(6)">
+                                            Project Date
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="lst in lstProjects" ng-show="!gridLoader" class="unread">
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">  {{lst.CampaignTitle}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CampaignDuration}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">  {{lst.ProductCategory}}</a>
+                                        </td>
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Budget}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Approve}}</a>
+                                        </td>
+
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Status}}</a>
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreatedDate}}</a>
+                                        </td>
+
+                                        @*<td>
+                                                <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
+                                            </td>*@
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+                        <!--End-->
+                        <!--Tab pannel 1-->
+
+                        <div id="divViewProject" role="tabpanel" aria-labelledby="v-pills-2-tab" novalidate ng-model="CampaignModal">
+                            <div class="form-horizontal border p-4 mb-4 mt-4 viewInfoPage" id="divProposalDetail">
+
+                                <h4 class="border-bottom mb-4 pb-3">Project Detail</h4>
+
+                                <div class="">
+                                    <div class="tab-pane-body">
+                                        <div class="ccpg-yt-chnl ">
+                                            <h4> Targeted YouTube Campaign</h4>
+
+                                            <div class="custom-control custom-checkbox custom-checkbox-icon">
+                                                @*<input type="checkbox" class="custom-control-input" id="twitterChnlCheck">*@
+                                                <input type="checkbox" class="custom-control-input" id="YouTubeCheck1" ng-model="chkYouTube" ng-change="fn_ShowYouTubeVideoType()" disabled>
+                                                <label class="custom-control-label" for="YouTubeCheck1"><img class="rounded-circle" width="65" src="~/images/famebot.png" /></label>
+                                            </div>
+                                        </div>
+                                        <div id="divYouTubeVideoType" style="display:none;">
+                                            <div class="ccpg-yt-chnl-type mt-5">
+                                                <h4>YouTube Video Types</h4>
+
+                                                <div class="row justify-content-between m-0">
+
+
+                                                    <div class="col-6 ccpg-yt-chnl-type-box " ng-repeat="obj in YouTubeVideoTypeModal">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" disabled class="custom-control-input" ng-checked="obj.isChecked" name="chkYouTubeType" id="aud_{{$index}}" ng-model="obj.checked">
+                                                            <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}}</label>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="ccpg-supplemental-chnls mt-5">
+                                            <h4> Supplemental Channels</h4>
+
+
+                                            <ul class="list-inline">
+
+                                                <li class="list-inline-item " ng-repeat="obj in SupplementalChannelModal">
+                                                    <div class="custom-control custom-checkbox custom-checkbox-icon" name="{{obj.path}}">
+                                                        <input type="checkbox" disabled ng-checked="obj.isChecked" class="custom-control-input" name="chkSupplementalChannel" id="aud_{{$index}}" ng-model="obj.checked">
+                                                        <label class="custom-control-label" for="aud_{{$index}}"><img class="rounded-circle" width="65" ng-src="{{obj.Path}}" /></label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    @*<section 2*@
+
+                                    <div class="tab-pane-body">
+                                        <h4 class="mt-5"> Product Details</h4>
+                                        <div class="form-horizontal full-width p-0">
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Product Category *</label>
+                                                    <p class="view-value">{{CampaignModal.ProductCategory}}</p>
+
+                                                    @*<select class="form-control" ng-model="CreateCampaignModal.ProductCategoryId" ng-options="item.ProductCategoryId as item.Name for item in ProductCategory">
+                                                            <option value="">{{CampaignModal.ProductCategoryId}}</option>
+                                                        </select>*@
+
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Product URL *</label>
+                                                    <p class="view-value">{{CampaignModal.ProductURL}}</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Product Photo *</label>
+
+                                                    <a href="javascript:void(0)" title="View" class="btn btn-primary" style="cursor:pointer" target="_blank" ng-click="fn_DownloadDocument(CampaignModal.ProductPhoto)">View Photo</a>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Shipping Products?</label>
+                                                    <div class="d-flex">
+                                                        <div class="custom-control custom-radio mr-3">
+                                                            <input type="radio" disabled class="custom-control-input" id="radioShippingProductsYes" value="true" ng-model="CreateCampaignModal.ShippingProduct" checked name="ShippingProduct">
+                                                            <label class="custom-control-label" for="radioShippingProductsYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio mr-3">
+                                                            <input type="radio" disabled class="custom-control-input" id="radioShippingProductsNo" value="false" ng-model="CreateCampaignModal.ShippingProduct" name="ShippingProduct">
+                                                            <label class="custom-control-label" for="radioShippingProductsNo">No</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-11">
+                                                    <label class="control-label">About Your Product/Service *</label>
+                                                    <p class="view-value">{{CampaignModal.AboutYourProduct}}</p>
+
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    @*section 3*@
+                                    <div class="tab-pane-body">
+                                        <h4>Campaign Details</h4>
+                                        <div class="form-horizontal full-width p-0">
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Campaign Title *</label>
+                                                    <p class="view-value">{{CampaignModal.CampaignTitle}}" </p>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">About Your Brand *</label>
+                                                    <p class="view-value">{{CampaignModal.AboutYourBrand}}</p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-12">
+                                                    <label class="control-label">Campaign Goals*</label>
+                                                    <p class="view-value">{{CampaignModal.CampaignGoal}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-11">
+                                                    <label class="control-label">Campaign Listing Duration *</label>
+                                                    @*<select class="form-control" ng-model="CreateCampaignModal.CampaignDurationId" ng-options="item.CampaignDurationId as item.Duration for item in CampaignDuration">*@
+
+                                                    @*<option value="1">7 day</option>
+                                                        <option value="2">10 day</option>*@
+                                                    @*</select>*@
+                                                    <p class="view-value">{{CampaignModal.CampaignDuration}}</p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row mx-0">
+                                                <div class="form-group custom-form-group">
+
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" disabled class="custom-control-input" value="True" id="chkPrivateCampaign" ng-model="PrivateCampaign">
+                                                        <label class="custom-control-label" for="chkPrivateCampaign">Private Campaign (not recommended)</label>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    @*section 4*@
+
+                                    <div class="tab-pane-body">
+
+                                        <h4 class="mb-2">Target Audience</h4>
+
+                                        <div class="form-horizontal full-width p-0">
+                                            <label class="custom-label">Audience Gender</label>
+
+                                            <div class="form-group custom-form-group ">
+                                                <div class="d-flex">
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderAll" ng-model="AudienceGender" checked value="All" name="radio-stacked" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderAll"> All</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderFemale" name="radio-stacked" value="Female" ng-model="AudienceGender" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderFemale">Female</label>
+
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3 col">
+                                                        <input type="radio" disabled class="custom-control-input" id="rdbAudienceGenderMale" value="Male" name="radio-stacked" ng-model="AudienceGender" required>
+                                                        <label class="custom-control-label" for="rdbAudienceGenderMale">Male</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <label class="custom-label">Audience Age</label>
+
+                                            <div class="form-group custom-form-group ">
+                                                <div class="row m-0">
+                                                    @*<div class="custom-control custom-checkbox col-3 mb-3">
+                                                            <input type="checkbox" disabled class="custom-control-input" name="chkAudienceAge" id="chkAudienceAge1" ng-model="chkAudienceAge1">
+                                                            <label class="custom-control-label" for="chkAudienceAge1">Any Age</label>
+                                                        </div>*@
+                                                    <div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
+                                                        @*"selection.indexOf(fruitName) > -1"*@
+                                                        <input type="checkbox" disabled ng-checked="obj.isChecked" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked">
+                                                        @*<input type="checkbox" disabled ng-checked="selection.indexOf(AudienceAgeId) > -1" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked">*@
+
+                                                        <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}} </label>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+
+                                            <h4 class="mb-2">Budget</h4>
+
+                                            <div class="row">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <label class="control-label">Maximum Budget per Content</label>
+                                                    @*<select class="form-control" ng-model="CreateCampaignModal.BudgetId" ng-options="item.BudgetId as item.Title for item in Budget">
+                                                            <option>100$</option>
+                                                        </select>*@
+                                                    <p class="view-value">{{CampaignModal.Budget}}</p>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    @* End section *@
+
+                                    <div class="form-group text-right" id="divButton">
+
+
+                                        <button class="btn btn-primary " ng-click="fn_SubmitProposal(CampaignModal.CampaignId)"> {{SubmitProposal}}</button>
+                                        @*<button class="btn btn-secondary ml-4" ng-click="fn_GetAllProjects()"> Back</button>*@
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_GetHomePage()"> Back </button>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div id="divProposal" class="project-read-message">
+                                <div class="form-horizontal border p-4 pb-0 mb-5">
+                                    <h4 class="border-bottom mb-4 pb-3">Submit Proposal Details</h4>
+                                    <div class="row">
+                                        <div class="form-group custom-form-group col-md-12">
+                                            <label class="control-label">Description</label>
+                                            <textarea class="form-control" rows="5" placeholder="Proposal Description" ng-model="ProjectProposalModal.ProjectDescription"></textarea>
+                                            <div class="invalid-feedback"><span>required</span><span class="pull-right">0/200</span></div>
+                                        </div>
+                                        @*<input type="text" class="form-control" maxlength="100" ng-model="ProjectProposalModal.ProjectDescription" placeholder="Proposal Description" required style="width:200px">*@
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="form-group custom-form-group col-md-6">
+
+                                            <label class="control-label">Payment Mode</label>
+                                            <select class="form-control" ng-model="ProjectProposalModal.PaymentType" ng-change="fn_GetMilestone()">
+                                                <option> Select </option>
+                                                <option value="1"> Fixed Cost </option>
+                                                <option value="2"> MileStone </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div id="divFixedCost" class="">
+                                        <div class="row form-group custom-form-group">
+                                            <div class="col-md-8">
+                                                <p class="">Bid *</p>
+                                                <p class="">What is the full amount you'd like to bid for this project?</p>
+                                            </div>
+                                            <div class="col-md-4 align-self-md-end">
+                                                <!-- If any fix icon are reqired in text box like $ -->
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    <input type="text" id="txtFixedCostAmount" class="form-control" ng-model="ProjectProposalModal.ProposalAmount" required ng-change="fn_GetProjectAmount(ProjectProposalModal.ProposalAmount)">
+                                                </div>
+                                                <!-- End-->
+                                                <div class="invalid-feedback"><span>required</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group custom-form-group">
+
+                                            <div class="col-md-8">
+                                                @*<label class="control-label">FamPark service fee</label>*@
+                                                <p class="">FamPark service fee</p>
+                                            </div>
+                                            <div class="col-md-4 align-self-md-end">
+                                                <!-- If any fix icon are reqired in text box like $ -->
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    <input type="text" id="txtFixedCostAmount1" ng-disabled="FpAmount" ng-model="FpAmount" class="form-control">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row form-group custom-form-group">
+                                            <div class="col-md-8">
+                                                @*<label class="control-label">FamPark service fee</label>*@
+                                                <p class="">You will receive</p>
+                                            </div>
+                                            <div class="col-md-4 align-self-md-end">
+                                                <!-- If any fix icon are reqired in text box like $ -->
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    <input type="text" id="txtFixedCostAmount2" ng-disabled="ReceiveAmount" ng-model="ReceiveAmount" class="form-control">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div id="divMilestone" class="">
+                                        <div class="form-group custom-form-group">
+                                            <label class="control-label">Milestone Type</label>
+                                            <select class="form-control" ng-model="ProjectProposalModal.NoOfMilestone" ng-change="fn_GetMilestone()">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+
+
+                                        <div class="">
+
+                                            <div class="row" id="divMilestone1">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <input type="text" id="txtMilestone1" class="form-control" maxlength="100" ng-model="ProjectProposalModal.Milestone1" placeholder="First Milestrone" required>
+                                                </div>
+
+                                                <div class="form-group custom-form-group col-md-3">
+                                                    <!-- If any fix icon are reqired in text box like $ -->
+                                                    <div class="input-group flex-nowrap">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" id="txtMilestone1Amt" class="form-control" ng-model="ProjectProposalModal.Milestone1Amount" ng-change="fn_GetProjectMilestoneAmount(ProjectProposalModal.Milestone1Amount)">
+                                                    </div>
+                                                    <!-- End-->
+
+                                                </div>
+                                            </div>
+                                            <div class="row" id="divMilestone2">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <input type="text" id="txtMilestone2" class="form-control" maxlength="100" ng-model="ProjectProposalModal.Milestone2" placeholder="Second Milestrone" required>
+                                                </div>
+                                                @*<div class="form-group custom-form-group col-md-3">
+                                                        <input type="text" class="form-control">
+                                                    </div>*@
+                                                <div class="form-group custom-form-group col-md-3">
+                                                    <!-- If any fix icon are reqired in text box like $ -->
+                                                    <div class="input-group flex-nowrap">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" id="txtMilestone2Amt" class="form-control" ng-model="ProjectProposalModal.Milestone2Amount" ng-change="fn_GetProjectMilestoneAmount(ProjectProposalModal.Milestone1Amount)">
+                                                    </div>
+                                                    <!-- End-->
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="divMilestone3">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <input type="text" id="txtMilestone3" class="form-control" maxlength="100" ng-model="ProjectProposalModal.Milestone3" placeholder="Third Milestrone" required>
+                                                </div>
+                                                @*<div class="form-group custom-form-group col-md-3">
+                                                        <input type="text" class="form-control">
+                                                    </div>*@
+                                                <div class="form-group custom-form-group col-md-3">
+                                                    <!-- If any fix icon are reqired in text box like $ -->
+                                                    <div class="input-group flex-nowrap">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" id="txtMilestone3Amt" class="form-control" ng-model="ProjectProposalModal.Milestone3Amount" ng-change="fn_GetProjectMilestoneAmount(ProjectProposalModal.Milestone1Amount)">
+                                                    </div>
+                                                    <!-- End-->
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="divMilestoneAmt">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <p class="">FamPark service fee</p>
+                                                </div>
+                                                <div class="form-group custom-form-group col-md-3">
+                                                    <!-- If any fix icon are reqired in text box like $ -->
+                                                    <div class="input-group flex-nowrap">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" id="txtFixedCostAmount11" ng-disabled="FpAmount" ng-model="FpAmount" class="form-control">
+                                                        @*<label id="txtFixedCostAmount11" ng-disabled="FpAmount" ng-model="FpAmount" class="form-control"> </label>*@
+                                                    </div>
+                                                    <!-- End-->
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="divMilestoneAmt">
+                                                <div class="form-group custom-form-group col-md-6">
+                                                    <p class="">You will receive</p>
+                                                </div>
+
+                                                <div class="form-group custom-form-group col-md-3">
+                                                    <!-- If any fix icon are reqired in text box like $ -->
+                                                    <div class="input-group flex-nowrap">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        @*<label id="txtFixedCostAmount22"  ng-model="ReceiveAmount" class="form-control"></label>*@
+                                                        <input type="text" id="txtFixedCostAmount22" ng-disabled="ReceiveAmount" ng-model="ReceiveAmount" class="form-control">
+
+                                                    </div>
+                                                    <!-- End-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="row">
+                                        <div class="form-group custom-form-group col-md-6">
+
+                                            <label class="control-label">Status</label>
+                                            <select class="form-control" ng-model="ProjectProposalModal.Status" placeholder="Select">
+                                                @*<option> Select </option>*@
+                                                <option value="Draft"> Draft </option>
+                                                <option value="Publish"> Publish </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mailbox-read-attachments-holder" id="divDoc">
+                                        <div class="table-responsive">
+                                            <table class="table table-inbox table-hover">
+                                                <tbody>
+                                                    <tr ng-repeat="lst in lstDocument" ng-show="!gridLoader" class="unread">
+
+                                                        <td>
+                                                            <a ng-click="fn_DownloadDocument(lst.FilePath)" href="javascript:void(0)" title="View" style="cursor:pointer">  {{lst.FileName}}</a>
+                                                            <a href="javascript:void(0)" title="Remove" style="cursor:pointer" ng-click="fn_DeleteDocument(lst.BrandMailFileId)"><i class="fa fa-trash" id="aDelete"></i></a>
+                                                        </td>
+
+
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    @*file upload*@
+                                    <div class="row" id="divFileUpload">
+                                        <div class="form-group custom-form-group col-md-12">
+                                            <label class="control-label"> Upload Doc</label>
+                                            <div class="fileUpload btn btn-primary">
+                                                <span>Upload Doc</span>
+                                                <input type="file" multiple class="upload" onchange="angular.element(this).scope().fn_DocumentUpload(this.files)" />
+                                            </div>
+
+
+
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <th style="width:95%">File Name</th>
+                                                        <th style="width:5%; text-align:center">Action</th>
+                                                    </tr>
+                                                    <tr ng-repeat="lst in lstDocuments" ng-show="!docLoader">
+                                                        <td>
+                                                            <a href="javascript:void(0)">{{lst.FileName}}</a>
+                                                        </td>
+                                                        <td style="text-align:center">
+                                                            <a href="javascript:void(0)" title="View" style="cursor:pointer" target="_blank" ng-click="fn_ViewDocument(lst)"><i class="fa fa-eye"></i></a>
+                                                            <a href="javascript:void(0)" title="Remove" style="cursor:pointer" ng-click="fn_RemoveDocument(lst)"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="lstDocuments.length == 0 && !docLoader">
+                                                        <td colspan="2">
+                                                            <span>No file found</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="docLoader">
+                                                        <td colspan="2">
+                                                            <span>Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*end file upload*@
+
+                                    <div class="form-group custom-form-group">
+                                        <button class="btn btn-primary " ng-show="btnSendUpdateDivShow==true" ng-click="fn_ShowUpdateDiv(ProjectProposalModal.ProjectProposalId, ProjectProposalModal.CampaignId)"> Send Update</button>
+                                        <button class="btn btn-primary" ng-show="ShowSave == true" ng-click="fn_SaveProposal(ProjectProposalModal)" id="btnSave">{{SaveProposal}}</button>
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_ViewProject(ProjectProposalModal.CampaignId)"> Back</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="divSendUpdates" ng-show="ShowSendUpdateDiv==true">
+                                <div class="form-horizontal border p-4 pb-0 mb-5">
+                                    <h4 class="border-bottom mb-4 pb-3">Send Project Update</h4>
+                                    <div class="row">
+                                        <div class="form-group custom-form-group col-md-12">
+                                            <label class="control-label">Description</label>
+                                            <textarea class="form-control" rows="5" placeholder="Update Description" ng-model="ProposalUpdateModal.Description"></textarea>
+                                            <div class="invalid-feedback"><span>required</span><span class="pull-right">0/200</span></div>
+                                        </div>
+                                        @*<input type="text" class="form-control" maxlength="100" ng-model="ProjectProposalModal.ProjectDescription" placeholder="Proposal Description" required style="width:200px">*@
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group custom-form-group col-md-12">
+                                            <label class="control-label">URL</label>
+                                            <textarea class="form-control" rows="1" placeholder="URL" ng-model="ProposalUpdateModal.URL"></textarea>
+                                            <div class="invalid-feedback"><span>required</span><span class="pull-right">0/200</span></div>
+                                        </div>
+                                        @*<input type="text" class="form-control" maxlength="100" ng-model="ProjectProposalModal.ProjectDescription" placeholder="Proposal Description" required style="width:200px">*@
+                                    </div>
+
+
+
+                                    @*file upload*@
+                                    <div class="row" id="divFileUpload">
+                                        <div class="form-group custom-form-group col-md-12">
+                                            <label class="control-label"> Upload Doc</label>
+                                            <div class="fileUpload btn btn-primary">
+                                                <span>Upload Doc</span>
+                                                <input type="file" multiple class="upload" onchange="angular.element(this).scope().fn_DocumentUpload(this.files)" />
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <th style="width:95%">File Name</th>
+                                                        <th style="width:5%; text-align:center">Action</th>
+                                                    </tr>
+                                                    <tr ng-repeat="lst in lstDocuments" ng-show="!docLoader">
+                                                        <td>
+                                                            <a href="javascript:void(0)">{{lst.FileName}}</a>
+                                                        </td>
+                                                        <td style="text-align:center">
+                                                            <a href="javascript:void(0)" title="View" style="cursor:pointer" target="_blank" ng-click="fn_ViewDocument(lst)"><i class="fa fa-eye"></i></a>
+                                                            <a href="javascript:void(0)" title="Remove" style="cursor:pointer" ng-click="fn_RemoveDocument(lst)"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="lstDocuments.length == 0 && !docLoader">
+                                                        <td colspan="2">
+                                                            <span>No file found</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="docLoader">
+                                                        <td colspan="2">
+                                                            <span>Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*end file upload*@
+
+                                    <div class="form-group custom-form-group">
+
+                                        <button class="btn btn-primary" ng-show="btnSendUpdateDivShow==true" ng-click="fn_SendProposalUpdate(ProposalUpdateModal)">Send</button>
+                                        <button class="btn btn-secondary ml-4" ng-click="fn_ViewProject(ProposalUpdateModal.CampaignId)"> Back</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--End-->
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("tblProjList");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    function fn_SearchProjects() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("txtSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblProjList");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+

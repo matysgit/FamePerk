@@ -1,0 +1,282 @@
+﻿
+@{
+    ViewBag.Title = "CreatorMailBox";
+    Layout = "~/Views/Shared/_CreatorLayout.cshtml";
+}
+
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+        margin: 10px;
+    }
+
+        .fileUpload input.upload {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+
+    .imgDivProfile {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .imgProfile {
+        border: 1px solid gray;
+        border-radius: 100px;
+        height: 130px;
+        width: 130px;
+    }
+</style>
+<script src="~/Scripts/app/controllers/MailboxController.js"></script>
+
+@*class="header-backdrop"*@
+<div class="container position-relative" ng-controller="MailboxController" ng-init="fn_DefaultMailboxSettings()" ng-cloak>
+
+    <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
+
+    <!---->
+    <div class="">
+        <div class="page-header">
+            <div class="top-tab-holder">
+
+            </div>
+
+           
+
+        </div>
+        <div class="card card-full">
+            <div class="card-head filter-bar rounded-0">
+                <div class="form-inline my-2 my-lg-0">
+                    <div class="input-group col-4 p-0">
+                        <label>Filter by : </label>
+                        <select class="form-control btn-sort-filter ml-3" ng-model="MailBoxFilter" ng-change="fn_GetAllMailbox(0)">
+                            <option>All</option>
+                            <option>Read</option>
+                            <option>Unread</option>
+                        </select>
+                    </div>
+                    <div class="input-group ml-auto col-4 p-0">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="MailBoxSearch" aria-label="Text" aria-describedby="basic-addon1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fa fa-search" id="basic-addon1" ng-click="fn_SearchMailbox()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 tab-holder messages-tab-holder">
+                        <ul class="nav flex-column  nav-messages-tab">
+                            <li><a class="nav-link">Inbox <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>
+                        </ul>
+                        <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <li class="" style=""><a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllMailbox(0)"><i class="fa fa-fw fa-circle"></i> All</a></li>
+                            <li class="" style=""><a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(1)"><i class="fa fa-fw fa-circle"></i> Proposals</a></li>
+                            <li class="" style=""><a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-3" aria-selected="false" ng-click="fn_GetAllMailbox(2)"><i class="fa fa-fw fa-circle"></i> In Production</a></li>
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(3)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Pending Approval</a></li>
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(4)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Project Updates</a></li>
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(5)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Completed</a></li>
+                        </ul>
+                        <ul class="nav flex-column nav-messages-tab">
+                            <li class="" style=""><a class="nav-link" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1">Sent</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8 pl-md-0  tab-content">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <!--Tab pannel 1-->
+                            <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                                <div class="inbox-body">
+                                    <div class="mail-option row m-0">
+                                        <ul class="list-inline inbox-pagination pull-right mb-0">
+                                            <li class="list-inline-item"><span>1-50 of 234</span></li>
+                                            <li class="list-inline-item">
+                                                <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-inbox table-hover">
+                                            <tbody>
+                                                <tr ng-repeat="lst in lstMailbox" ng-show="!gridLoader" class="unread">
+                                                    <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
+                                                    @*<td>
+
+                                                            <a ng-click="fn_ViewMailbox(lst.BrandMailId)"> {{lst.BrandMailId}} </a>
+                                                        </td>*@
+                                                    <td>
+                                                        <a ng-click="fn_ViewMailbox(lst.BrandMailId)" href="#v-pills-2">  {{lst.Subject}}</a>
+                                                    </td>
+
+                                                    <td>
+                                                        <a ng-click="fn_ViewMailbox(lst.BrandMailId)" href="#v-pills-2">  {{lst.Message}}</a>
+                                                    </td>
+                                                    <td>
+                                                        <a ng-click="fn_ViewMailbox(lst.BrandMailId)" href="#v-pills-2">    {{lst.CreatedDate}}</a>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--End-->
+                            <!--Tab pannel 1-->
+
+                            <div id="divViewmailBox" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                                <div class="mailbox-read">
+                                    <div class="mailbox-read-info">
+                                        <h3><label for="MailboxModal">{{MailboxModal.Subject}}</label></h3>
+
+                                        <h5><label for="MailboxModal">From: {{MailboxModal.MailFrom}}</label> <span class="mailbox-read-time pull-right"><label for="MailboxModal"> {{MailboxModal.CreatedDate}}</label></span></h5>
+                                    </div>
+                                    <div id="divMessage" class="mailbox-read-message">
+
+                                        <label for="MailboxModal">{{MailboxModal.Message}}</label>
+
+                                    </div>
+                                    <div id="divProposalMessage" class="mailbox-read-message">
+
+
+
+                                        <div class="mb-1"><strong>Description :</strong> {{MailboxModal.ProjectDescription}}</div>
+
+                                        <div class="mb-1"><strong>Payment Mode :</strong> {{MailboxModal.PaymentType}}</div>
+                                        <div id="divFixedCost" class="mb-1">
+                                            <strong>Proposal Amount:</strong>{{MailboxModal.ProposalAmount}}
+                                        </div>
+
+                                        <div id="divMilestone">
+                                            <div class="mb-1"><strong>No of Milestone:</strong>{{MailboxModal.NoOfMilestone}}</div>
+                                            <div class="mb-1 table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tr><th>Milestone discription</th><th>Milestone Amount</th></tr>
+                                                    <tr id="lblMilestone1"><td>{{MailboxModal.Milestone1}}</td> <td>{{MailboxModal.Milestone1Amount}}</td></tr>
+                                                    <tr id="lblMilestone2"><td>{{MailboxModal.Milestone2}}</td> <td>{{MailboxModal.Milestone2Amount}}</td></tr>
+                                                    <tr id="lblMilestone3"><td>{{MailboxModal.Milestone3}}</td> <td>{{MailboxModal.Milestone3Amount}}</td></tr>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mailbox-read-attachments-holder" id="divDoc">
+                                        <h3>Attachments</h3>
+                                        <ul class="list-unstyled">
+                                            <li ng-repeat="lst in lstDocument" ng-show="!gridLoader" class="unread">
+                                                <a ng-click="fn_DownloadDocument(lst.FilePath)" href="#v-pills-2">  {{lst.FileName}}</a>
+
+
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+
+                                    <div class="mailbox-read-footer">
+                                        <div class="pull-right">
+                                            <button class="btn btn-outline-primary btn-sm" ng-click="fn_ReplyMailbox(MailboxModal.BrandMailId)"><i class="fa fa-reply"></i> Reply</button>
+                                            @*<button class="btn btn-outline-secondary btn-sm" ><i class="fa fa-share"></i> Forward</button>*@
+                                        </div>
+                                        <button class="btn btn-outline-secondary btn-sm" ng-click="fn_GetAllMailbox(0)"> Back</button>
+
+                                        <button class="btn btn-outline-secondary btn-sm" ng-click="fn_RemoveMailbox(MailboxModal.BrandMailId, MailboxModal.MailTypeId)"><i class="fa fa-trash-o"></i> Delete</button>
+                                        @*<button class="btn btn-outline-secondary btn-sm"><i class="fa fa-print"></i> Print</button>*@
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!--End-->
+                            <!--Start Reply-->
+                            <div id="divReplyMailBox" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                                <form name="frmMailboxModal" ng-submit="fn_ReplyMailboxModal(MailboxModal)" novalidate>
+                                    <div class="mailbox-read">
+
+                                        <div class="mailbox-read-info">
+                                            <h3><label for="MailboxModal" ng-model="MailboxModal.Subject">Re: {{MailboxModal.Subject}}</label></h3>
+
+                                            <h5><label for="MailboxModal">To: {{MailboxModal.MailFrom}}</label> <span class="mailbox-read-time pull-right"><label for="MailboxModal"> {{MailboxModal.CreatedDate}}</label></span></h5>
+                                        </div>
+
+                                        <div class="mailbox-read-message">
+
+                                            <textarea class="form-control" maxlength="1000" ng-model="MailboxModal.Message" placeholder="Type Message" required></textarea>
+
+                                        </div>
+                                        @*file upload*@
+
+                                        <div class="mailbox-read-attachments-holder">
+                                            <div class="col-lg-12">
+
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <th style="width:95%">File Name</th>
+                                                        <th style="width:5%; text-align:center">Action</th>
+                                                    </tr>
+                                                    <tr ng-repeat="lst in lstDocuments" ng-show="!docLoader">
+                                                        <td>
+                                                            <a href="javascript:void(0)">{{lst.FileName}}</a>
+                                                        </td>
+                                                        <td style="text-align:center">
+                                                            <a href="javascript:void(0)" title="View" style="cursor:pointer" target="_blank" ng-click="fn_ViewDocument(lst)"><i class="fa fa-eye"></i></a>
+                                                            <a href="javascript:void(0)" title="Remove" style="cursor:pointer" ng-click="fn_RemoveDocument(lst)"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="lstDocuments.length == 0 && !docLoader">
+                                                        <td colspan="2">
+                                                            <span>No file found</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-show="docLoader">
+                                                        <td colspan="2">
+                                                            <span>Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        @*end file upload*@
+                                    </div>
+                                    <div class="mailbox-read-footer">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="fn_GetAllMailbox(0)"><i class="fa fa-times"></i> Cancel</button>
+                                        <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!frmMailboxModal.$valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+
+                                        <div class="fileUpload btn btn-primary btn-sm m-0" style="float: right;">
+                                            <i class="fa fa-paperclip"></i>
+                                            <span>Upload Doc</span>
+                                            <input type="file" multiple class="upload" onchange="angular.element(this).scope().fn_DocumentUpload(this.files)" />
+                                        </div>
+                                    </div>
+                                    @*<div class="clearfix"></div>*@
+                                </form>
+                            </div>
+
+                            <!--end reply-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+@*<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/easing.js"></script>*@
+
+<!--<script type="text/javascript" src="js/script.js"></script>-->

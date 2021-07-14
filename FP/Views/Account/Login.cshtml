@@ -1,0 +1,72 @@
+﻿@using FP.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+
+<div class="login-box">
+    <a href="#" class="logo">@*<h2>@ViewBag.Title.</h2>*@ Fame Perks</a>
+    <section id="loginForm">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal  full-width", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @*<h4>Use a local account to log in.</h4>*@
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @*@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })*@
+                <div class="col-md-12">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label"  })*@
+                <div class="col-md-12">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class=" col-md-12">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>
+                </div>
+            </div>
+
+
+            @* Enable this once you have account confirmation enabled for password reset functionality
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>*@
+
+
+            <ul class="btn-list">
+                <li><input type="submit" value="Log in" class="btn btn-red" /></li>
+                <li class="forgot-password"><a href="">Forgot Password</a></li>
+                <li class="no-ac">No account yet?</li>
+
+                <li> @Html.ActionLink("Sign Up As a Brand", "Register", null, new { @class = "btn btn-md" })</li>
+                <li>
+                    @Html.ActionLink("Sign Up As a Creator", "", null, new { @class = "btn btn-md" })
+                </li>
+            </ul>
+            <p>&copy; @DateTime.Now.Year - Famebit</p>
+        }
+    </section>
+
+    @*<section id="socialLoginForm">
+        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+    </section>*@
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

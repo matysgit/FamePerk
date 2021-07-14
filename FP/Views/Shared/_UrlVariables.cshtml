@@ -1,0 +1,162 @@
+﻿<script type="text/javascript">
+
+     //Product Category Url Section
+    var $_ProductCategory = {
+        PageUrl : "@Url.Action("ProductCategory", "Admin")",
+        Get : "@Url.Action("GetProductCategoryList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveProductCategory", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetProductCategoryById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveProductCategory", "Admin", new { @Area  ="" })"
+    }
+
+    var $_CampaignDuration = {
+        PageUrl : "@Url.Action("CampaignDuration", "Admin")",
+        Get : "@Url.Action("GetCampaignDurationList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveCampaignDuration", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetCampaignDurationById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveCampaignDuration", "Admin", new { @Area  ="" })"
+    }
+
+    var $_CampaignType = {
+        PageUrl : "@Url.Action("CampaignType", "Admin")",
+        Get : "@Url.Action("GetCampaignTypeList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveCampaignType", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetCampaignTypeById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveCampaignType", "Admin", new { @Area  ="" })"
+    }
+
+    var $_Budget = {
+        PageUrl : "@Url.Action("Budget", "Admin")",
+        Get : "@Url.Action("GetBudgetList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveBudget", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetBudgetById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveBudget", "Admin", new { @Area  ="" })"
+    }
+
+    var $_AudienceAge = {
+        PageUrl : "@Url.Action("AudienceAge", "Admin")",
+        Get : "@Url.Action("GetAudienceAgeList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveAudienceAge", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetAudienceAgeById", "Admin", new { @Area  ="" })",
+        Remove: "@Url.Action("RemoveAudienceAge", "Admin", new { @Area  ="" })",
+        GetAllClient : "@Url.Action("GetAllClient", "Admin", new { @Area  ="" })",
+        EditClient : "@Url.Action("EditClient", "Admin", new { @Area  ="" })"
+    }
+
+    var $_Channel = {
+        PageUrl : "@Url.Action("Channel", "Admin")",
+        Get : "@Url.Action("GetChannelList", "Admin", new { @Area  ="" })",
+        Save : "@Url.Action("SaveChannel", "Admin", new { @Area  ="" })",
+        Edit : "@Url.Action("GetChannelById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveChannels", "Admin", new { @Area  ="" })"
+    }
+
+
+     var $_Mailbox = {
+        PageUrl : "@Url.Action("Mailbox", "Client")",
+        Get : "@Url.Action("GetMailboxList", "Client", new { @Area  ="" })",
+        Save : "@Url.Action("SaveMailbox", "Client", new { @Area  ="" })",
+        Edit : "@Url.Action("GetMailboxById", "Client", new { @Area  ="" })",
+         Remove: "@Url.Action("RemoveMailboxs", "Client", new { @Area  ="" })",
+         View: "@Url.Action("GetMailboxById", "Client", new { @Area  ="" })",
+         Search: "@Url.Action("GetMailBoxByText", "Client", new { @Area  ="" })",
+         UploadDocument : "@Url.Action("UploadDocuments", "Client", new { @Area  ="" })",
+         RemoveDocument: "@Url.Action("RemoveDocument", "Client", new { @Area  ="" })",
+         GetDocument: "@Url.Action("GetDocument", "Client", new { @Area  ="" })",
+         DownloadDocument: "@Url.Action("DownloadDocument", "Client", new { @Area  ="" })",
+         ApproveProposal: "@Url.Action("ApproveProposal", "Client", new { @Area  ="" })",
+         SendProposalUpdate: "@Url.Action("SendProposalUpdate", "Client", new { @Area  ="" })",
+         GetCreatorInfoMail: "@Url.Action("GetCreatorInfoMail", "Client", new { @Area  ="" })",
+         GetUnReadMsg: "@Url.Action("GetUnReadMsg", "Client", new { @Area  ="" })"
+     }
+
+    var $_Creator = {
+        PageUrl: "@Url.Action("Index", "Creator")",
+          GetCreatorList : "@Url.Action("GetCreatorList", "Creator", new { @Area  ="" })",
+        Get: "@Url.Action("GetCreatorInfo", "Creator", new { @Area  ="" })",
+        GetCreatorInfo : "@Url.Action("GetCreatorInfoForClient", "Creator", new { @Area  ="" })",
+        Save: "@Url.Action("SaveCreator", "Creator", new { @Area  ="" })",
+        GetCountry: "@Url.Action("GetCountry", "Creator", new { @Area  ="" })",
+          UploadDocument : "@Url.Action("UploadDocuments", "Creator", new { @Area  ="" })",
+         RemoveDocument: "@Url.Action("RemoveDocument", "Creator", new { @Area  ="" })",
+         GetDocument: "@Url.Action("GetDocument", "Creator", new { @Area  ="" })",
+         DownloadDocument: "@Url.Action("DownloadDocument", "Creator", new { @Area  ="" })",
+        GetImg: "@Url.Action("GetProfileImg", "Creator", new { @Area  ="" })",
+        GetCampaignList: "@Url.Action("GetCampaignListForCreator", "Creator", new { @Area  ="" })",
+        GetSupplementalChannel: "@Url.Action("GetSupplementalChannelList", "Creator", new { @Area  ="" })",
+          GetYouTubeType: "@Url.Action("GetYouTubeTypeList", "Creator", new { @Area  ="" })",
+        GetCampaignByFillter: "@Url.Action("GetCampaignByFillter", "Creator", new { @Area  ="" })",
+        GetCreatorByFillter: "@Url.Action("GetCreatorByFillter", "Creator", new { @Area  ="" })",
+         GetCreatorFeedBack : "@Url.Action("GetCreatorFeedBack", "Creator", new { @Area  ="" })"
+            @* Save: "@Url.Action("SaveWalletDetails", "Creator", new { @Area  ="" })",
+            Edit : "@Url.Action("GetWalletAmountById", "Creator", new { @Area  ="" })",
+            Remove : "@Url.Action("RemoveWalletAmount", "Creator", new { @Area  ="" })*@
+    }
+
+    @*var $_Country = {
+        Get: "@Url.Action("GetCountry", "Admin", new { @Area  ="" })"
+    }*@
+
+    var $_Level = {
+           PageUrl : "@Url.Action("Level", "Admin")",
+        Get: "@Url.Action("GetLevel", "Admin", new { @Area  ="" })",
+        Save: "@Url.Action("SaveLevel", "Admin", new { @Area  ="" })",
+          Edit : "@Url.Action("GetLevelById", "Admin", new { @Area  ="" })",
+        Remove : "@Url.Action("RemoveLevel", "Admin", new { @Area  ="" })"
+    }
+
+    var $_Project = {
+        PageUrl : "@Url.Action("Projects", "Client")",
+        Get: "@Url.Action("GetProjectList", "Client", new { @Area  ="" })",
+        Edit: "@Url.Action("GetProjectById", "Client", new { @Area  ="" })",
+        Save : "@Url.Action("SaveProposal", "Client", new { @Area  ="" })",
+        GetProposal: "@Url.Action("GetProposal", "Client", new { @Area  ="" })",
+         UploadDocument : "@Url.Action("UploadProposalDocuments", "Client", new { @Area  ="" })",
+         RemoveDocument: "@Url.Action("RemoveProposalDocument", "Client", new { @Area  ="" })",
+         GetDocument: "@Url.Action("GetProposalDocument", "Client", new { @Area  ="" })",
+        DownloadDocument: "@Url.Action("DownloadDocument", "Client", new { @Area  ="" })",
+
+        EditProposal: "@Url.Action("GetProjectProposalById", "Creator", new { @Area  ="" })",
+        GetProposalDocument: "@Url.Action("GetProposalDocumentById", "Creator", new { @Area  ="" })",
+        DeleteDocument: "@Url.Action("DeleteDocument", "Creator", new { @Area  ="" })",
+        GetAllProposal: "@Url.Action("GetAllProposal", "Client", new { @Area  ="" })",
+        RemoveProposal: "@Url.Action("RemoveProposal", "Client", new { @Area  ="" })",
+        SendProposalUpdate: "@Url.Action("SendProposalUpdate", "Creator", new { @Area  ="" })"@*,
+        RemoveCampaign: "@Url.Action("RemoveCampaign", "Client", new { @Area  ="" })"*@
+    }
+
+    var $_WalletDetails = {
+            PageUrl : "@Url.Action("Wallet", "Client")",
+            Get: "@Url.Action("GetWalletAmountList", "Client", new { @Area  ="" })",
+            Save: "@Url.Action("SaveWalletDetails", "Client", new { @Area  ="" })",
+            Edit : "@Url.Action("GetWalletAmountById", "Client", new { @Area  ="" })",
+            Remove : "@Url.Action("RemoveWalletAmount", "Client", new { @Area  ="" })"
+    }
+
+     var $_BankDetails = {
+            PageUrl : "@Url.Action("BankDetails", "Client")",
+            Get: "@Url.Action("GetBankList", "Client", new { @Area  ="" })",
+            Save: "@Url.Action("SaveBankDetails", "Client", new { @Area  ="" })",
+            Edit : "@Url.Action("GetBankDetailById", "Client", new { @Area  ="" })",
+            Remove : "@Url.Action("RemoveBank", "Client", new { @Area  ="" })"
+    }
+
+    var $_CreateCampaign = {
+            PageUrl : "@Url.Action("CreateCampaign", "Client")",
+        Save: "@Url.Action("SaveCampaign", "Client", new { @Area  ="" })",
+        UploadImage: "@Url.Action("UploadImage", "Client", new { @Area  ="" })"
+    }
+
+    var $_UploadImage = "@Url.Action("UploadImage", "Creator", new { @Area  ="" })"
+     @*var $_UploadDocument = "@Url.Action("UploadDocuments", "Home", new { @Area  ="" })"*@
+    var $_RemoveDocument = "@Url.Action("RemoveDocument", "Home", new { @Area  ="" })"
+
+
+    var $_AdminCampaign = {
+        PageUrl : "@Url.Action("Campaign", "Admin")",
+        Get: "@Url.Action("GetCampaignList", "Admin", new { @Area  ="" })",
+        Edit: "@Url.Action("GetCampaignById", "Admin", new { @Area  ="" })",
+        Update: "@Url.Action("UpdateCampaignById", "Admin", new { @Area  ="" })"
+    }
+
+</script>

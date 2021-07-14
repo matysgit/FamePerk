@@ -1,0 +1,353 @@
+﻿
+@{
+    ViewBag.Title = "Creator";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+    <style>
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+            .fileUpload input.upload {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+            }
+
+        .imgDivProfile {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .imgProfile {
+            border: 1px solid gray;
+            border-radius: 100px;
+            height: 130px;
+            width: 130px;
+        }
+    </style>
+
+    <script src="~/Scripts/app/controllers/ClientCreatorController.js"></script>
+    <div class="container position-relative" ng-controller="ClientCreatorController" ng-init="fn_DefaultCreatorSettings()" ng-cloak>
+        <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
+
+
+        <div class="page-header">
+            <div class="top-tab-holder">
+
+                <ul class="nav nav-pills" id="myTab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Discover</a>
+                    </li>
+                    @*<li class="nav-item">
+                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Hired</a>
+                    </li>*@
+
+                </ul>
+            </div>
+
+            @*<ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+                <li class="nav-item ">
+                    <button class="btn btn-success " type="button">Create Campaign</button>
+                </li>
+
+            </ul>*@
+
+        </div>
+        <div class="card card-full" id="divAllCreator">
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <!--Tab pannel 1-->
+                            <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                                <div class="row">
+                                    <div class="col-md-4 order-md-last filter-holder">
+
+                                        <!--Filters Start-->
+                                        @*<div class="filter-box">
+                                            <h4 class="filter-box-title">AUDIENCE GENDER</h4>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="customControlValidation7" name="radio-stacked" required>
+                                                <label class="custom-control-label" for="customControlValidation7"> All</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="customControlValidation8" name="radio-stacked" required>
+                                                <label class="custom-control-label" for="customControlValidation8"> Male</label>
+
+                                            </div>
+                                            <div class="custom-control custom-radio ">
+                                                <input type="radio" class="custom-control-input" id="customControlValidation9" name="radio-stacked" required>
+                                                <label class="custom-control-label" for="customControlValidation9"> Female</label>
+                                            </div>
+                                        </div>*@
+
+                                        <div class="filter-box">
+                                            <h4 class="filter-box-title">PRIMARY AUDIENCE AGE</h4>
+                                            @*<div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="customControlAge1" name="radio-stacked" required>
+                                                <label class="custom-control-label" for="customControlAge1">  Any Age</label>
+                                            </div>*@
+                                            @*<div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-radio">*@
+                                            <input type="radio" class="custom-control-input custom-checkbox" name="radio-stacked" id="aud_{{$index}}" ng-model="obj.checked" @*ng-checked="obj.isChecked"*@ required ng-change="GetCreatorByFillter(CreatorFillterModal)">
+                                            @*<input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">*@
+                                            @*<label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}}</label>*@
+
+                                            <select class="form-control" ng-model="CreatorFillterModal.TargetAudienceId" ng-options="item.AudienceAgeId as item.Title for item in AudienceAgeModal" ng-change="GetCreatorByFillter(CreatorFillterModal)">
+                                                <option value="">Select Age</option>
+                                                @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
+
+                                            </select>
+                                            @*</div>*@
+
+
+                                        </div>
+
+
+                                        <div class="filter-box">
+                                            <h4 class="filter-box-title">CREATOR'S COUNTRY</h4>
+                                            @*<select class="form-control"><option>All</option></select>*@
+
+                                            <select class="form-control" ng-model="CreatorFillterModal.CountyId" ng-options="item.CountryId as item.Name for item in Country" ng-change="GetCreatorByFillter(CreatorFillterModal)">
+                                                <option value="">All</option>
+                                                @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
+
+                                            </select>
+                                        </div>
+
+
+                                        <!--End-->
+                                    </div>
+                                    <div class="col-md-8 order-md-1">
+                                        <div class="creators-grid">
+                                            <h4 class="top-note-msg text-center">Here are some of our over 39,000 Creators. @*<a class="btn-link" href="#">Create a campaign</a>to start inviting!*@ </h4>
+                                            <div class="row">
+                                                <div class="col-md-6" ng-repeat="obj in CreatorModal">
+                                                    <div class="creator-card">
+                                                        <div class="creator-card-title">
+                                                            @*<div class="creator-card-title-media"><a class="creator-card-title-img" href="#" style="background-image: url(https://thumbs.famebit.com/1189b5262bdc8f86c26a1ebc01fa019db54fbc60e05b8364b52f7af4d4879fe0.jpg);"></a></div>*@
+
+                                                            <div class="creator-card-title-media">
+                                                                <img class="imgProfile" ng-src="{{obj.ProfileImage}}" /> <br />
+                                                                <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                                                            </div>
+
+                                                            <div class="creator-card-title-text">
+                                                                @*<a class="creator-card-name" href="#">User Name</a>*@
+
+                                                                <h5 class="creator-card-name">{{obj.FullName}}</h5>
+                                                                <h5 class="creator-card-name">Gender : {{obj.Gender}}</h5>
+                                                                <h5 class="creator-card-name">Age : {{obj.DOB}}</h5>
+                                                                @*<h5 class="creator-card-name">Language : {{obj.Language}}</h5>*@
+                                                                @*<div class="creator-card-rating"><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i><i class="fa fa-star"></i></div>*@
+                                                                @*<p> Tech</p>
+                                                                <p> Unknown</p>*@
+                                                            </div>
+                                                        </div>
+
+
+
+
+                                                        <ul class="list-unstyled creator-card-body">
+                                                            <li class="d-flex justify-content-between"><span>Language  </span><strong>{{obj.Language}}</strong></li>
+                                                            <li class="d-flex justify-content-between"><span>Categories  </span><strong>{{obj.Categories}}</strong></li>
+
+                                                            <li class="d-flex justify-content-between">
+                                                                <span>Channels Offered</span>
+                                                                <div class="social-chnl-list"><a class="fa fa-youtube-play"></a> <a class="fa fa-facebook"></a><a class="fa fa-twitter"></a><a class="fa fa-instagram"></a></div>
+                                                            </li>
+                                                            <li class="d-flex justify-content-between"><span>Total Reach</span><strong>97.6K</strong></li>
+                                                            <li class="d-flex justify-content-between"><span>Total Reach</span><strong>97.6K</strong></li>
+                                                        </ul>
+
+                                                        <div class="read-more p-4 text-center">
+                                                            @*<a class="btn btn-success mb-3 mb-sm-0 mr-sm-2" href="#">Send Invite</a>
+                                                            <a class="btn btn-primary mb-3 mb-sm-0" href="#">View Profile</a>*@
+                                                            <button class="btn btn-primary mb-3 mb-sm-0" ng-click="fn_ViewCreatorProfile(obj.UserId)"> View Profile</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End-->
+                            <!--Tab pannel 2-->
+                            <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
+
+                                <div class="tab-pane-body"></div>
+
+                            </div>
+                            <!--End-->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*profile creator*@
+        <div class="card card-full" id="divCreatorProfile">
+            <div class="card-head filter-bar rounded-0">
+                <div class="form-inline my-2 my-lg-0">
+                    Basic Profile
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 order-md-2">
+
+                        <div class="imgDivProfile mt-md-5">
+                            <img class="imgProfile" ng-src="{{imgProfile}}" /> <br />
+                            <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                            @*<div class="fileUpload btn btn-primary" style="text-align: center;" ng-show="!imgLoader">
+                                <span>Upload Image</span>
+                                <input type="file" class="upload" onchange="angular.element(this).scope().fn_ImageUpload(this.files)" accept="image/png, image/jpeg, image/gif" />
+                            </div>*@
+                        </div>
+                        <div class="divFeedBack">
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Feedback</label>
+                                @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
+                                <div ng-repeat="obj in CreatorFeedbackModal" class="custom-control">
+
+                                    <input type="text" class="custom-control-input" name="txtFeedback" id="fed_{{$index}}" disabled>
+                                    <label class="control-label" for="fed_{{$index}}">* {{obj.Feedback}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 order-md-1">
+                        <form name="frmCreatorModal" ng-submit="fn_SaveCreatorModal(CreatorModal)" novalidate>
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="form-group custom-form-group col-lg-12">
+                                        <label class="control-label">Full Name</label>
+                                        @*<input type="text" class="form-control" ng-model="CreatorModal.FullName" maxlength="1000" placeholder="" required width="20">*@
+                                        <label class="form-control">{{CreatorModal.FullName}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group custom-form-group col-lg-12">
+                                        <label class="control-label">Gender</label>
+                                        @*<md-datepicker ng-model="CreatorModal.myDate" md-placeholder="Enter date"></md-datepicker>*@
+                                        <input type="text" id="txtDOB" class="form-control datepicker" ng-model="CreatorModal.Gender" maxlength="1000" placeholder="" required width="20" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group custom-form-group col-lg-12">
+                                        <label class="control-label">Age</label>
+                                        @*<md-datepicker ng-model="CreatorModal.myDate" md-placeholder="Enter date"></md-datepicker>*@
+                                        <input type="text" id="txtDOB" class="form-control datepicker" ng-model="CreatorModal.DOB" maxlength="1000" placeholder="" required width="20" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">State</label>
+                                    @*<label class="form-control" >{{CreatorModal.State}}</label>*@
+                                    <input type="text" class="form-control" ng-model="CreatorModal.State" maxlength="1000" placeholder="" required width="20" disabled>
+                                </div>
+
+
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Country</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Message" maxlength="1000" placeholder="" required width="20">*@
+                                    <select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country" disabled>
+                                        <option value="0" label="Please Select Country"></option>
+                                        @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
+
+                                    </select>
+                                </div>
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Languages</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20" multiple>*@
+                                    <textarea class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20" disabled></textarea>
+                                </div>
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">YouTube</label>
+                                    <label class="form-control">{{CreatorModal.YouTube}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="1000" placeholder="" required width="20" disabled>
+                                    *@
+                                </div>
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Instagram</label>
+                                    <label class="form-control" disabled>{{CreatorModal.Instagram}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Instagram" maxlength="1000" placeholder="" required width="20" disabled>*@
+                                </div>
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Facebook</label>
+                                    <label class="form-control" disabled>{{CreatorModal.Facebook}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Facebook" maxlength="1000" placeholder="" required width="20">*@
+                                </div>
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Minimum Budgeted Project</label>
+                                    <label class="form-control" disabled>{{CreatorModal.MinimumBudgetedProject}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.MinimumBudgetedProject" maxlength="1000" placeholder="" required width="20">*@
+                                </div>
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Summary</label>
+                                    <label class="form-control">{{CreatorModal.Summary}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Summary" maxlength="1000" placeholder="" width="20">*@
+                                </div>
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">PastWork Experience</label>
+                                    <label class="form-control">{{CreatorModal.PastWorkExperience}}</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.PastWorkExperience" maxlength="1000" placeholder="" width="20">*@
+                                </div>
+
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Categories</label>
+                                    <div ng-repeat="obj in ProductCategory" class="custom-control custom-checkbox col-3 mb-3">
+
+                                        <input type="checkbox" class="custom-control-input" name="chkCategories" id="cat_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked" disabled>
+                                        <label class="custom-control-label" for="cat_{{$index}}">{{obj.Name}} </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group custom-form-group">
+                                    <label class="control-label">Target Audience Age</label>
+                                    @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
+                                    <div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
+
+                                        <input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked" disabled>
+                                        <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group custom-form-group text-right">
+                                    @*<button type="submit" ng-disabled="!frmCreatorModal.$valid" class="btn btn-primary">Update</button>*@
+
+                                    <button type="button" ng-click="fn_GetCreatorList()" class="btn btn-primary">Back</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+

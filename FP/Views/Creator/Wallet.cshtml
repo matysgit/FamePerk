@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Wallet";
+    Layout = "~/Views/Shared/_CreatorLayout.cshtml";
+}
+
+<script src="~/Scripts/app/controllers/WalletDetailsController.js"></script>
+<div class="container position-relative" ng-controller="WalletDetailsController" ng-init="fn_DefaultWalletSettings()" ng-cloak>
+
+    <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
+    <div class="page-header">
+        <div class="top-tab-holder">
+
+        </div>
+
+        <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+            <li class="nav-item ">
+                <!--<button class="btn btn-success " type="button">Create Campaign</button>-->
+            </li>
+
+        </ul>
+
+    </div>
+    <div class="card full-width">
+        <div class="card-header">
+            <h4 class="card-title">Wallet Details</h4>
+        </div>
+        <div class="card-body">
+            <h5>   <label class="border-bottom mb-4 pb-3">Total Available  Amount : </label><label class="border-bottom mb-4 pb-3" ng-model="TotalAmount"> {{TotalAmount}}</label></h5>
+
+            <div class="form-horizontal border p-4 mb-5 mt-4">
+                <h5 class="border-bottom mb-4 pb-3">Add Amount Details</h5>
+
+                <form name="frmWallet" ng-submit="frmWallet.$valid && fn_SaveWalletDetails(WalletAmountModal)" novalidate>
+
+                    <div class="form-inline justify-content-center my-4">
+                        <div class="form-group d-flex">
+                            <label class="mr-3">Add Amount</label>
+                            <input type="text" class="form-control" maxlength="100" ng-model="WalletAmountModal.Amount" placeholder="Amount" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmWallet.$valid">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="form-horizontal px-0">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th class="w-50">
+                                    S NO.
+                                </th>
+                                <th class="w-25">
+                                    Amount
+                                </th>
+                                <th class="w-25">
+                                    Uploaded Date
+                                </th>
+
+                                @*<th>
+                                        Uploaded By
+                                    </th>*@
+
+                                @*<th style="text-align:center">
+                                        Action (Edit/Delete)
+                                    </th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat=" lst in lstWalletAmount" ng-show="!gridLoader">
+
+                                <td>{{ $index + 1 | number }}</td>
+
+                                <td>
+                                    {{lst.Amount}}
+                                </td>
+                                <td>
+                                    {{lst.UploadDate}}
+                                </td>
+                                @*<td>
+                                        {{lst.UploadedBy}}
+                                    </td>*@
+                                @*<td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_Edit_WalletDetails(lst.ID)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveWalletAmount(lst.ID)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>*@
+                            </tr>
+
+                            <tr ng-show="lstWalletAmount.length < 1 && !gridLoader">
+                                <td colspan="3">
+                                    <span>No record found</span>
+                                </td>
+                            </tr>
+                            <tr ng-show="gridLoader">
+                                <td colspan="3">
+                                    <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+

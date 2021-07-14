@@ -1,0 +1,74 @@
+/*footer*/
+.footer{
+	color:#fff;
+	padding:90px 0 15px;
+	position:relative;	
+	background: #1e1f22;	
+    overflow: hidden;
+	@include respond-to(xxsmall){text-align:center;} 
+	/*color:#color: #00A3DA;*/
+	
+  	 p,a,li{font-size:12px; margin:0;     color: rgba(255, 255, 255, 0.3);
+	  &:hover{color: rgba(255, 255, 255, 0.5)}
+	 }
+	
+	.text-right{@include respond-to(xxsmall){ text-align:center;}}	
+	
+	form {
+		position:relative;
+		input[type=email] {
+			width: calc(100% - 0px);
+			background: none;
+			border: none;
+			border-bottom: 1px solid #00A3DA;
+			padding-bottom: 10px;
+			text-transform: uppercase;
+			color: #fff;
+			font-size: 1.3em;
+			letter-spacing: 0.15em;
+			outline: 0;
+			padding-right: 15px;
+			}
+			
+			button{
+					background: transparent;
+					border: 0;
+					color: #00a3da;
+					position: absolute;
+					right: 5px;
+				}
+	}
+	
+	.social li {
+			display: inline-block;
+			margin: 0 12px;
+			 >a {
+				color: #fff;
+				font-size: 1em;
+				&:hover {
+					color: #00A3DA;
+				}
+			} /*li*/
+		}  /*/.social*/
+	
+	.foot-left{
+		
+		h1{   
+			font-size: 0.8em;
+			letter-spacing: 0.07em;
+			color: #00A3DA;
+			text-transform: uppercase;
+			margin-bottom: 15px;
+			font-weight:normal;
+			}
+	
+		
+		}	
+
+    .foot-right{
+		padding-top:15px;
+		h4{    color: rgba(255, 255, 255, 0.5);font-size: 1em;}
+	}
+} /*---//footer--*/
+
+

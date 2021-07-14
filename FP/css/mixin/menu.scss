@@ -1,0 +1,32 @@
+
+	
+
+
+
+.navbar {
+	background:#fff;
+	    @include respond-to(mobile-md-screens){padding: 15px;}
+ @include respond-to(web-screens){ height: 120px;}	
+	
+	>*{ position:relative;}	
+	a.navbar-brand {
+		
+		font-size:20px;
+		font-weight: 900;
+		@include respond-to(web-screens){    
+			font-size: 25px;
+			margin-right:50px;
+	}}
+	
+	
+}
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    padding: 5px 15px;
+	&.btn{ color:#fff; max-width:100px;  border-radius:50px; font-weight:600; font-size:16px;
+	@include respond-to(web-screens){ margin-left:15px;}
+	}
+}
+   
+

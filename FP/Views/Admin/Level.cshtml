@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Level";
+    Layout = "~/Views/Shared/_CreatorLayout.cshtml";
+}
+<script src="~/Scripts/app/controllers/LevelController.js"></script>
+
+<div class="container-fluid" ng-controller="LevelController" ng-init="fn_DefaultLevelSettings()" ng-cloak>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="border-bottom: 1px solid #51cbce;">
+                    <h4 class="card-title">Level</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <form name="frmLevel" ng-submit="frmLevel.$valid && fn_SaveLevel(LevelModal)" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Title</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="LevelModal.Title" placeholder="Title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Start Range</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="LevelModal.StartRange" placeholder="StartRange" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">End Range</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="LevelModal.EndRange" placeholder="EndRange" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Active : </label>
+                                        <select class="form-control btn-sort-filter ml-3" ng-model="LevelModal.IsActive" >
+                                            <option value="1">True</option>
+                                            <option value="0">False</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmLevel.$valid">{{button}}</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <hr />
+                    <div class="table-responsive" style="overflow:hidden">
+                        <table class="table" style="border: 1px solid lightgrey;">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        StartRange
+                                    </th>
+                                    <th>
+                                        EndRange
+                                    </th>
+                                    <th>
+                                        Active
+                                    </th>
+                                    <th style="text-align:center">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="lst in lstLevel" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Title}}
+                                    </td>
+                                    <td>
+                                        {{lst.StartRange}}
+                                    </td>
+                                    <td>
+                                        {{lst.EndRange}}
+                                    </td>
+                                    <td>
+                                        {{lst.IsActive}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditLevel(lst.LevelId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveLevel(lst.LevelId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>
+                                @*<tr ng-repeat="lst in lstLevel" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Title}}
+                                    </td>
+                                    <td>
+                                        {{lst.StartRange}}
+                                    </td>
+                                    <td>
+                                        {{lst.EndRange}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditLevel(lst.LevelId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveLevel(lst.LevelId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>*@
+                                <tr ng-show="lstLevel.length < 1 && !gridLoader">
+                                    <td colspan="3">
+                                        <span>No record found</span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="gridLoader">
+                                    <td colspan="3">
+                                        <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

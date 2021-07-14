@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Fame Perks</title>
+    @Styles.Render("~/Content/homecss")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <!-- Bootstrap CSS -->
+  
+</head>
+
+<body>
+
+    <header class="main-head" id="mainNav">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                @Html.ActionLink("Fame Perks", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Creators</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Brands & Agencies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-danger" href="#">Join Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!---->
+    @RenderBody()
+
+    
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+

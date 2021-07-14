@@ -1,0 +1,350 @@
+﻿@{
+    ViewBag.Title = "Fame Perks";
+}
+
+<link rel="stylesheet" href="~/Content/bootstrap.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example-includeSelectAllOption').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+@*<select id="example-getting-started" multiple="multiple">
+    <option value="cheese">Cheese</option>
+    <option value="tomatoes">Tomatoes</option>
+    <option value="mozarella">Mozzarella</option>
+    <option value="mushrooms">Mushrooms</option>
+    <option value="pepperoni">Pepperoni</option>
+    <option value="onions">Onions</option>
+</select>*@
+<section class="banner animate-sec">
+    <img src="img/bg01.png" alt="" class="banner-visual-bg" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 banner-caption">
+                <div>
+                    <h1 class="heading heading-1 ">YouTube’s Branded Content Platform</h1>
+                    <div class="read-more"><a href="#" class="btn btn-danger">I'm a Creator</a> <a href="#" class="btn btn-blue ml-md-5">I'm a Brand</a></div>
+                </div>
+            </div>
+            <div class="col-md-6 banner-wrapper">
+                <div class="animate-banner">
+                    <div class="owl-carousel owl-theme owl-home-banner">
+                        <div class="item">
+                            <!--<img class="img-fluid" src="img/home-mob-banner-1.jpg"/>-->
+                            <img class="img-fluid" src="img/home-banner-1.png" />
+                            <!--<div class="banner-content d-none d-md-block"  style="background-image:url(img/home-banner-1.png);"></div>
+                            <div class="banner-content d-md-none"  style="background-image:url(img/home-mob-banner-1.jpg);"></div>
+                            -->
+                        </div>
+                        <div class="item">
+                            <img class="img-fluid" src="img/home-banner-2.png" />
+                            <!--<img class="img-fluid" src="img/home-mob-banner-1.jpg"/>-->
+                            <!--<div class="banner-content d-none d-md-block"  style="background-image:url(img/home-banner-1.png);"></div>
+                            <div class="banner-content d-md-none"  style="background-image:url(img/home-mob-banner-1.jpg);"></div>
+                            -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="home-section1 animate-sec">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-md-5">
+                <img class="img-fluid home-about-img" src="img/tab-img-2.jpg" alt="img" />
+
+            </div>
+            <div class="col-md-6 text-left home-about-content">
+                <h2 class="heading heading-1">The Leading Marketplace for Influencers</h2>
+                <div class="cnt-text">Powered by data, we built the best in class tools to connect brands with the right creators, enabling branded content that reaches the right audience and inspires action.</div>
+            </div>
+        </div>
+
+        <!--About Content Section -->
+        <div class="home-about-content1">
+
+            <h2 class="heading heading-1">Why Influencer Marketing?</h2>
+            <div class="cnt-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type .</div>
+        </div>
+        <!--End About Content Section-->
+    </div>
+</section>
+
+<section class="home-section2 animate-sec" style="background-image:url(img/dot-bg.png);">
+    <div class="container">
+
+        <ul class="nav nav-pills mb-5" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="Creator-tab" data-toggle="tab" href="#panel-Creator" role="tab" aria-controls="panel-Creator" aria-selected="true">Creator</a>
+            </li>
+            <li class="nav-item ml-3">
+                <a class="nav-link" id="Brand-tab" data-toggle="tab" href="#panel-Brand" role="tab" aria-controls="panel-Brand" aria-selected="false">Brand</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="panel-Creator" role="tabpanel" aria-labelledby="Creator-tab">
+                <div class="row justify-content-md-between">
+                    <div class="col-md-5">
+                        <h1 class="heading heading-1">Lorem Ipsum is simply dummy text of the printing </h1>
+                        <div class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+                        <div class="read-more">
+                            <a class="btn btn-danger">Join Us</a>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="tab-panel-img" style="background-image:url(img/tab-img-1.jpg)"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="panel-Brand" role="tabpanel" aria-labelledby="Brand-tab">
+
+                <div class="row justify-content-md-between">
+                    <div class="col-md-5">
+                        <h1 class="heading heading-1">Lorem Ipsum is simply dummy text of the printing </h1>
+                        <div class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+                        <div class="read-more">
+                            <a class="btn btn-danger">Join Us</a>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="tab-panel-img" style="background-image:url(img/tab-img-2.jpg)"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+
+<section class="home-section3 animate-sec">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <h1 class="col-lg-9 heading heading-1 text-uppercase mb-3">Featured Branded Content</h1>
+            <p class="col-lg-9">Content Produced Through Our Marketplace Has Generated 650 Million Views and 2.3 Billion Minutes of Watch Time</p>
+        </div>
+        <div class="row  pt-lg-5 position-relative">
+            <div class="owl-carousel owl-theme  owl-thumbs">
+                <div class="item">
+                    <div class="post-thumbnails">
+                        <a class="thumbnails-img" style="background-image:url(img/tab-img-1.jpg)"> </a>
+                        <h1 class="title"><a>500 Hour Yoga Teacher Certification Program</a></h1>
+                        <ul class="data-list"><li><i class="fa fa-eye"></i>49.8k</li><li><i class="fa fa-heart"></i>1,576</li></ul>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="post-thumbnails">
+                        <a class="thumbnails-img" style="background-image:url(img/tab-img-2.jpg)"> </a>
+                        <h1 class="title"><a>500 Hour Yoga Teacher Certification Program</a></h1>
+                        <ul class="data-list"><li><i class="fa fa-eye"></i>49.8k</li><li><i class="fa fa-heart"></i>1,576</li></ul>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="post-thumbnails">
+                        <a class="thumbnails-img" style="background-image:url(img/tab-img-1.jpg)"> </a>
+                        <h1 class="title "><a>500 Hour Yoga Teacher Certification Program</a></h1>
+                        <ul class="data-list"><li><i class="fa fa-eye"></i>49.8k</li><li><i class="fa fa-heart"></i>1,576</li></ul>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="post-thumbnails">
+                        <a class="thumbnails-img" style="background-image:url(img/tab-img-2.jpg)"> </a>
+                        <h1 class="title "><a>500 Hour Yoga Teacher Certification Program</a></h1>
+                        <ul class="data-list"><li><i class="fa fa-eye"></i>49.8k</li><li><i class="fa fa-heart"></i>1,576</li></ul>
+                    </div>
+                </div>
+
+            </div>
+            <a class="slider-thumbs-view-all" href="#">View All  <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+
+
+<!--- --->
+<div class="container-fluid pre-footer">
+
+    <div class="row align-content-center">
+        <a href="#" class="col-sm-6 pre-footer-creator">
+            <h3>Join as a Creator <i class="fa fa-arrow-right"></i></h3>
+
+        </a>
+        <a href="#" class="col-sm-6 pre-footer-brand">
+            <h3>Join as a Brand <i class="fa fa-arrow-right"></i></h3>
+
+        </a>
+    </div>
+</div>
+<!--Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 foot-left">
+                <div class="foot-newsletter">
+                    <h1>KEEP IN TOUCH</h1>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="email" placeholder="YOUR EMAIL" aria-label="YOUR EMAIL">
+                        <button class="fa fa-arrow-right my-2 my-sm-0" type="submit"></button>
+                    </form>
+                </div>
+                <h1 class="mt-5">Platform</h1>
+                <ul class="list-inline social ">
+                    <li class="list-inline-item"><a class="fa fa-facebook"></a></li>
+                    <li class="list-inline-item"><a class="fa fa-twitter"></a></li>
+                    <li class="list-inline-item"><a class="fa fa-google-plus"></a></li>
+                    <li class="list-inline-item"><a class="fa fa-linkedin"></a></li>
+                </ul>
+
+            </div>
+
+            <div class="col-md-6 foot-right">
+                <div class="row">
+                    <nav class="col-md-4 foo-nav">
+                        <h4>Platform</h4>
+                        <ul class="list-unstyled">
+                            <li><a>Creators</a></li>
+                            <li><a>Brands &amp; Agencies</a></li>
+                            <li><a>Pricing</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="col-md-4 foo-nav">
+                        <h4>Company</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="">Careers</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="col-md-4 foo-nav">
+                        <h4>Resources</h4>
+                        <ul class="list-unstyled">
+                            <li><a>Help</a></li>
+                            <li><a>Support</a></li>
+                            <li><a>Terms of Use</a></li>
+                            <li><a>Privacy</a></li>
+                            <li><a>Licenses</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <p class="col-sm-12 pt-3 pt-md-5">Copyright 2019 | ALL RIGHTS RESERVED</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--<script type="text/javascript" src="js/script.js"></script>-->
+@Scripts.Render("~/bundles/home")
+<script>
+    $(document).ready(function (e) {
+        $(".menu-btn").click(function (e) {
+            $("header").toggleClass("menu-open");
+        });
+
+    });
+    $(document).scroll(function (e) {
+        $("header").removeClass("menu-open");
+
+    });
+
+
+    $('.owl-home-banner').owlCarousel({
+        loop: true,
+        items: 1,
+        nav: false,
+        //stagePadding: 50,
+        dots: false,
+        autoplay: true,
+        autoplayHoverPause: true,
+        lazyLoad: true,
+        lazyLoadEager: 1,
+        animateOut: 'fadeOut',
+    })
+
+
+    $('.owl-thumbs').owlCarousel({
+        loop: true,
+        items: 1,
+        nav: true,
+        //stagePadding: 50,
+        dots: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        lazyLoad: true,
+        lazyLoadEager: 1,
+        margin: 30,
+        responsiveClass: true,
+
+        responsive: {
+            0: {
+                items: 1,
+                nav: true
+            },
+            768: {
+                items: 2,
+                nav: false
+            },
+            992: {
+                items: 3,
+                nav: true,
+                loop: false
+            }
+        }
+    })
+
+
+
+
+
+
+    var $animation_elements = $('.animate-sec');
+    var $window = $(window);
+
+    function check_if_in_view() {
+        var window_height = $window.height();
+        var window_top_position = $window.scrollTop();
+        var window_bottom_position = (window_top_position + window_height);
+
+        $.each($animation_elements, function () {
+            var $element = $(this);
+            var element_height = $element.outerHeight();
+            var element_top_position = $element.offset().top + 100;
+            var element_bottom_position = (element_top_position + element_height);
+
+            //check to see if this current container is within viewport
+            if ((element_bottom_position >= window_top_position) && (element_top_position <= window_bottom_position)) {
+                $element.addClass('in-view');
+            }
+            //else {
+            // $element.removeClass('in-view');
+            //}
+        });
+    }
+
+    $window.on('scroll resize', check_if_in_view);
+    $window.trigger('scroll');
+
+
+
+</script>
+

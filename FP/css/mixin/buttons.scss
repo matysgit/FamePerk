@@ -1,0 +1,31 @@
+
+
+.read-more{
+	margin:30px 0;
+	}
+.btn{ }	
+
+.btn-danger{
+	 padding:10px 30px;
+					 font-size:20px;
+					 border-radius:50px;
+					 font-weight:bold;
+	@include setLinkStyleAll{
+		color: #fff;
+		background-color: #e3281f;
+		border-color: #e3281f;
+	}
+}
+.btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active, .show > .btn-danger.dropdown-toggle{
+		background-color: #e3281f;
+		border-color: #e3281f;
+	}
+	
+.btn-blue{
+	@include setLinkStyleAll{
+		color: #fff;
+		background-color: #36465d;
+		border-color: #36465d;
+	}
+	
+	}

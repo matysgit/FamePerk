@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Product Category";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/Scripts/app/controllers/productCategoryController.js"></script>
+<div class="container-fluid" ng-controller="ProductCategoryController" ng-init="fn_DefaultProductSettings()" ng-cloak>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="border-bottom: 1px solid #51cbce;">
+                    <h4 class="card-title">Product Category</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <form name="frmProductCategory" ng-submit="frmProductCategory.$valid && fn_SaveProductCategory(productCategoryModal)" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Category Name</label>
+                                        <input type="text" class="form-control" maxlength="100" ng-model="productCategoryModal.Name" placeholder="Category Name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmProductCategory.$valid">Save</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <hr />
+                    <div class="table-responsive" style="overflow:hidden">
+                        <table class="table" id="tblProduct" style="border: 1px solid lightgrey;">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th onclick="sortTable(0)">
+                                        Category Name
+                                    </th>
+                                    <th onclick="sortTable(1)">
+                                        Created Date
+                                    </th>
+                                    <th style="text-align:center">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="lst in lstProductCategory" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Name}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditProductCategory(lst.ProductCategoryId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveProductCategory(lst.ProductCategoryId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="lst in lstProductCategory" ng-show="!gridLoader">
+                                    <td>
+                                        {{lst.Name}}
+                                    </td>
+                                    <td>
+                                        {{lst.CreatedDate}}
+                                    </td>
+                                    <td class="text-primary" align="center">
+                                        <a href="javascript:void(0)" ng-click="fn_EditProductCategory(lst.ProductCategoryId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                                        <a href="javascript:void(0)" ng-click="fn_RemoveProductCategory(lst.ProductCategoryId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                    </td>
+                                </tr>
+                                <tr ng-show="lstProductCategory.length < 1 && !gridLoader">
+                                    <td colspan="3">
+                                        <span>No record found</span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="gridLoader">
+                                    <td colspan="3">
+                                        <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("tblProduct");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+</script>
