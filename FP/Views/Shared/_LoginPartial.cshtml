@@ -5,12 +5,14 @@
     {
     @Html.AntiForgeryToken()
 
-    <ul class="list-inline ml-auto mb-0">
-        <li class="list-inline-item">
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" , @class="nav-link"})
-        </li>
-        <li class="list-inline-item"><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Log off</a></li>
-    </ul>
+<ul class="list-inline ml-auto mb-0">
+    <li class="list-inline-item">
+        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+    </li>
+    @*<li class="list-inline-item"><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Log off</a></li>*@
+<li class="list-inline-item">@Html.ActionLink("Log Off", "Index", "Home", new { area = "" }, new { @class = "navbar-brand white" })</li>
+
+</ul>
     }
 }
 else

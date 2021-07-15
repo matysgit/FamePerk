@@ -229,7 +229,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
         var countryList = "";
         angular.forEach($scope.CountryModal, function (item) {
-           // if (!angular.isUndefined(item) && item.checked) {
+           
             if (countryList == "") {
                 countryList = item.label;
             } else {
@@ -254,7 +254,6 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     window.location.href = '/Client/Projects';
                 }, 5000);
                
-               // $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 409) {
                 toastr.warning('Campaign already exists.');
@@ -310,14 +309,12 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                         transformRequest: angular.identity,
                         headers: { 'Content-Type': undefined }
                     }).then(function (result) {
-                        //$scope.imgProfile = '../Upload/Profile/' + result.data.UserId + '/' + result.data.UplodedFileName[0];
-                        //$scope.imgLoader = false;
-
+                        
                         $scope.CreateCampaignModal.ProductPhoto = '../Upload/ProductPhoto/' + result.data.UserId + '/' + result.data.UplodedFileName[0];
                     });
                 }
             }
-            // angular.element("input[type='file']").val(null);
+            
         }
     };
 
@@ -345,42 +342,20 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                             RedirectToLogin();
                         }
                         $scope.ProductCategory = responseJson.data;
-                       // $scope.CreateCampaignModal.ProductCategoryId = $scope.CreateCampaignModal.ProductCategoryId;//$scope.ProductCategory[0].ProductCategoryId;
-                       // $scope.CreateCampaignModal.ProductCategoryId = $scope.CreateCampaignModal.ProductCategoryId;
-
-                      //  $scope.ProductCategory.forEach(function (itemArr) {
+                       
                         angular.forEach($scope.ProductCategory, function (item) {
                             if (parseInt($scope.CreateCampaignModal.ProductCategoryId) === item.ProductCategoryId) {
                                 $scope.CreateCampaignModal.ProductCategoryId = item.ProductCategoryId
                                 }
                             });
-                       // });
-
+                       
                     }
                     if (responseJson.statusCode === 204) {
                         toastr.error('Error in getting data.');
                     }
 
                 });
-               // $scope.CreateCampaignModal.ProductCategoryId = $scope.CreateCampaignModal.ProductCategoryId;// $scope.CampaignModal.ProductCategoryId.toString();// responseJson.data[0].ProductCategoryId;
-              //  $scope.CreateCampaignModal.CountryId = $scope.CreateCampaignModal.CountryId;// $scope.CampaignModal.ProductCategoryId.toString();// responseJson.data[0].ProductCategoryId;
-                //$scope.Country = {};
-
-                //fpService.getData($_Creator.GetCountry, "", function (response) {
-                //    var responseJson = response.data;
-                //    if (responseJson.statusCode === 200) {
-                //        $scope.Country = responseJson.data;
-                //        angular.forEach($scope.Country, function (item) {
-                //            if (parseInt($scope.CreateCampaignModal.CountryId) === item.CountryId) {
-                //                $scope.CreateCampaignModal.CountryId = item.CountryId
-                //            }
-                //        });
-                //    }
-                //    if (responseJson.statusCode === 204) {
-                //        toastr.error('Error in getting data.');
-                //    }
-
-                //});
+               
                 $scope.Budget = {};
 
                 fpService.getData($_Budget.Get, "", function (response) {
