@@ -63,24 +63,8 @@ namespace FP.DAL
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
 
-                    //string  query = "SELECT Project.ProjectId, Project.ProjectTitle, Project.ProjectDescription, Project.Budget, Project.IsActive, CreatorProfile.FullName AS CreateBy, ProjectProposal.ProjectProposalId as ProjectProposalId, ProjectProposal.Status as Status  FROM Project INNER JOIN CreatorProfile on CreatorProfile.UserId = Project.CreateBy left join  ProjectProposal on  Project.ProjectId=ProjectProposal.ProjectId and ProjectProposal.UserId=@UserId Where Project.ProjectId =@ProjectId and IsActive=@IsActive ";
-                    //  List<ProjectsModal> _objData = _dbDapperContext.Query<ProjectsModal>(query, new
-                    //  {
-                    //      UserId=UserId,
-                    //      ProjectId=ProjectId,
-                    //      IsActive = 1
-
-                    //  }).ToList();
-
-                    //  return _objData;
-                    //int CampaignId = 2002;
-                    //string query = "Select CampaignId, UserId, CampaignTypeId, SupplementalChannels, ProductCategoryId, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, CampaignTitle, AboutYourBrand, CampaignGoal, "
-                    //        +" CampaignDurationId, PrivateCampaign, AudienceAgeId, BudgetId, CreatedDate, ModifyDate, Status, AudienceGender, YouTube, YouTubeVideoType"
-                    //        + " FROM Campaign Where Campaign.CampaignId =@CampaignId and Status=@Status ";
-
-
                     string query = @"Select CampaignId, UserId, CampaignTypeId, SupplementalChannels,ProductCategory.ProductCategoryId, ProductCategory.Name AS ProductCategory, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, 
-                                    CampaignTitle, AboutYourBrand, CampaignGoal, CampaignDuration.Duration AS CampaignDuration, PrivateCampaign, AudienceAgeId, Budget.Title AS Budget, Campaign.CreatedDate, ModifyDate, Status, 
+                                    CampaignTitle, AboutYourBrand, CampaignGoal,CampaignDuration.CampaignDurationId , CampaignDuration.Duration AS CampaignDuration, PrivateCampaign, AudienceAgeId,Budget.BudgetId, Budget.Title AS Budget, Campaign.CreatedDate, ModifyDate, Status, 
                                     AudienceGender, YouTube, YouTubeVideoType, Country FROM Campaign 
                                     INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId 
                                     INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId 
@@ -93,21 +77,6 @@ namespace FP.DAL
                                               // Status = "Publish"
 
                     }).ToList();
-
-
-
-
-
-                    //    using (var objOrgDetail = _dbDapperContext.QueryMultiple(query, new
-                    //    {
-                    //        CampaignId = ProjectId
-                    //    }))
-                    //    {
-                    //        objModal.CampaignList = objOrgDetail.Read<CampaignModal>().ToList();
-                    //        objModal.AudList = objOrgDetail.Read<CampaignModal>().ToList();
-                    //    };
-
-                    //return objModal;
 
                     return _objData;
                 }
@@ -380,6 +349,7 @@ namespace FP.DAL
                     string BudgetId = null;
                     string CountryId = null;
                     string ProductCategoryId = null;
+                    string countryName = null;
                     if(objData.ProductCategoryId != "0")
                     {
                         ProductCategoryId = objData.ProductCategoryId;
@@ -396,18 +366,30 @@ namespace FP.DAL
                     if (objData.CountryId != "0")
                     {
                         CountryId = objData.CountryId;
+                        if (CountryId !="" && CountryId != null)
+                        {
+                            query = "SELECT CountryId, Name FROM Country WHERE CountryId=@CountryId";
+                            var _objDataCountry = _dbDapperContext.Query<CountryModal>(query, new
+                            {
+                               CountryId
+                            }).SingleOrDefault();
+
+                            countryName= _objDataCountry.Name;
+                        }
                     }
+
 
                     query = "SELECT CampaignId, UserId, CampaignTypeId, ProductCategory.Name AS ProductCategory, CASE WHEN ShippingProduct=0 THEN 'Yes' ELSE 'No' END AS ShippingProduct, " +
                             "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget.Title AS Budget, " +
-                            "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, Country.Name AS Country " +
+                            "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, Campaign.Country AS Country " +
                             "FROM  Campaign " +
                             "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
                             "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                             "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
-                            "inner join Country on Country.CountryId=Campaign.CountryId " +
+                           // "inner join Country on Country.CountryId=Campaign.CountryId " +
                             "WHERE Status = @Status and Approved=@Approve and Campaign.CampaignDurationId=isnull(@CampaignDurationId,Campaign.CampaignDurationId) and Campaign.BudgetId =isnull(@BudgetId,Campaign.BudgetId) and Campaign.ProductCategoryId= isnull(@ProductCategoryId,Campaign.ProductCategoryId) " +
-                            "and Campaign.CountryId = isnull(@CountryId, Country.CountryId) ORDER BY Campaign.CreatedDate DESC ";
+                             //"and Campaign.CountryId = isnull(@CountryId, Country.CountryId) ORDER BY Campaign.CreatedDate DESC ";
+                             "and Campaign.Country like isnull('%'+@Country+'%', Campaign.Country) ORDER BY Campaign.CreatedDate DESC ";
 
                     List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
                     {
@@ -416,8 +398,8 @@ namespace FP.DAL
                         ProductCategoryId,
                         BudgetId,
                         CampaignDurationId,
-                        CountryId
-
+                        //CountryId
+                        Country= countryName
                     }).ToList();
 
                     return _objData;
@@ -806,7 +788,7 @@ namespace FP.DAL
 
 
                     query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
-                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS DOB, Language,
+                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
                              Categories, Gender FROM CreatorProfile";
 
                     List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new

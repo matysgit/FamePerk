@@ -36,14 +36,14 @@ fpApp.controller("CampaignDurationController", function ($scope, fpService, $htt
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Campaign Duration saved successfully.');
+                toastr.success('Campaign Duration saved successfully.', "Success");
                 $scope.fn_DefaultCampaignDurationSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Campaign Duration already exists.');
+                toastr.warning('Campaign Duration already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -80,11 +80,11 @@ fpApp.controller("CampaignDurationController", function ($scope, fpService, $htt
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Campaign Duration removed successfully.');
+                            toastr.success('Campaign Duration removed successfully.', "Success");
                             $scope.fn_GetAllCampaignDuration();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

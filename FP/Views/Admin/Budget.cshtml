@@ -8,9 +8,14 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header" style="border-bottom: 1px solid #51cbce;">
-                    <h4 class="card-title">Budget</h4>
+                <div class="card-head filter-bar rounded-0">
+                    <div class="form-inline my-2 my-lg-0">
+                        <div class="input-group col-4 p-0">
+                            <h4 class="card-title">Budget</h4>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <div>
                         <form name="frmBudget" ng-submit="frmBudget.$valid && fn_SaveBudget(BudgetModal)" novalidate>
@@ -55,18 +60,18 @@
                                         <a href="javascript:void(0)" ng-click="fn_RemoveBudget(lst.BudgetId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
                                     </td>
                                 </tr>
-                           <!-- <tr ng-repeat="lst in lstBudget" ng-show="!gridLoader">
-                                    <td>
-                                        {{lst.Title}}
-                                    </td>
-                                    <td>
-                                        {{lst.CreatedDate}}
-                                    </td>
-                                    <td class="text-primary" align="center">
-                                        <a href="javascript:void(0)" ng-click="fn_EditBudget(lst.BudgetId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
-                                        <a href="javascript:void(0)" ng-click="fn_RemoveProductCategory(lst.BudgetId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
-                                    </td>
-                                </tr> -->
+                                <!-- <tr ng-repeat="lst in lstBudget" ng-show="!gridLoader">
+                        <td>
+                            {{lst.Title}}
+                        </td>
+                        <td>
+                            {{lst.CreatedDate}}
+                        </td>
+                        <td class="text-primary" align="center">
+                            <a href="javascript:void(0)" ng-click="fn_EditBudget(lst.BudgetId)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>
+                            <a href="javascript:void(0)" ng-click="fn_RemoveProductCategory(lst.BudgetId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                        </td>
+                    </tr> -->
                                 <tr ng-show="lstBudget.length < 1 && !gridLoader">
                                     <td colspan="3">
                                         <span>No record found</span>
@@ -82,8 +87,8 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
+</div>
 </div>
 
 <script>
@@ -142,5 +147,5 @@
         }
     }
 
-  
+
 </script>

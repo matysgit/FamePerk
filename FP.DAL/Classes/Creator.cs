@@ -73,12 +73,8 @@ namespace FP.DAL
                         objData.Gender
 
                     });
-
-
-
                     return output;
                 }
-                
             }
             catch (Exception ex)
             {
@@ -94,7 +90,7 @@ namespace FP.DAL
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                    
-                  string  query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS DOB, Language, Categories, Gender from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
+                  string  query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email,FORMAT(CreatorProfile.DOB, 'MM/dd/yyyy ') as  DOB, Language, Categories, Gender from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
 
                    CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
@@ -194,7 +190,7 @@ namespace FP.DAL
 
                         return _objData;
                     }
-                   else if (ageId == "2008" || ageId =="")
+                   else if ( ageId =="")
                     {
                         query = "SELECT     * FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId)";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new

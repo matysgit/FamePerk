@@ -42,30 +42,25 @@
 
 
         <div class="page-header">
-            <div class="top-tab-holder">
+            <!--<div class="top-tab-holder">
 
                 <ul class="nav nav-pills" id="myTab" role="tablist">
 
                     <li class="nav-item">
                         <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Discover</a>
-                    </li>
+                    </li>-->
                     @*<li class="nav-item">
                         <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Hired</a>
                     </li>*@
 
-                </ul>
-            </div>
-
-            @*<ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
-                <li class="nav-item ">
-                    <button class="btn btn-success " type="button">Create Campaign</button>
-                </li>
-
-            </ul>*@
+                <!--</ul>
+            </div>-->
 
         </div>
         <div class="card card-full" id="divAllCreator">
-
+            <div class="card-header">
+                <h4 class="card-title">Creator List</h4>
+            </div>
             <div class="card-body">
                 <div class="row">
 
@@ -78,28 +73,28 @@
 
                                         <!--Filters Start-->
                                         @*<div class="filter-box">
-                                            <h4 class="filter-box-title">AUDIENCE GENDER</h4>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="customControlValidation7" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlValidation7"> All</label>
-                                            </div>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="customControlValidation8" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlValidation8"> Male</label>
+                                        <h4 class="filter-box-title">AUDIENCE GENDER</h4>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" id="customControlValidation7" name="radio-stacked" required>
+                                            <label class="custom-control-label" for="customControlValidation7"> All</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" id="customControlValidation8" name="radio-stacked" required>
+                                            <label class="custom-control-label" for="customControlValidation8"> Male</label>
 
-                                            </div>
-                                            <div class="custom-control custom-radio ">
-                                                <input type="radio" class="custom-control-input" id="customControlValidation9" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlValidation9"> Female</label>
-                                            </div>
-                                        </div>*@
+                                        </div>
+                                        <div class="custom-control custom-radio ">
+                                            <input type="radio" class="custom-control-input" id="customControlValidation9" name="radio-stacked" required>
+                                            <label class="custom-control-label" for="customControlValidation9"> Female</label>
+                                        </div>
+                                    </div>*@
 
                                         <div class="filter-box">
                                             <h4 class="filter-box-title">PRIMARY AUDIENCE AGE</h4>
                                             @*<div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="customControlAge1" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlAge1">  Any Age</label>
-                                            </div>*@
+                                            <input type="radio" class="custom-control-input" id="customControlAge1" name="radio-stacked" required>
+                                            <label class="custom-control-label" for="customControlAge1">  Any Age</label>
+                                        </div>*@
                                             @*<div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-radio">*@
                                             <input type="radio" class="custom-control-input custom-checkbox" name="radio-stacked" id="aud_{{$index}}" ng-model="obj.checked" @*ng-checked="obj.isChecked"*@ required ng-change="GetCreatorByFillter(CreatorFillterModal)">
                                             @*<input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">*@
@@ -149,11 +144,11 @@
 
                                                                 <h5 class="creator-card-name">{{obj.FullName}}</h5>
                                                                 <h5 class="creator-card-name">Gender : {{obj.Gender}}</h5>
-                                                                <h5 class="creator-card-name">Age : {{obj.DOB}}</h5>
+                                                                <h5 class="creator-card-name">Age : {{obj.CurrentAge}}</h5>
                                                                 @*<h5 class="creator-card-name">Language : {{obj.Language}}</h5>*@
                                                                 @*<div class="creator-card-rating"><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i><i class="fa fa-star"></i></div>*@
                                                                 @*<p> Tech</p>
-                                                                <p> Unknown</p>*@
+                                                            <p> Unknown</p>*@
                                                             </div>
                                                         </div>
 
@@ -174,7 +169,7 @@
 
                                                         <div class="read-more p-4 text-center">
                                                             @*<a class="btn btn-success mb-3 mb-sm-0 mr-sm-2" href="#">Send Invite</a>
-                                                            <a class="btn btn-primary mb-3 mb-sm-0" href="#">View Profile</a>*@
+                                                        <a class="btn btn-primary mb-3 mb-sm-0" href="#">View Profile</a>*@
                                                             <button class="btn btn-primary mb-3 mb-sm-0" ng-click="fn_ViewCreatorProfile(obj.UserId)"> View Profile</button>
                                                         </div>
                                                     </div>

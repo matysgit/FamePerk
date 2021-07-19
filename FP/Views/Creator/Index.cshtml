@@ -6,15 +6,6 @@
     
 <script src="~/Scripts/jquery-3.0.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-@*<script src="~/Scripts/jquery-ui.js"></script>*@
-@*<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />*@
-
-@*<script src="~/Scripts/bootstrap.min.js"></script>*@
-@*<script type="text/javascript" src="Scripts/jquery.blockUI.js"></script>*@
-
-@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
-    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/start/jquery-ui.css" rel="stylesheet" type="text/css" />*@
 
 <script src="~/Scripts/app/controllers/CreatorController.js"></script>
 <style>
@@ -102,12 +93,12 @@
 
             </div>
 
-            <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+            @*<ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
                 <li class="nav-item ">
                     <button class="btn btn-success " type="button" ng-click="fn_EditProfile()">Edit Profile</button>
                 </li>
 
-            </ul>
+            </ul>*@
 
         </div>
         <div id="divDashboard">
@@ -140,6 +131,13 @@
                             </div>
 
                             <div ng-repeat="obj in CampaignModal">
+                                @*<div>
+                                    <tr ng-show="gridLoader">
+                                        <td colspan="3">
+                                            <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                        </td>
+                                    </tr>
+                                </div>*@
                                 @*herf="@Html.ActionLink("t", "Projects", "Creator", new { @class = "nav-link btn btn-success" })"*@
                                 @*<a class="proposals-item border-bottom" href="/Creator/Projects?CampaignId={{obj.CampaignId}}">*@
                                 <a class="proposals-item border-bottom" href="/Creator/Projects?CampaignId={{obj.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewProject({{obj.CampaignId}}")'">
@@ -168,193 +166,157 @@
                         </div>
                     </div>
                 </div>
-
-                @*<div class="col-md-4 ">
-
-                    <div class="profile-card">
-                        <div class="profile-card-title">
-                           
-                            <div class="imgDivProfile mt-md-5 mb-3">
-                                <img class="imgProfile" ng-src="{{imgProfile}}" /> <br />
-                                <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
-                            </div>
-
-                            <h3 class="profile-card-name">{{CreatorModal.FullName}}</h3>
-                           
-
-                        </div>
-
-
-                        <ul class="list-unstyled profile-card-list">
-                           
-                            <li class="d-flex justify-content-between"><span>Email</span><strong>{{CreatorModal.Email}}</strong></li>
-                            <li class="d-flex justify-content-between"><span>Contact Number</span><strong>{{CreatorModal.ContactNumber}}</strong></li>
-                        </ul>
-
-                        <div class="read-more p-4 text-center">
-                            <button class="btn btn-primary " ng-click="fn_EditProfile()"> Edit Profile</button>
-                           
-                        </div>
-                    </div>
-
-                </div>*@
             </div>
 
         </div>
-
-
-
-
 
 
         @*Basic Profile*@
-        <div class="card card-full" id="divProfile">
-            <div class="card-head filter-bar rounded-0">
-                <div class="form-inline my-2 my-lg-0">
-                    Basic Profile
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 order-md-2">
-
-                        <div class="imgDivProfile mt-md-5">
-                            <img class="imgProfile" ng-src="{{imgProfile}}" ng-model="CreatorModal.imgProfile" /> <br />
-                            <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
-                            <div class="fileUpload btn btn-primary" style="text-align: center;" ng-show="!imgLoader">
-                                <span>Upload Image</span>
-                                <input type="file" class="upload" onchange="angular.element(this).scope().fn_ImageUpload(this.files)" accept="image/png, image/jpeg, image/gif" />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-8 order-md-1">
-                        <form name="frmCreatorModal" ng-submit="fn_SaveCreatorModal(CreatorModal)" novalidate>
-                            <div class="form-horizontal">
-                                <div class="row">
-                                    <div class="form-group custom-form-group col-lg-12">
-                                        <label class="control-label">Full Name</label>
-                                        <input type="text" class="form-control" ng-model="CreatorModal.FullName" maxlength="1000" placeholder="" required width="20">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group custom-form-group col-lg-12">
-                                        <label class="control-label">Gender</label>
-                                        <div class="d-flex">
-
-                                            <div class="custom-control custom-radio mr-3 col">
-                                                <input type="radio" class="custom-control-input" checked id="rdbGenderFemale" value="Female" ng-model="CreatorModal.Gender" required>
-                                                <label class="custom-control-label" for="rdbGenderFemale">Female</label>
-                                            </div>
-
-                                            <div class="custom-control custom-radio mr-3 col">
-                                                <input type="radio" class="custom-control-input" id="rdbGenderMale" value="Male" name="radio-stacked" ng-model="CreatorModal.Gender" required>
-                                                <label class="custom-control-label" for="rdbGenderMale">Male</label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group custom-form-group col-lg-12">
-                                        <label class="control-label">Date Of Birth</label>
-                                        @*<md-datepicker ng-model="CreatorModal.myDate" md-placeholder="Enter date"></md-datepicker> ng-model="CreatorModal.DOB"*@
-                                        <input type="date" date='dd-MM-yyyy'  id="txtDOB" class="form-control datepicker" ng-model="CreatorDOB.DOB" maxlength="1000" placeholder="" required width="20">
-                                    </div>
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">E-Mail</label>
-                                    @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })*@
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Email" maxlength="1000" placeholder="" ng-view="true" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">ContactNumber</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.ContactNumber" maxlength="1000" placeholder="" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">State</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.State" maxlength="1000" placeholder="" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Country</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Message" maxlength="1000" placeholder="" required width="20">*@
-                                    <select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country">
-                                        <option value="0" label="Please Select Country"></option>
-                                        @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
-
-                                    </select>
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Languages</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20" multiple>*@
-                                    <textarea class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20"></textarea>
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">YouTube</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="1000" placeholder="" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Instagram</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Instagram" maxlength="1000" placeholder="" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Facebook</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Facebook" maxlength="1000" placeholder="" required width="20">
-                                </div>
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Minimum Budgeted Project</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.MinimumBudgetedProject" maxlength="1000" placeholder="" required width="20">
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Summary</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Summary" maxlength="1000" placeholder="" width="20">
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">PastWork Experience</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.PastWorkExperience" maxlength="1000" placeholder="" width="20">
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Categories</label>
-                                    @*<select id="EmpList" class="form-control" ng-model="CreateCampaignModal.ProductCategoryId" ng-options="item.ProductCategoryId as item.Name for item in ProductCategory" checkboxes="true">
-                                        </select>*@
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
-                                    <div ng-repeat="obj in ProductCategory" class="custom-control custom-checkbox col-3 mb-3">
-
-                                        <input type="checkbox" class="custom-control-input" name="chkCategories" id="cat_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
-                                        <label class="custom-control-label" for="cat_{{$index}}">{{obj.Name}} </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group custom-form-group">
-                                    <label class="control-label">Target Audience Age</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
-                                    <div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
-
-                                        <input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
-                                        <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}} </label>
-                                    </div>
-                                </div>
-                                <div class="form-group custom-form-group text-right">
-                                    <button type="submit" ng-disabled="!frmCreatorModal.$valid" class="btn btn-primary">Update</button>
-
-                                    <button type="button" ng-click="fn_DefaultCreatorSettings()" class="btn btn-primary">Back</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
+    <!--<div class="card card-full" id="divProfile">
+        <div class="card-head filter-bar rounded-0">
+            <div class="form-inline my-2 my-lg-0">
+                Basic Profile
             </div>
         </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 order-md-2">
 
+                    <div class="imgDivProfile mt-md-5">
+                        <img class="imgProfile" ng-src="{{imgProfile}}" ng-model="CreatorModal.imgProfile" /> <br />
+                        <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
+                        <div class="fileUpload btn btn-primary" style="text-align: center;" ng-show="!imgLoader">
+                            <span>Upload Image</span>
+                            <input type="file" class="upload" onchange="angular.element(this).scope().fn_ImageUpload(this.files)" accept="image/png, image/jpeg, image/gif" />
+                        </div>
+                    </div>
 
+                </div>
+                <div class="col-md-8 order-md-1">
+                    <form name="frmCreatorModal" ng-submit="fn_SaveCreatorModal(CreatorModal)" novalidate>
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="form-group custom-form-group col-lg-12">
+                                    <label class="control-label">Full Name</label>
+                                    <input type="text" class="form-control" ng-model="CreatorModal.FullName" maxlength="1000" placeholder="" required width="20">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group custom-form-group col-lg-12">
+                                    <label class="control-label">Gender</label>
+                                    <div class="d-flex">
+
+                                        <div class="custom-control custom-radio mr-3 col">
+                                            <input type="radio" class="custom-control-input" checked id="rdbGenderFemale" value="Female" ng-model="CreatorModal.Gender" required>
+                                            <label class="custom-control-label" for="rdbGenderFemale">Female</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio mr-3 col">
+                                            <input type="radio" class="custom-control-input" id="rdbGenderMale" value="Male" name="radio-stacked" ng-model="CreatorModal.Gender" required>
+                                            <label class="custom-control-label" for="rdbGenderMale">Male</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group custom-form-group col-lg-12">
+                                    <label class="control-label">Date Of Birth</label>-->
+                                    @*<md-datepicker ng-model="CreatorModal.myDate" md-placeholder="Enter date"></md-datepicker> ng-model="CreatorModal.DOB"*@
+                                    <!--<input type="date" date='dd-MM-yyyy' id="txtDOB" class="form-control datepicker" ng-model="CreatorDOB.DOB" maxlength="1000" placeholder="" required width="20">
+                                </div>
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">E-Mail</label>-->
+                                @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })*@
+                                <!--<input type="text" class="form-control" ng-model="CreatorModal.Email" maxlength="1000" placeholder="" ng-view="true" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">ContactNumber</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.ContactNumber" maxlength="1000" placeholder="" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">State</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.State" maxlength="1000" placeholder="" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Country</label>-->
+                                @*<input type="text" class="form-control" ng-model="CreatorModal.Message" maxlength="1000" placeholder="" required width="20">*@
+                                <!--<select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country">
+                                    <option value="0" label="Please Select Country"></option>-->
+                                    @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
+
+                                <!--</select>
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Languages</label>-->
+                                @*<input type="text" class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20" multiple>*@
+                                <!--<textarea class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20"></textarea>
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">YouTube</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="1000" placeholder="" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Instagram</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.Instagram" maxlength="1000" placeholder="" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Facebook</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.Facebook" maxlength="1000" placeholder="" required width="20">
+                            </div>
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Minimum Budgeted Project</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.MinimumBudgetedProject" maxlength="1000" placeholder="" required width="20">
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Summary</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.Summary" maxlength="1000" placeholder="" width="20">
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">PastWork Experience</label>
+                                <input type="text" class="form-control" ng-model="CreatorModal.PastWorkExperience" maxlength="1000" placeholder="" width="20">
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Categories</label>-->
+                                @*<select id="EmpList" class="form-control" ng-model="CreateCampaignModal.ProductCategoryId" ng-options="item.ProductCategoryId as item.Name for item in ProductCategory" checkboxes="true">
+                                </select>*@
+                                @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
+                                <!--<div ng-repeat="obj in ProductCategory" class="custom-control custom-checkbox col-3 mb-3">
+
+                                    <input type="checkbox" class="custom-control-input" name="chkCategories" id="cat_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
+                                    <label class="custom-control-label" for="cat_{{$index}}">{{obj.Name}} </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group custom-form-group">
+                                <label class="control-label">Target Audience Age</label>-->
+                                @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
+                                <!--<div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
+
+                                    <input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
+                                    <label class="custom-control-label" for="aud_{{$index}}">{{obj.Title}} </label>
+                                </div>
+                            </div>
+                            <div class="form-group custom-form-group text-right">
+                                <button type="submit" ng-disabled="!frmCreatorModal.$valid" class="btn btn-primary">Update</button>
+
+                                <button type="button" ng-click="fn_DefaultCreatorSettings()" class="btn btn-primary">Back</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>-->
 
     </div>
 </div>

@@ -403,13 +403,21 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
+            ProductCategory objCategory = new ProductCategory();
+            var resultProductCateegoryList = objCategory.GetProductCategoryList();
+
+
             Projects obj = new Projects();
+            var resultYouTubeList = obj.GetYouTubeTypeList();
+
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
             var result = obj.GetProjectById(ProjectId, userId);
             return Json(new
             {
                 data = result,
+                dataProductList= resultProductCateegoryList,
+                dataYouTubeList= resultYouTubeList,
                 statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
             }, JsonRequestBehavior.AllowGet);
         }

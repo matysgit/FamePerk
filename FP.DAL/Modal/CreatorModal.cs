@@ -31,6 +31,7 @@ namespace FP.DAL
         public string Language { get; set; }
 
         public string Gender { get; set; }
+        public int CurrentAge { get; set; }
     }
 
     public class CountryModal

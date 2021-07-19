@@ -305,14 +305,14 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Mailbox saved successfully.');
+                toastr.success('Mailbox saved successfully.', "Success");
                 $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Mailbox name already exists.');
+                toastr.warning('Mailbox name already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -326,14 +326,14 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Mailbox reply successfully.');
+                toastr.success('Mailbox reply successfully.', "Success");
                 $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Mailbox name already exists.');
+                toastr.warning('Mailbox name already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in replying.');
+                toastr.error('Error in replying.', "Error");
             }
         });
     };
@@ -393,11 +393,11 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Mailbox removed successfully.');
+                            toastr.success('Mailbox removed successfully.', "Success");
                             $scope.fn_GetAllMailbox(MailTypeId);
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }
@@ -482,13 +482,13 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Proposal approved successfully.');
+                toastr.success('Proposal approved successfully.', "Success");
                 $("#divViewmailBox").hide();
                 $("#divReplyMailBox").show();
                 $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in getting data.');
+                toastr.error('Error in getting data.', "Error");
             }
         });
     };
@@ -502,13 +502,13 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Successfully.');
+                toastr.success('Successfully.', "Success");
                 $("#divViewmailBox").hide();
                 $("#divReplyMailBox").show();
                 $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in getting data.');
+                toastr.error('Error in getting data.', "Error");
             }
         });
     };

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard - My ASP.NET Application</title>
+    <title>Fame Perks-@ViewBag.Title</title>
     @Scripts.Render("~/bundles/angular")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -20,7 +20,7 @@
 	   <div class=" container top-main-menu text-right">  @Html.Partial("_LoginPartial")</div>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
-                @Html.ActionLink("Logo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand white" })
+                @Html.ActionLink("Fame Perks", "Projects", "Client", new { area = "" }, new { @class = "navbar-brand white" })
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -30,9 +30,8 @@
                         <li class="nav-item d-block d-md-none">
                             <button class="btn btn-success " type="button">Create Campaign</button>
                         </li>
-                        @*<li class="nav-item">@Html.ActionLink("Home", "Index", "Client", new { @class = "nav-link" })</li>*@
+                       
                         <li class="nav-item">@Html.ActionLink("Campaigns", "Projects", "Client", new { @class = "nav-link" })</li>
-                        @*<li class="nav-item">@Html.ActionLink("Campaigns", "Campaigns", "Client", new { @class = "nav-link" })</li>*@
 
                         <li class="nav-item mr-3">@Html.ActionLink("Messages", "Mailbox", "Client", new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Creator", "Creator", "Client", new { @class = "nav-link" })</li>

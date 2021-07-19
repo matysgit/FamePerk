@@ -59,14 +59,14 @@ fpApp.controller("WalletDetailsController", function ($scope, fpService, $http) 
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Data saved successfully.');
+                toastr.success('Data saved successfully.', "Success");
                 $scope.fn_DefaultWalletSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Account Number already exists.');
+                toastr.warning('Account Number already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -100,11 +100,11 @@ fpApp.controller("WalletDetailsController", function ($scope, fpService, $http) 
                     fpService.postData($_WalletDetails.Remove, jObject, function (response) {
                         var responseJson = response.data;
                         if (responseJson.statusCode === 200) {
-                            toastr.success('Record Deleted successfully.');
+                            toastr.success('Record Deleted successfully.', "Success");
                             $scope.fn_GetAllWalletAmount();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

@@ -23,8 +23,6 @@
                     <span class="input-group-text fa fa-search" id="basic-addon1" ng-click="fn_SearchProjects()"></span>
                 </div>
             </div>*@
-
-
                 </div>
                 
             </div>
@@ -37,7 +35,7 @@
                             <ul class="nav nav-pills" id="myTab" role="tablist">
 
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="aPending" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllProjects('Pending')">Pending </a>
+                                    <a class="nav-link active"  id="aPending" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllProjects('Pending')">Pending </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="aApproved" data-toggle="pill" href="#divPending" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllProjects('Approved')">Approved</a>
@@ -103,11 +101,20 @@
                                         </td>
 
                                         @*<td>
-                            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
-                        </td>*@
+                <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
+            </td>*@
 
                                     </tr>
-
+                                    <tr ng-show="lstProjects.length < 1 && !gridLoader">
+                                        <td colspan="3">
+                                            <span>No record found</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="gridLoader">
+                                        <td colspan="3">
+                                            <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

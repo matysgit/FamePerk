@@ -21,13 +21,10 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
     $scope.CreateCampaignModal={ };
     $scope.fn_DefaultCampaignSettings = function () {
         $scope.ShowSaveCampaign = true;
-        $scope.fn_GetProductCategory();
-        $scope.fn_GetCampaignDuration();
-        $scope.fn_GetBudget();
-        $scope.fn_GetAge();
-        $scope.fn_GetCountry();
-        $scope.fn_GetYouTubeType();
-        $scope.fn_GetSupplementalChannel();
+
+       
+        //$scope.fn_GetYouTubeType();
+        //$scope.fn_GetSupplementalChannel();
         $("#divYouTubeVideoType").hide();
         $scope.CreateCampaignModal.Status = "Draft";
         $("#divDraft").show();
@@ -41,7 +38,17 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
         if ("CampaignId" == isCamapaignId[0]) {
             $scope.fn_ViewCampaign(isCamapaignId[1]);
         }
+        else {
+            $scope.fn_GetYouTubeType();
+            $scope.fn_GetSupplementalChannel();
+            $scope.fn_GetProductCategory();
+            $scope.fn_GetCampaignDuration();
+            $scope.fn_GetBudget();
+            $scope.fn_GetAge();
+            $scope.fn_GetCountry();
 
+        }
+       
     };
    
     $scope.fn_GetSupplementalChannel = function () {
@@ -205,25 +212,36 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
         $("#" + BtnId + "").hide();
     }
     $scope.fn_SaveCampaign = function (CreateCampaignModal, Status) {
-        $scope.CreateCampaignModal = {};
+        //$scope.CreateCampaignModal = {};
 
         var age = "";
         angular.forEach($scope.AudienceAgeModal, function (item) {
-            if (!angular.isUndefined(item) && item.checked) {
-                age = age + item.AudienceAgeId + ",";
+            if (item.selected) {
+                if(age=="")
+                    age = item.AudienceAgeId;
+                else
+                    age = age +","+item.AudienceAgeId;
             }
         });
 
         var YouTubeVideoType = ""; 
         angular.forEach($scope.YouTubeVideoTypeModal, function (item) {
-            if (!angular.isUndefined(item) && item.checked) {
-                YouTubeVideoType = YouTubeVideoType + item.YouTubeVideoTypeId + ",";
+            if (item.selected) {//SupplementalId
+                if (YouTubeVideoType == "")
+                    YouTubeVideoType = item.AudienceAgeId;
+                else
+                    YouTubeVideoType = YouTubeVideoType + "," + item.YouTubeVideoTypeId;
+               // YouTubeVideoType = YouTubeVideoType + item.YouTubeVideoTypeId + ",";
             }
         });
         var SupplementalChannels = "";
         angular.forEach($scope.SupplementalChannelModal, function (item) {
-            if (!angular.isUndefined(item) && item.checked) {
-                SupplementalChannels = SupplementalChannels + item.SupplementalId + ",";
+            if (item.checked == true) {//!angular.isUndefined(item) &&
+                if (SupplementalChannels == "")
+                    SupplementalChannels = item.SupplementalId;
+                else
+                    SupplementalChannels = SupplementalChannels + "," + item.SupplementalId;
+               // SupplementalChannels = SupplementalChannels + item.SupplementalId + ",";
             }
         });   
 
@@ -248,7 +266,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Campaign save successfully.');
+                toastr.success('Campaign save successfully.', "Success");
 
                 setTimeout(function () {
                     window.location.href = '/Client/Projects';
@@ -256,10 +274,10 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Campaign already exists.');
+                toastr.warning('Campaign already exists.',"Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -268,6 +286,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
     $scope.fn_ShowYouTubeVideoType = function () {
         if ($scope.chkYouTube) {
             $("#divYouTubeVideoType").show();
+            $scope.fn_GetYouTubeType();
         }
         else {
             $("#divYouTubeVideoType").hide();
@@ -321,7 +340,9 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
 
     $scope.fn_ViewCampaign = function (ProjectId) {
-        
+
+       
+        //
         $scope.ShowSaveCampaign = true;
         $scope.CreateCampaignModal = {};
         //$scope.ProductCategory = [];
@@ -334,6 +355,74 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                 }
                 $scope.CreateCampaignModal = responseJson.data[0];
 
+
+                var youTubeTypeArry = responseJson.data[0].YouTubeVideoType;
+                if (youTubeTypeArry == null || youTubeTypeArry=="") {
+                    $scope.fn_GetYouTubeType();
+                   
+                }
+                else {
+                    var youTubeTypeArryNew = youTubeTypeArry.split(',');
+                    $scope.YouTubeVideoTypeModal = {};
+
+                    fpService.getData($_Creator.GetYouTubeType, "", function (response) {
+                        var responseJson = response.data;
+                        if (responseJson.statusCode === 200) {
+                            if (responseJson.data == "logOut") {
+                                RedirectToLogin();
+                            }
+                            $scope.YouTubeVideoTypeModal = responseJson.data;
+                            if (youTubeTypeArry != "") {
+                                youTubeTypeArryNew.forEach(function (itemArr) {
+                                    angular.forEach($scope.YouTubeVideoTypeModal, function (item) {
+                                        if (parseInt(itemArr) === item.YouTubeVideoTypeId) {
+                                            item.isChecked = true;
+                                            $("#YouTubeCheck1").prop("checked", true);
+                                            $("#divYouTubeVideoType").show();
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                        if (responseJson.statusCode === 204) {
+                            toastr.error('Error in getting data.');
+                        }
+
+
+                    });
+                }
+                    
+                //todo
+                var supplementalArry = responseJson.data[0].SupplementalChannels;
+                if (supplementalArry == null || supplementalArry == "") {
+                    $scope.fn_GetSupplementalChannel();
+
+                }
+                else {
+                    var supplementalArryNew = supplementalArry.split(',');
+                    $scope.SupplementalChannelModal = {};
+                    fpService.getData($_Creator.GetSupplementalChannel, "", function (response) {
+                        var responseJson = response.data;
+                        if (responseJson.statusCode === 200) {
+                            if (responseJson.data == "logOut") {
+                                RedirectToLogin();
+                            }
+                            $scope.SupplementalChannelModal = responseJson.data;
+                            supplementalArryNew.forEach(function (itemArr) {
+                                angular.forEach($scope.SupplementalChannelModal, function (item) {
+                                    if (parseInt(itemArr) === item.SupplementalId) {
+                                        item.isChecked = true;
+                                    }
+                                });
+                            });
+                        }
+                        if (responseJson.statusCode === 204) {
+                            toastr.error('Error in getting data.');
+                        }
+
+                    });
+                }
+                
                 $scope.ProductCategory = {};
                 fpService.getData($_ProductCategory.Get, "", function (response) {
                     var responseJson = response.data;
@@ -346,6 +435,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                         angular.forEach($scope.ProductCategory, function (item) {
                             if (parseInt($scope.CreateCampaignModal.ProductCategoryId) === item.ProductCategoryId) {
                                 $scope.CreateCampaignModal.ProductCategoryId = item.ProductCategoryId
+                                item.selected = true;
                                 }
                             });
                        
@@ -355,7 +445,8 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     }
 
                 });
-               
+
+                //bug
                 $scope.Budget = {};
 
                 fpService.getData($_Budget.Get, "", function (response) {
@@ -370,6 +461,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                             if (parseInt($scope.CreateCampaignModal.BudgetId) === item.BudgetId) {
                                 $scope.CreateCampaignModal.BudgetId = item.BudgetId;
                                 $scope.ReviewBudget = item.Title;
+                                item.selected = true;
                             }
                         });
                     }
@@ -378,6 +470,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     }
 
                 });
+
                 $scope.CampaignDuration = {};
                 
                 fpService.getData($_CampaignDuration.Get, "", function (response) {
@@ -390,6 +483,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                        // $scope.CreateCampaignModal.CampaignDurationId = $scope.CampaignDuration[0].CampaignDurationId;
                         angular.forEach($scope.CampaignDuration, function (item) {
                             if (parseInt($scope.CreateCampaignModal.CampaignDurationId) === item.CampaignDurationId) {
+                                item.selected = true;
                                 $scope.CreateCampaignModal.CampaignDurationId = item.CampaignDurationId;
                             }
                         });
@@ -399,105 +493,95 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     }
 
                 });
+
                 var audienceArry = responseJson.data[0].AudienceAgeId;
-                var audienceArryNew = audienceArry.split(',');
-                var age = "";
-                $scope.AudienceAgeModal = {};
-                fpService.getData($_AudienceAge.Get, "", function (response) {
-                    var responseJson = response.data;
-                    if (responseJson.statusCode === 200) {
-                        if (responseJson.data == "logOut") {
-                            RedirectToLogin();
-                        }
-                        $scope.AudienceAgeModal = responseJson.data;
+                if (audienceArry == null || audienceArry == "") {
+                    $scope.fn_GetAge();
 
-                        audienceArryNew.forEach(function (itemArr) {
-                            angular.forEach($scope.AudienceAgeModal, function (item) {
-                                if (parseInt(itemArr) === item.AudienceAgeId) {
-                                    item.isChecked = true;
-                                    if (age == "") {
-                                        age = item.Title;
+                }
+                else {
+                    var audienceArryNew = audienceArry.split(',');
+                    var age = "";
+                    $scope.AudienceAgeModal = {};
+                    fpService.getData($_AudienceAge.Get, "", function (response) {
+                        var responseJson = response.data;
+                        if (responseJson.statusCode === 200) {
+                            if (responseJson.data == "logOut") {
+                                RedirectToLogin();
+                            }
+                            $scope.AudienceAgeModal = responseJson.data;
+                            //todo
+                            audienceArryNew.forEach(function (itemArr) {
+                                angular.forEach($scope.AudienceAgeModal, function (item) {
+                                    if (parseInt(itemArr) === item.AudienceAgeId || itemArr === "All") {
+                                        item.checked = true;
+                                        if (age == "") {
+                                            age = item.Title;
+                                        }
+                                        else {
+                                            age = age, item.Title;
+                                        }
+
                                     }
-                                    else {
-                                        age = age, item.Title;
-                                    }
-                                  
-                                }
+                                });
                             });
-                        });
-                        $scope.ReviewAudienceAge = age;
-                    }
-                    if (responseJson.statusCode === 204) {
-                        toastr.error('Error in getting data.');
-                    }
 
-                });
-              
+                        }
+                        if (responseJson.statusCode === 204) {
+                            toastr.error('Error in getting data.');
+                        }
+
+                    });
+                    if (age == "") {
+                        age = "All";
+                    }
+                    $scope.ReviewAudienceAge = age;
+                }
                 
+                var countryArry = responseJson.data[0].Country;
+                if (countryArry == null || countryArry == "") {
+                    $scope.fn_GetCountry();
+                }
+                else {
+                    var countryArryNew = countryArry.split(',');
+                    $scope.Country = {};
+                    fpService.getData($_Creator.GetCountry, "", function (response) {
+                        var responseJson = response.data;
+                        if (responseJson.statusCode === 200) {
+                            if (responseJson.data == "logOut") {
+                                RedirectToLogin();
+                            }
+                            $scope.Country = responseJson.data;
+                            $scope.CountryModal = [];
+                            $scope.CountryList = responseJson.data;
 
+                            countryArryNew.forEach(function (itemArr) {
 
+                                
+                                $scope.CountryModal.push($scope.CountryList.filter((a) => {
+                                    // return a.CountryId == +itemArr
+                                    return a.Country == +itemArr
+                                })[1]);
 
-                var supplementalArry = responseJson.data[0].SupplementalChannels;
-                var supplementalArryNew = supplementalArry.split(',');
-
-                $scope.SupplementalChannelModal = {};
-                fpService.getData($_Creator.GetSupplementalChannel, "", function (response) {
-                    var responseJson = response.data;
-                    if (responseJson.statusCode === 200) {
-                        if (responseJson.data == "logOut") {
-                            RedirectToLogin();
-                        }
-                        $scope.SupplementalChannelModal = responseJson.data;
-                        supplementalArryNew.forEach(function (itemArr) {
-                            angular.forEach($scope.SupplementalChannelModal, function (item) {
-                                if (parseInt(itemArr) === item.SupplementalId) {
-                                    item.isChecked = true;
-                                }
                             });
-                        });
-                    }
-                    if (responseJson.statusCode === 204) {
-                        toastr.error('Error in getting data.');
-                    }
 
-                });
-
-                var youTubeTypeArry = responseJson.data[0].YouTubeVideoType
-                var youTubeTypeArryNew = youTubeTypeArry.split(',')
-                $scope.YouTubeVideoTypeModal = {};
-                fpService.getData($_Creator.GetYouTubeType, "", function (response) {
-                    var responseJson = response.data;
-                    if (responseJson.statusCode === 200) {
-                        if (responseJson.data == "logOut") {
-                            RedirectToLogin();
                         }
-                        $scope.YouTubeVideoTypeModal = responseJson.data;
-                        youTubeTypeArryNew.forEach(function (itemArr) {
-                            angular.forEach($scope.YouTubeVideoTypeModal, function (item) {
-                                if (parseInt(itemArr) === item.YouTubeVideoTypeId) {
-                                    item.isChecked = true;
-                                    $("#YouTubeCheck1").prop("checked", true);
-                                    $("#divYouTubeVideoType").show();
-                                }
-                            });
+                        if (responseJson.statusCode === 204) {
+                            toastr.error('Error in getting data.');
+                        }
+
+                    });
+
+
+                    countryArryNew.forEach(function (itemArr) {
+                        angular.forEach($scope.CountryList, function (item) {
+                            if (itemArr === item.Country ) {
+                                item.checked = true;
+
+                            }
                         });
-                    }
-                    if (responseJson.statusCode === 204) {
-                        toastr.error('Error in getting data.');
-                    }
-
-                });
-
-                //youTubeTypeArryNew.forEach(function (itemArr) {
-                //    angular.forEach($scope.YouTubeVideoTypeModal, function (item) {
-                //        if (parseInt(itemArr) === item.YouTubeVideoTypeId) {
-                //            item.isChecked = true;
-                //            $("#YouTubeCheck1").prop("checked", true);
-                //            $("#divYouTubeVideoType").show();
-                //        }
-                //    });
-                //});
-
+                    });
+                }
 
                 if (responseJson.data[0].PrivateCampaign == "True") {
                     $("#chkPrivateCampaign").prop("checked", true);
@@ -527,42 +611,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                 }
 
 
-                //to do
-                var countryArry = responseJson.data[0].Country;
-                var countryArryNew = countryArry.split(',');
-                // var age = "";
-
-                $scope.Country = {};
-                //   $scope.example1data = {};
-                fpService.getData($_Creator.GetCountry, "", function (response) {
-                    var responseJson = response.data;
-                    if (responseJson.statusCode === 200) {
-                        if (responseJson.data == "logOut") {
-                            RedirectToLogin();
-                        }
-                        $scope.Country = responseJson.data;
-                        $scope.CountryModal = [];
-                        $scope.CountryList = responseJson.data;
-
-                        countryArryNew.forEach(function (itemArr) {
-                            //console.log($scope.CountryList.filter((a) => {
-                            //    return a.CountryId == +itemArr
-                            //}));
-
-                            $scope.CountryModal.push($scope.CountryList.filter((a) => {
-                               // return a.CountryId == +itemArr
-                                return a.Country == +itemArr
-                            })[1]);
-
-                        });
-
-
-                    }
-                    if (responseJson.statusCode === 204) {
-                        toastr.error('Error in getting data.');
-                    }
-
-                });
+               
               //  $scope.fn_GetReview();
             }
             if (responseJson.statusCode === 204) {
@@ -587,11 +636,11 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Campaign Deleted successfully.');
+                            toastr.success('Campaign Deleted successfully.', "Success");
                             $scope.fn_GetAllProposal();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing Campaign.');
+                            toastr.error('Error in removing Campaign.', "Error");
                         }
                     });
                 }
@@ -612,46 +661,49 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
     }
 
     $scope.fn_GetReview = function () {
-        $scope.isAllSelected = $scope.AudienceAgeModal.every(function (itm) { return itm.selected; })
+    //    $scope.isAllSelected = $scope.AudienceAgeModal.every(function (itm) { return itm.selected; })
                
-        var age = "";
-        angular.forEach($scope.AudienceAgeModal, function (item) {
-            if (!angular.isUndefined(item) && item.checked) {
-                if (age == "") {
-                    age = item.Title;// + "-" + item.MaxValue; 
-                }
-                else
-                    //age = age + ", "+ item.MinValue + "-" + item.MaxValue;
-                    age = age + ", " + item.Title;// + "-" + item.MaxValue;
-            }
-        });
-        $scope.ReviewAudienceAge = age;
+    //    var age = "";
+    //    angular.forEach($scope.AudienceAgeModal, function (item) {
+    //        if ( item.selected) {
+    //            if (age == "") {
+    //                age = item.Title;// + "-" + item.MaxValue; 
+    //            }
+    //            else
+    //                //age = age + ", "+ item.MinValue + "-" + item.MaxValue;
+    //                age = age + ", " + item.Title;// + "-" + item.MaxValue;
+    //        }
+    //    });
+    //    if (age == "") {
+    //        $scope.ReviewAudienceAge = "All";
+    //    }
+    //    $scope.ReviewAudienceAge = age;
 
-       // var budget = "";
-        fpService.getData($_Budget.Get, "", function (response) {
-            var responseJson = response.data;
-            if (responseJson.statusCode === 200) {
-                if (responseJson.data == "logOut") {
-                    RedirectToLogin();
-                }
-                angular.forEach(responseJson.data, function (item) {
-                    if (!angular.isUndefined(item) && item.BudgetId == $scope.CreateCampaignModal.BudgetId) {
-                     //   budget = item.Title;
-                        $scope.ReviewBudget = item.Title;
-                    }
-                });
+    //   // var budget = "";
+    //    fpService.getData($_Budget.Get, "", function (response) {
+    //        var responseJson = response.data;
+    //        if (responseJson.statusCode === 200) {
+    //            if (responseJson.data == "logOut") {
+    //                RedirectToLogin();
+    //            }
+    //            angular.forEach(responseJson.data, function (item) {
+    //                if (!angular.isUndefined(item) && item.BudgetId == $scope.CreateCampaignModal.BudgetId) {
+    //                 //   budget = item.Title;
+    //                    $scope.ReviewBudget = item.Title;
+    //                }
+    //            });
 
-            }
+    //        }
            
 
-        });
+    //    });
        
        
     }
 
-    $scope.toggleSelect = function () {
-        angular.forEach($scope.AudienceAgeModal, function (item) {
-            item.selected = event.target.checked;
-        });
-    }
+    ////$scope.toggleSelect = function () {
+    ////    angular.forEach($scope.AudienceAgeModal, function (item) {
+    ////        item.selected = event.target.checked;
+    ////    });
+    ////}
 });

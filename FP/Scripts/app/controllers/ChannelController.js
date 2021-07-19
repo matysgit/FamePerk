@@ -36,14 +36,14 @@ fpApp.controller("ChannelController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Channel saved successfully.');
+                toastr.success('Channel saved successfully.', "Success");
                 $scope.fn_DefaultChannelSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Channel already exists.');
+                toastr.warning('Channel already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -60,7 +60,7 @@ fpApp.controller("ChannelController", function ($scope, fpService, $http) {
                 $scope.ChannelModal = responseJson.data;
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in getting data.');
+                toastr.error('Error in getting data.', "Error");
             }
         });
     };
@@ -80,11 +80,11 @@ fpApp.controller("ChannelController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Channel removed successfully.');
+                            toastr.success('Channel removed successfully.', "Success");
                             $scope.fn_GetAllChannel();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

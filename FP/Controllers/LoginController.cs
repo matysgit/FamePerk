@@ -11,6 +11,9 @@ namespace FP.Controllers
         // GET: Login
         public ActionResult Index()
         {
+            Session.Clear();
+            Session.RemoveAll();
+            Session.Abandon();
             return View();
         }
     }

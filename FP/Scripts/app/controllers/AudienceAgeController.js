@@ -37,14 +37,14 @@ fpApp.controller("AudienceAgeController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Audience Age saved successfully.');
+                toastr.success('Audience Age saved successfully.', "Success");
                 $scope.fn_DefaultAudienceAgeSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Audience Age name already exists.');
+                toastr.warning('Audience Age name already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -81,11 +81,11 @@ fpApp.controller("AudienceAgeController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Audience Age removed successfully.');
+                            toastr.success('Audience Age removed successfully.', "Success");
                             $scope.fn_GetAllAudienceAge();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

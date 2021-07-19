@@ -84,7 +84,7 @@ namespace FP.Controllers
                     Session["UserId"] = user.Identity.GetUserId();
                     if (user.IsInRole("Client"))
                     {
-                       return RedirectToAction("Welcome", "Client");
+                       return RedirectToAction("Projects", "Client");
                     }
                     else if (user.IsInRole("Creator"))
                     {
@@ -92,7 +92,7 @@ namespace FP.Controllers
                     }
                     else if (user.IsInRole("Admin"))
                     {
-                        return RedirectToAction("Dashboard", "Admin");
+                        return RedirectToAction("ProductCategory", "Admin");
                     }
 
                     else

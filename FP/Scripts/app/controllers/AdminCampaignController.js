@@ -205,12 +205,12 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Campaign updated successfully.');
+                toastr.success('Campaign updated successfully.', "Success");
                 $scope.fn_GetAllProjects(ListType);
             }
            
             if (responseJson.statusCode === 204) {
-                toastr.error('Error.');
+                toastr.error('Error.', "Error");
                 $scope.fn_GetAllProjects(ListType);
             }
         });
@@ -472,14 +472,14 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Proposal save successfully.');
+                toastr.success('Proposal save successfully.', "Success");
                 $scope.fn_DefaultProjectSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Proposal already exists.');
+                toastr.warning('Proposal already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in replying.');
+                toastr.error('Error in replying.', "Error");
             }
         });
     };
@@ -501,14 +501,14 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                     RedirectToLogin();
                 }
                 $window.open(responseJson)
-                toastr.success('Documant Downloaded.');
+                toastr.success('Documant Downloaded.', "Success");
                 // $scope.fn_DefaultMailboxSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.error('Error in dowloading.');
+                toastr.error('Error in dowloading.', "Error");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in dowloading.');
+                toastr.error('Error in dowloading.', "Error");
             }
         });
     };
@@ -591,14 +591,14 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('File delete successfully.');
+                toastr.success('File delete successfully.', "Success");
                 $scope.lstDocument = responseJson.data;
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Error in deleteing.');
+                toastr.warning('Error in deleteing.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in deleteing.');
+                toastr.error('Error in deleteing.', "Error");
             }
         });
     };
@@ -619,11 +619,11 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Campaign Deleted successfully.');
+                            toastr.success('Campaign Deleted successfully.', "Success");
                             $scope.fn_GetAllProposal();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing Campaign.');
+                            toastr.error('Error in removing Campaign.', "Error");
                         }
                     });
                 }
@@ -665,12 +665,12 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Project Proposal Update send successfully.');
+                toastr.success('Project Proposal Update send successfully.', "Success");
                 $scope.fn_DefaultProjectSettings();
             }
 
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in replying.');
+                toastr.error('Error in replying.', "Error");
             }
         });
     };
