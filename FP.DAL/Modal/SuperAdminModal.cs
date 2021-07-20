@@ -40,6 +40,7 @@ namespace FP.DAL
         public string Duration { get; set; }
         public int ManagedBy { get; set; }
         public string CreatedDate { get; set; }
+        public bool isChecked { get; set; }
     }
 
 

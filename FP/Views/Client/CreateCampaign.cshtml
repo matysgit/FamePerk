@@ -159,12 +159,6 @@
                                         <button class="fa fa-question  question-tooltip" data-toggle="tooltip" data-placement="bottom" title="A dedicated video in which YouTubers provide a review of their experience with your products or service and talk about your features."></button>
 
                                     </div>
-
-
-
-
-
-
                                 </div>
 
                             </div>
@@ -293,6 +287,7 @@
                                                 <div class="custom-control custom-checkbox col-3 mb-3">
                                                     <input type="checkbox" ng-click="toggleAll()" ng-model="isAllSelected">Select all
                                                     <br>
+                                                   
                                                     <div ng-repeat="option in AudienceAgeModal">
                                                         <input type="checkbox" ng-model="option.selected" ng-change="fn_GetReview()">{{option.Title}}
                                                     </div>
@@ -334,9 +329,6 @@
                                         <div class="form-group custom-form-group col-md-6">
                                             <label class="control-label">Country</label>
                                             <div ng-dropdown-multiselect="" options="CountryList" selected-model="CountryModal"></div>
-
-
-
                                         </div>
                                         <button class="fa fa-question  question-tooltip" data-toggle="tooltip" data-placement="bottom" title="A dedicated video in which YouTubers provide a review of their experience with your products or service and talk about your features."></button>
                                     </div>

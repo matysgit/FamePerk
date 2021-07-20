@@ -212,8 +212,6 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
         $("#" + BtnId + "").hide();
     }
     $scope.fn_SaveCampaign = function (CreateCampaignModal, Status) {
-        //$scope.CreateCampaignModal = {};
-
         var age = "";
         angular.forEach($scope.AudienceAgeModal, function (item) {
             if (item.selected) {
@@ -226,28 +224,26 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
         var YouTubeVideoType = ""; 
         angular.forEach($scope.YouTubeVideoTypeModal, function (item) {
-            if (item.selected) {//SupplementalId
+            if (item.isChecked) {
                 if (YouTubeVideoType == "")
-                    YouTubeVideoType = item.AudienceAgeId;
+                    YouTubeVideoType = item.YouTubeVideoTypeId;
                 else
                     YouTubeVideoType = YouTubeVideoType + "," + item.YouTubeVideoTypeId;
-               // YouTubeVideoType = YouTubeVideoType + item.YouTubeVideoTypeId + ",";
             }
         });
+
         var SupplementalChannels = "";
         angular.forEach($scope.SupplementalChannelModal, function (item) {
-            if (item.checked == true) {//!angular.isUndefined(item) &&
+            if (item.isChecked) {
                 if (SupplementalChannels == "")
                     SupplementalChannels = item.SupplementalId;
                 else
                     SupplementalChannels = SupplementalChannels + "," + item.SupplementalId;
-               // SupplementalChannels = SupplementalChannels + item.SupplementalId + ",";
             }
         });   
 
         var countryList = "";
         angular.forEach($scope.CountryModal, function (item) {
-           
             if (countryList == "") {
                 countryList = item.label;
             } else {
@@ -340,12 +336,9 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
 
     $scope.fn_ViewCampaign = function (ProjectId) {
-
        
-        //
         $scope.ShowSaveCampaign = true;
         $scope.CreateCampaignModal = {};
-        //$scope.ProductCategory = [];
         var param = { ProjectId: ProjectId };
         fpService.getData($_Project.Edit, param, function (response) {
             var responseJson = response.data;
@@ -354,12 +347,9 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     RedirectToLogin();
                 }
                 $scope.CreateCampaignModal = responseJson.data[0];
-
-
                 var youTubeTypeArry = responseJson.data[0].YouTubeVideoType;
                 if (youTubeTypeArry == null || youTubeTypeArry=="") {
                     $scope.fn_GetYouTubeType();
-                   
                 }
                 else {
                     var youTubeTypeArryNew = youTubeTypeArry.split(',');
@@ -387,8 +377,6 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                         if (responseJson.statusCode === 204) {
                             toastr.error('Error in getting data.');
                         }
-
-
                     });
                 }
                     
@@ -514,7 +502,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                             audienceArryNew.forEach(function (itemArr) {
                                 angular.forEach($scope.AudienceAgeModal, function (item) {
                                     if (parseInt(itemArr) === item.AudienceAgeId || itemArr === "All") {
-                                        item.checked = true;
+                                        item.selected = true;
                                         if (age == "") {
                                             age = item.Title;
                                         }
@@ -565,6 +553,14 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
                             });
 
+                            countryArryNew.forEach(function (itemArr) {
+                                angular.forEach($scope.CountryList, function (item) {
+                                    if (itemArr == item.Name) {
+                                        item.isChecked = true;
+                                    }
+                                });
+                            });
+
                         }
                         if (responseJson.statusCode === 204) {
                             toastr.error('Error in getting data.');
@@ -573,14 +569,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                     });
 
 
-                    countryArryNew.forEach(function (itemArr) {
-                        angular.forEach($scope.CountryList, function (item) {
-                            if (itemArr === item.Country ) {
-                                item.checked = true;
-
-                            }
-                        });
-                    });
+                   
                 }
 
                 if (responseJson.data[0].PrivateCampaign == "True") {
