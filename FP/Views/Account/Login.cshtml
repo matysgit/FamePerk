@@ -47,11 +47,32 @@
                 <li>
                     @Html.ActionLink("Sign Up As a Creator", "", null, new { @class = "btn btn-md" })
                 </li>
+
             </ul>
-            <p>&copy; @DateTime.Now.Year - Famebit</p>
+
+
+            @*using (Html.BeginForm("Login", "Account", new { ViewBag.ReturnUrl }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div id="socialLoginList">
+                        <p>
+                            @foreach (var p in loginProviders)
+                            {
+                                <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                            }
+                        </p>
+                    </div>
+                }*@
+
+
+            <p>&copy; @DateTime.Now.Year - Fame Perks</p>
         }
     </section>
-
+    <div class="col-md-4">
+        <section id="socialLoginForm">
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = "Creator/Index/" })
+        </section>
+    </div>
 </div>
 
 @section Scripts {

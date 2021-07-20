@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using FP.Models;
 using System.Collections.Generic;
 
+
 namespace FP.Controllers
 {
     [Authorize]
@@ -363,7 +364,9 @@ namespace FP.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
+                    Session["UserId"] = user.Identity.GetUserId();
+                    return RedirectToAction("Index", "Creator");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
