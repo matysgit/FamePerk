@@ -366,3 +366,6 @@ C:\Matys\FamePerk\FP.DAL\obj\Debug\FP.DAL.csproj.CoreCompileInputs.cache
 C:\Matys\FamePerk\FP.DAL\obj\Debug\FP.DAL.csproj.CopyComplete
 C:\Matys\FamePerk\FP.DAL\obj\Debug\FP.DAL.dll
 C:\Matys\FamePerk\FP.DAL\obj\Debug\FP.DAL.pdb
+C:\Matys\FamePerk\FP.DAL\bin\Debug\Microsoft.Owin.dll
+C:\Matys\FamePerk\FP.DAL\bin\Debug\Owin.dll
+C:\Matys\FamePerk\FP.DAL\bin\Debug\Microsoft.Owin.xml

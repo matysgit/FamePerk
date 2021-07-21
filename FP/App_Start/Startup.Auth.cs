@@ -58,11 +58,11 @@ namespace FP
                appId: "830691827582398",
                appSecret: "704244fc8b77d8329798be10bd93f506");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "648237907553-k1ubr08cs7buh1e8rm0jdpds8b07k586.apps.googleusercontent.com",
+                ClientSecret = "PloAD7UXrS_Vz4RyxuiO0Lw6"
+            });
         }
     }
 }
