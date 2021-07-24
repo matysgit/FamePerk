@@ -1198,3 +1198,12 @@ C:\Matys\FamePerk\FP\bin\Google.Apis.Auth.pdb
 C:\Matys\FamePerk\FP\bin\Google.Apis.Auth.xml
 C:\Matys\FamePerk\FP\bin\Google.Apis.Core.pdb
 C:\Matys\FamePerk\FP\bin\Google.Apis.Core.xml
+C:\Matys\FamePerk\FP\bin\Google.Apis.YouTube.v3.dll
+C:\Matys\FamePerk\FP\bin\Google.Apis.YouTube.v3.pdb
+C:\Matys\FamePerk\FP\bin\Google.Apis.YouTube.v3.xml
+C:\Matys\FamePerk\FP\bin\Google.Apis.Drive.v3.dll
+C:\Matys\FamePerk\FP\bin\Google.Apis.Storage.v1.dll
+C:\Matys\FamePerk\FP\bin\Google.Apis.Drive.v3.pdb
+C:\Matys\FamePerk\FP\bin\Google.Apis.Drive.v3.xml
+C:\Matys\FamePerk\FP\bin\Google.Apis.Storage.v1.pdb
+C:\Matys\FamePerk\FP\bin\Google.Apis.Storage.v1.xml

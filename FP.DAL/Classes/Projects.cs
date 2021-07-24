@@ -1,9 +1,13 @@
 ﻿using Dapper;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FP.DAL
@@ -797,6 +801,35 @@ namespace FP.DAL
 
                     }).ToList();
 
+                    foreach (var obj in _objData)
+                    {
+                        var youTubeLink = obj.YouTube.ToString();
+                      //  string[] youTubeIds = youTubeLink.Split("/");
+                        List<string> youTubeIds = new List<string>(
+                                     youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+                        if (youTubeIds.Count > 4)
+                        {
+                            var youTubeId = youTubeIds[4];
+                            //var youTubeId = "UCmo8uSna3y3b6ioa5oKJlCQ";/*//"https://www.youtube.com/watch?v=*/
+                            //for (int i = 4; i < youTubeIds.Count; i++) 
+                            //{
+                            //    youTubeId=youTubeIds[i];
+                            //}
+                            var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                            
+
+                            var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
+                            WebRequest request = HttpWebRequest.Create(url);
+                            request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                            WebResponse response = request.GetResponse();
+                            StreamReader reader = new StreamReader(response.GetResponseStream());
+                            string responseText = reader.ReadToEnd();
+                            dynamic data = JObject.Parse(responseText);
+                            ;
+                            obj.YouTube = data.items[0].statistics.subscriberCount;// data;
+                            
+                        }
+                    }
                     return _objData;
 
                 }

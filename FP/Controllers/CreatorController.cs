@@ -707,7 +707,7 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
-            // if(Session["ClientIsApproved"].ToString() != "Client") { 
+           
             Projects obj = new Projects();
             var result = obj.GetCreatorList();
 

@@ -100,6 +100,7 @@ fpApp.controller("ClientCreatorController", function ($scope, fpService, $http) 
             }
         });
     };
+
     $scope.fn_GetProfileImg = function () {
         fpService.postData($_Creator.GetImg, "", function (response) {
             var responseJson = response.data;

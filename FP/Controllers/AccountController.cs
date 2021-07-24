@@ -10,7 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FP.Models;
 using System.Collections.Generic;
-
+using System.Net;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace FP.Controllers
 {
@@ -85,7 +87,7 @@ namespace FP.Controllers
                     Session["UserId"] = user.Identity.GetUserId();
                     if (user.IsInRole("Client"))
                     {
-                       return RedirectToAction("Projects", "Client");
+                        return RedirectToAction("Projects", "Client");
                     }
                     else if (user.IsInRole("Creator"))
                     {
@@ -367,6 +369,14 @@ namespace FP.Controllers
                 case SignInStatus.Success:
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
+                    ////changes
+                    //ChannelsResource.ListRequest channelsListRequest = youtube.Channels.List("id");
+                    //channelsListRequest.Mine = true;
+                    //ChannelListResponse channelsListResponse = channelsListRequest.Fetch();
+                    //string channelId = channelsListResponse.Items[0].Id;
+                    ////changes
+                    ///
+                    
                     return RedirectToAction("Index", "Creator");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
