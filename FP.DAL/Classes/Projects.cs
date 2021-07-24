@@ -810,14 +810,7 @@ namespace FP.DAL
                         if (youTubeIds.Count > 4)
                         {
                             var youTubeId = youTubeIds[4];
-                            //var youTubeId = "UCmo8uSna3y3b6ioa5oKJlCQ";/*//"https://www.youtube.com/watch?v=*/
-                            //for (int i = 4; i < youTubeIds.Count; i++) 
-                            //{
-                            //    youTubeId=youTubeIds[i];
-                            //}
                             var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                            
-
                             var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
                             WebRequest request = HttpWebRequest.Create(url);
                             request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
@@ -825,9 +818,11 @@ namespace FP.DAL
                             StreamReader reader = new StreamReader(response.GetResponseStream());
                             string responseText = reader.ReadToEnd();
                             dynamic data = JObject.Parse(responseText);
-                            ;
-                            obj.YouTube = data.items[0].statistics.subscriberCount;// data;
-                            
+                            obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                        }
+                        else
+                        {
+                            obj.YouTube = "NA";
                         }
                     }
                     return _objData;
@@ -839,6 +834,24 @@ namespace FP.DAL
                 //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
+        }
+
+        static string FormatNumber(int num)
+        {
+
+            if (num >= 100000000)
+                return (num / 1000000).ToString("#,0M");
+
+            if (num >= 10000000)
+                return (num / 1000000).ToString("0.#") + "M";
+
+            if (num >= 100000)
+                return (num / 1000).ToString("#,0K");
+
+            if (num >= 10000)
+                return (num / 1000).ToString("0.#") + "K";
+
+            return num.ToString("#,0");
         }
     }
 }

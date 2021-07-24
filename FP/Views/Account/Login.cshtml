@@ -15,7 +15,7 @@
         {
             @Html.AntiForgeryToken()
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            
             <div class="form-group">
                 <div class="col-md-12">
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
@@ -39,7 +39,9 @@
 
 
             <ul class="btn-list">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <li><input type="submit" value="Log in" class="btn btn-red" /></li>
+
                 <li class="forgot-password"><a href="javascript:void(0)">Forgot Password</a></li>
                 <li class="no-ac">No account yet?</li>
 
@@ -49,20 +51,6 @@
                 </li>
 
             </ul>
-
-
-            @*using (Html.BeginForm("Login", "Account", new { ViewBag.ReturnUrl }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div id="socialLoginList">
-                        <p>
-                            @foreach (var p in loginProviders)
-                            {
-                                <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
-                            }
-                        </p>
-                    </div>
-                }*@
 
 
             <p>&copy; @DateTime.Now.Year - Fame Perks</p>
