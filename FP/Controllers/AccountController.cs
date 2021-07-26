@@ -65,6 +65,13 @@ namespace FP.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ExternalLogin(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -369,14 +376,6 @@ namespace FP.Controllers
                 case SignInStatus.Success:
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
-                    ////changes
-                    //ChannelsResource.ListRequest channelsListRequest = youtube.Channels.List("id");
-                    //channelsListRequest.Mine = true;
-                    //ChannelListResponse channelsListResponse = channelsListRequest.Fetch();
-                    //string channelId = channelsListResponse.Items[0].Id;
-                    ////changes
-                    ///
-                    
                     return RedirectToAction("Index", "Creator");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -385,9 +384,22 @@ namespace FP.Controllers
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    //ViewBag.ReturnUrl = returnUrl;
+                    //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    if (info == null)
+                    {
+                        return View("ExternalLoginFailure");
+                    }
+                    ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
+                    model.Email = info.Email;
+                   await ExternalLoginConfirmation(model, null);
+                    user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
+                    Session["UserId"] = user.Identity.GetUserId();
+                    return RedirectToAction("Index", "Creator");
+
+
             }
         }
 

@@ -574,6 +574,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
                 if (responseJson.data[0].PrivateCampaign == "True") {
                     $("#chkPrivateCampaign").prop("checked", true);
+
                     //element(by.id('chkPrivateCampaign')).getAttribute('checked')
                 }
                 if (responseJson.data[0].AudienceGender == "All") {

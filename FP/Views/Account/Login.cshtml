@@ -15,51 +15,56 @@
         {
             @Html.AntiForgeryToken()
 
-            
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class=" col-md-12">
-                    <div class="checkbox">
-                        @Html.CheckBoxFor(m => m.RememberMe)
-                        @Html.LabelFor(m => m.RememberMe)
+            <div id="divLogin">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class=" col-md-12">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                </div>
+
+
+                <ul class="btn-list">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <li><input type="submit" value="Log in" class="btn btn-red" /></li>
+
+                    <li class="forgot-password"><a href="javascript:void(0)">Forgot Password</a></li>
+                    <li class="no-ac">No account yet?</li>
+
+                    <li> @Html.ActionLink("Sign Up As a Brand", "Register", null, new { @class = "btn btn-md" })</li>
+                    <li>
+                        @Html.ActionLink("Sign In/Sign Up As a Creator", "ExternalLogin", null, new { @class = "btn btn-md" })
+                    </li>
+
+                </ul>
             </div>
-
-
-            <ul class="btn-list">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <li><input type="submit" value="Log in" class="btn btn-red" /></li>
-
-                <li class="forgot-password"><a href="javascript:void(0)">Forgot Password</a></li>
-                <li class="no-ac">No account yet?</li>
-
-                <li> @Html.ActionLink("Sign Up As a Brand", "Register", null, new { @class = "btn btn-md" })</li>
-                <li>
-                    @Html.ActionLink("Sign Up As a Creator", "", null, new { @class = "btn btn-md" })
-                </li>
-
-            </ul>
-
 
             <p>&copy; @DateTime.Now.Year - Fame Perks</p>
         }
     </section>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
+
+    <div id="divLoginCreator" style="display:none">
+        <div class="col-md-4">
+            <section id="socialLoginForm">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+
+                <p>&copy; @DateTime.Now.Year - Fame Perks</p>
+            </section>
+        </div>
     </div>
 </div>
 

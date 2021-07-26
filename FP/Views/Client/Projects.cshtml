@@ -99,7 +99,7 @@
                                         </th>
 
                                         <th style="text-align:center" >
-                                            Action (Edit/Delete)
+                                            Action 
                                         </th>
 
                                     </tr>
@@ -132,9 +132,9 @@
                                             <a href="javascript:void(0)">    {{lst.CreatedDate}}</a>
                                         </td>
                                         <td class="text-primary" align="center">
-                                            <a ng-show="{{lst.Status}} == 'Publish'" title="View" style="cursor:pointer" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-eye"></i></a>
-                                            <a ng-show="{{lst.Status}} != 'Publish'" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                                            <a href="javascript:void(0)" ng-show="{{lst.Status}} != 'Publish'" ng-click="fn_RemoveCampaign(lst.CampaignId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                            <a ng-show="lst.Status == 'Publish'" title="View" style="cursor:pointer" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-eye"></i></a>
+                                            <a ng-show="lst.Status != 'Publish'" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;@*|&nbsp;&nbsp;&nbsp;*@
+                                            <a href="javascript:void(0)" ng-show="lst.Status != 'Publish'" ng-click="fn_RemoveCampaign(lst.CampaignId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
                                         </td>
                                     </tr>
                                     <tr ng-show="tblProjList.length < 1 && !gridLoader">
