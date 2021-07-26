@@ -384,17 +384,30 @@ namespace FP.Controllers
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
-                    //ViewBag.ReturnUrl = returnUrl;
-                    //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                    ViewBag.ReturnUrl = returnUrl;
+                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+
+                    //
+                    ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
+                    model.Email = loginInfo.Email;
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        //var userID = User.Identity.GetUserId();
+                        
+                        //var d=await UserManager.GetClaims(model, userID);
+                        ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                        return View("ExternalLogin");
+                      // return RedirectToAction("ExternalLogin", "ExternalLogin");
+                    }
+
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                     if (info == null)
                     {
                         return View("ExternalLoginFailure");
                     }
-                    ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
-                    model.Email = info.Email;
-                   await ExternalLoginConfirmation(model, null);
+                    
+                    await ExternalLoginConfirmation(model, null);
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
                     return RedirectToAction("Index", "Creator");
