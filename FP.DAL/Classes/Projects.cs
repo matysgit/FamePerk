@@ -25,16 +25,9 @@ namespace FP.DAL
 
                     string query = "";
 
-                    //query = "SELECT   ProjectId, ProjectTitle, ProjectDescription, Budget, IsActive, CreatorProfile.FullName AS CreateBy FROM Project INNER JOIN CreatorProfile on CreatorProfile.UserId = Project.CreateBy Where IsActive =@IsActive ";
-                    //List<ProjectsModal> _objData = _dbDapperContext.Query<ProjectsModal>(query, new
-                    //{
-                    //    IsActive = 1
-
-                    //}).ToList();
-
                     query = "SELECT Campaign.CampaignId, ProductCategory.Name AS ProductCategory, " +
                       "CampaignTitle,  Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 0 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , " +
-                      "Budget.Title AS Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, CASE WHEN ProjectProposal.Approved = 1 THEN 'Approved' WHEN ProjectProposal.Approved = 0 THEN 'Reject' ELSE 'Active' END Approve, " +
+                      "Budget.Title AS Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy') as CreatedDate, CASE WHEN ProjectProposal.Approved = 1 THEN 'Approved' WHEN ProjectProposal.Approved = 0 THEN 'Reject' ELSE 'Active' END Approve, " +
                         "ProjectProposal.Status " +
                       "FROM  Campaign " +
                       "INNER JOIN ProjectProposal ON ProjectProposal.CampaignId = Campaign.CampaignId " +
@@ -809,6 +802,7 @@ namespace FP.DAL
                                      youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
                         if (youTubeIds.Count > 4)
                         {
+                            //https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
                             var youTubeId = youTubeIds[4];
                             var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
                             var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;

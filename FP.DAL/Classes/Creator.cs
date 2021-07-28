@@ -1,8 +1,11 @@
 ﻿using Dapper;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace FP.DAL
 {
@@ -182,35 +185,45 @@ namespace FP.DAL
                     }
                     if(ageId =="" && countryId == null)
                     {
-                        query = "SELECT     * FROM CreatorProfile ";
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
+                             Categories, Gender FROM CreatorProfile";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                            
                         }).ToList();
 
-                        return _objData;
+                        List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
+                        return objFilnalCreatorData;
+                       
                     }
                    else if ( ageId =="")
                     {
-                        query = "SELECT     * FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId)";
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
+                             Categories, Gender  FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId)";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                             CountryId = countryId
                         }).ToList();
 
-                        return _objData;
+                     List<CreatorModal> objFilnalCreatorData=   GetCreatorDetails(_objData);
+                        return objFilnalCreatorData;
                     }
                     else
                     {
-                        query = "SELECT     * FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId) and TargetAudience LIKE '%TargetAudience,%'";
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
+                             Categories, Gender  FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId) and TargetAudience LIKE @TargetAudience ";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                             CountryId = countryId,
-                            TargetAudience = ageId
+                            TargetAudience = "%" + ageId + "%"// ageId
 
                         }).ToList();
 
-                        return _objData;
+                        List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
+                        return objFilnalCreatorData;
                     }
                    
 
@@ -221,6 +234,53 @@ namespace FP.DAL
                 //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
+        }
+
+        public List<CreatorModal> GetCreatorDetails(List<CreatorModal> objData)
+        {
+            foreach (var objList in objData)
+            {
+                var youTubeLink = objList.YouTube.ToString();
+                //  string[] youTubeIds = youTubeLink.Split("/");
+                List<string> youTubeIds = new List<string>(
+                             youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+                if (youTubeIds.Count > 4)
+                {
+                    //https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+                    var youTubeId = youTubeIds[4];
+                    var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                    var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
+                    WebRequest request = HttpWebRequest.Create(url);
+                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                    WebResponse response = request.GetResponse();
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string responseText = reader.ReadToEnd();
+                    dynamic data = JObject.Parse(responseText);
+                    objList.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                }
+                else
+                {
+                    objList.YouTube = "NA";
+                }
+            }
+            return objData;
+        }
+        static string FormatNumber(int num)
+        {
+
+            if (num >= 100000000)
+                return (num / 1000000).ToString("#,0M");
+
+            if (num >= 10000000)
+                return (num / 1000000).ToString("0.#") + "M";
+
+            if (num >= 100000)
+                return (num / 1000).ToString("#,0K");
+
+            if (num >= 10000)
+                return (num / 1000).ToString("0.#") + "K";
+
+            return num.ToString("#,0");
         }
 
         public CreatorModal GetCreatorInfoMail(string email)
