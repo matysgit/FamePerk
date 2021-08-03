@@ -1,0 +1,25 @@
+﻿@using FP.Models
+@{
+    ViewBag.Title = "Fame Perks -LogIn";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<div class="login-box">
+    <div id="divLoginCreator" >
+        <div class="col-md-12">
+           
+            <section id="socialLoginForm">
+
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                 @Html.ActionLink("Back", "Login", null, new { @class = "btn btn-md", })
+
+                <p>&copy; @DateTime.Now.Year - Fame Perks</p>
+            </section>
+        </div>
+    </div>
+</div>

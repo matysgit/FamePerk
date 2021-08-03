@@ -17,12 +17,18 @@ namespace FP.Controllers
         // GET: Creator
 
         #region CreatorBasic Profile
+
+        public ActionResult Profile()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", controllerName: "Account");
+            }
+            return View();
+        }
+
         public ActionResult Index()
         {
-            // var res = GetUnReadMsg("");
-
-            // ViewBag.MessageCount = JsonConvert.SerializeObject(res.Data);
-            //var a = JObject.Parse(ViewBag.MessageCount);
             if (Session["UserId"] == null)
             {
                 return RedirectToAction("Login", controllerName: "Account");
@@ -683,10 +689,6 @@ namespace FP.Controllers
                     }
                 }
 
-                //if (Directory.Exists(@"D:\Gaurav_Project_2020\FP_OLD\FP\FP\Upload\ProjectProposal\" + userId))
-                //{
-                //    Directory.Delete(@"D:\Gaurav_Project_2020\FP_OLD\FP\FP\Upload\ProjectProposal\" + userId );
-                //}
             }
             return Json(new
             {
@@ -705,7 +707,7 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
-            // if(Session["ClientIsApproved"].ToString() != "Client") { 
+           
             Projects obj = new Projects();
             var result = obj.GetCreatorList();
 

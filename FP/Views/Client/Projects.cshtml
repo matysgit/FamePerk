@@ -48,13 +48,7 @@
             </div>
 
             <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
-                @*<li class="nav-item ">
-            <button class="btn btn-success " type="button">Create Campaign</button>
-        </li>*@
-
-                @*<li class="nav-item ">
-                    <button class="btn btn-success" type="button">Create Campaign</button>
-                </li>*@
+               
                 <li class="nav-item">@Html.ActionLink("Create Campaign", "CreateCampaign", "Client", new { @class = "nav-link btn btn-success" })</li>
                 
 
@@ -70,10 +64,6 @@
                        <h4 class="card-title">Campaign List</h4>
                     </div>
                     <div class="input-group ml-auto col-4 p-0">
-                        @* <input type="text" class="form-control" placeholder="Title" ng-model="ProjectsSearch" aria-label="Text" aria-describedby="basic-addon1">
-        <div class="input-group-prepend">
-            <span class="input-group-text fa fa-search" id="basic-addon1" ng-click="fn_SearchProjects()"></span>
-        </div>*@
                     </div>
                 </div>
             </div>
@@ -97,10 +87,6 @@
                                         <th onclick="sortTable(3)">
                                             Budget
                                         </th>
-
-                                        @*<th>
-            Proposal Status
-        </th>*@
                                         <th onclick="sortTable(4)">
                                             Approved/Rejected
                                         </th>
@@ -113,7 +99,7 @@
                                         </th>
 
                                         <th style="text-align:center" >
-                                            Action (Edit/Delete)
+                                            Action 
                                         </th>
 
                                     </tr>
@@ -122,7 +108,7 @@
                                     <tr ng-repeat="lst in lstProposal" ng-show="!gridLoader" class="unread">
 
                                         <td>
-                                            <a href="javascript:void(0)">  {{lst.CampaignTitle}}</a>
+                                            <a href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}">  {{lst.CampaignTitle}}</a>
                                         </td>
 
                                         <td>
@@ -135,13 +121,8 @@
                                         <td>
                                             <a href="javascript:void(0)">    {{lst.Budget}}</a>
                                         </td>
-
-                                        @*<td>
-            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.Approve}}</a>
-        </td>*@
-
                                         <td>
-                                            <a >    {{lst.Approved}}</a>
+                                            <a>    {{lst.Approved}}</a>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0)">    {{lst.Status}}</a>
@@ -151,26 +132,25 @@
                                             <a href="javascript:void(0)">    {{lst.CreatedDate}}</a>
                                         </td>
                                         <td class="text-primary" align="center">
-                                            <a ng-show="{{lst.Status}} == 'Publish'" title="View" style="cursor:pointer" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-eye"></i></a>
-                                            <a ng-show="{{lst.Status}} != 'Publish'" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                                            <a href="javascript:void(0)" ng-show="{{lst.Status}} != 'Publish'" ng-click="fn_RemoveCampaign(lst.CampaignId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
+                                            <a ng-show="lst.Status == 'Publish'" title="View" style="cursor:pointer" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-eye"></i></a>
+                                            <a ng-show="lst.Status != 'Publish'" href="/Client/CreateCampaign?CampaignId={{lst.CampaignId}}" onclick="location.href='@Url.Action("fn_ViewCampaign({{lst.CampaignId}}")'"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;@*|&nbsp;&nbsp;&nbsp;*@
+                                            <a href="javascript:void(0)" ng-show="lst.Status != 'Publish'" ng-click="fn_RemoveCampaign(lst.CampaignId)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
                                         </td>
-                                        @*<td>
-            <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
-        </td>*@
-
                                     </tr>
-
+                                    <tr ng-show="tblProjList.length < 1 && !gridLoader">
+                                        <td colspan="3">
+                                            <span>No record found</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="gridLoader">
+                                        <td colspan="3">
+                                            <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
 
-
-
-                        <!--End-->
-                        <!--Tab pannel 1-->
-
-                        
                     </div>
                 </div>
             </div>

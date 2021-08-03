@@ -50,6 +50,7 @@ fpApp.controller("BankDetailsController", function ($scope, fpService, $http) {
     $scope.fn_GetAllBankDetails = function () {
         $scope.lstBankDetail = [];
         $scope.gridLoader = true;
+        //$("#divAddNewBank").show();
         fpService.getData($_BankDetails.Get, "", function (response) {
             var responseJson = response.data;
             if (responseJson.statusCode === 200) {
@@ -57,6 +58,11 @@ fpApp.controller("BankDetailsController", function ($scope, fpService, $http) {
                     RedirectToLogin();
                 }
                 $scope.lstBankDetail = responseJson.data;
+                if ($scope.lstBankDetail != "")
+                    $("#divAddNewBank").hide();
+                else
+                    $("#divAddNewBank").show();
+                
             }
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');
@@ -72,14 +78,14 @@ fpApp.controller("BankDetailsController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Data saved successfully.');
+                toastr.success('Data saved successfully.', "Success");
                 $scope.fn_DefaultBankSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Data already exists.');
+                toastr.warning('Data already exists.',"Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.',"Error");
             }
         });
     };
@@ -94,6 +100,7 @@ fpApp.controller("BankDetailsController", function ($scope, fpService, $http) {
                     RedirectToLogin();
                 }
                 $scope.BankDetailModal = responseJson.data;
+             
                 $("#divAddBank").show();
                 $("#divBankList").hide();
                 $scope.SaveBank = "Update";
@@ -116,11 +123,12 @@ fpApp.controller("BankDetailsController", function ($scope, fpService, $http) {
                     fpService.postData($_BankDetails.Remove, jObject, function (response) {
                         var responseJson = response.data;
                         if (responseJson.statusCode === 200) {
-                            toastr.success('Record Deleted successfully.');
+                            
+                            toastr.success('Record Deleted successfully.','Success');
                             $scope.fn_GetAllBankDetails();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.','Error');
                         }
                     });
                 }

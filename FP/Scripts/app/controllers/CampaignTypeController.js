@@ -36,14 +36,14 @@ fpApp.controller("CampaignTypeController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Campaign Type saved successfully.');
+                toastr.success('Campaign Type saved successfully.', "Success");
                 $scope.fn_DefaultCampaignTypeSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Campaign Type already exists.');
+                toastr.warning('Campaign Type already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -80,11 +80,11 @@ fpApp.controller("CampaignTypeController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Campaign Type removed successfully.');
+                            toastr.success('Campaign Type removed successfully.', "Success");
                             $scope.fn_GetAllCampaignType();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

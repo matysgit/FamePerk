@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FP.Models;
 using System.Collections.Generic;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace FP.Controllers
 {
@@ -62,6 +65,13 @@ namespace FP.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ExternalLogin(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -84,7 +94,7 @@ namespace FP.Controllers
                     Session["UserId"] = user.Identity.GetUserId();
                     if (user.IsInRole("Client"))
                     {
-                       return RedirectToAction("Welcome", "Client");
+                        return RedirectToAction("Projects", "Client");
                     }
                     else if (user.IsInRole("Creator"))
                     {
@@ -92,7 +102,7 @@ namespace FP.Controllers
                     }
                     else if (user.IsInRole("Admin"))
                     {
-                        return RedirectToAction("Dashboard", "Admin");
+                        return RedirectToAction("ProductCategory", "Admin");
                     }
 
                     else
@@ -308,6 +318,7 @@ namespace FP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            Session["Workaround"] = 0;
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
@@ -363,7 +374,9 @@ namespace FP.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
+                    Session["UserId"] = user.Identity.GetUserId();
+                    return RedirectToAction("Index", "Creator");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -373,7 +386,33 @@ namespace FP.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+
+                    //
+                    ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
+                    model.Email = loginInfo.Email;
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        //var userID = User.Identity.GetUserId();
+                        
+                        //var d=await UserManager.GetClaims(model, userID);
+                        ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                        return View("ExternalLogin");
+                      // return RedirectToAction("ExternalLogin", "ExternalLogin");
+                    }
+
+                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    if (info == null)
+                    {
+                        return View("ExternalLoginFailure");
+                    }
+                    
+                    await ExternalLoginConfirmation(model, null);
+                    user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
+                    Session["UserId"] = user.Identity.GetUserId();
+                    return RedirectToAction("Index", "Creator");
+
+
             }
         }
 

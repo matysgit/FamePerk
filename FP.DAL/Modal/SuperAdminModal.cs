@@ -40,6 +40,7 @@ namespace FP.DAL
         public string Duration { get; set; }
         public int ManagedBy { get; set; }
         public string CreatedDate { get; set; }
+        public bool isChecked { get; set; }
     }
 
 
@@ -83,7 +84,8 @@ namespace FP.DAL
         public string Title { get; set; }
         public string Path { get; set; }
         public string IsActive { get; set; }
-       
+        public bool isChecked { get; set; }
+
     }
 
     public class YouTubeTypeModal
@@ -91,7 +93,7 @@ namespace FP.DAL
         public int YouTubeVideoTypeId { get; set; }
         public string Title { get; set; }
         public string IsActive { get; set; }
-
+        public bool isChecked { get; set; }
     }
 
     //public class CountryModal

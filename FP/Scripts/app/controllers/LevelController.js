@@ -37,14 +37,14 @@ fpApp.controller("LevelController", function ($scope, fpService, $http) {
                     RedirectToLogin();
                 }
 
-                toastr.success('Level saved successfully.');
+                toastr.success('Level saved successfully.', "Success");
                 $scope.fn_DefaultLevelSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Level already exists.');
+                toastr.warning('Level already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -62,7 +62,7 @@ fpApp.controller("LevelController", function ($scope, fpService, $http) {
                 $scope.button = "Update";
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in getting data.');
+                toastr.error('Error in getting data.', "Error");
             }
         });
     };
@@ -82,11 +82,11 @@ fpApp.controller("LevelController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Product category removed successfully.');
+                            toastr.success('Product category removed successfully.', "Success");
                             $scope.fn_DefaultLevelSettings();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

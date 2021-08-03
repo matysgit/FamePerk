@@ -36,14 +36,14 @@ fpApp.controller("BudgetController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                toastr.success('Budget saved successfully.');
+                toastr.success('Budget saved successfully.', "Success");
                 $scope.fn_DefaultBudgetSettings();
             }
             if (responseJson.statusCode === 409) {
-                toastr.warning('Budget name already exists.');
+                toastr.warning('Budget name already exists.', "Warning");
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in saving.');
+                toastr.error('Error in saving.', "Error");
             }
         });
     };
@@ -60,7 +60,7 @@ fpApp.controller("BudgetController", function ($scope, fpService, $http) {
                 $scope.BudgetModal = responseJson.data;
             }
             if (responseJson.statusCode === 204) {
-                toastr.error('Error in getting data.');
+                toastr.error('Error in getting data.', "Error");
             }
         });
     };
@@ -80,11 +80,11 @@ fpApp.controller("BudgetController", function ($scope, fpService, $http) {
                             if (responseJson.data == "logOut") {
                                 RedirectToLogin();
                             }
-                            toastr.success('Budget removed successfully.');
+                            toastr.success('Budget removed successfully.', "Success");
                             $scope.fn_GetAllBudget();
                         }
                         if (responseJson.statusCode === 204) {
-                            toastr.success('Error in removing records.');
+                            toastr.error('Error in removing records.', "Error");
                         }
                     });
                 }

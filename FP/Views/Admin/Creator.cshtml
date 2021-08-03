@@ -41,7 +41,13 @@
 <div class="container" ng-controller="ClientCreatorController" ng-init="fn_DefaultCreatorSettings()" ng-cloak>
     
     <div class="card card-full" id="divAllCreator">
-
+        <div class="card-head filter-bar rounded-0">
+            <div class="form-inline my-2 my-lg-0">
+                <div class="input-group col-4 p-0">
+                    <h4 class="card-title">Creator List</h4>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <div class="row">
 
@@ -54,23 +60,23 @@
 
                                     <div class="filter-box">
                                         <h4 class="filter-box-title">PRIMARY AUDIENCE AGE</h4>
-                                       
+
                                         <input type="radio" class="custom-control-input custom-checkbox" name="radio-stacked" id="aud_{{$index}}" ng-model="obj.checked" @*ng-checked="obj.isChecked"*@ required ng-change="GetCreatorByFillter(CreatorFillterModal)">
-                                       
+
                                         <select class="form-control" ng-model="CreatorFillterModal.TargetAudienceId" ng-options="item.AudienceAgeId as item.Title for item in AudienceAgeModal" ng-change="GetCreatorByFillter(CreatorFillterModal)">
                                             <option value="">Select Age</option>
-                                          
+
                                         </select>
-                                        
+
                                     </div>
 
 
                                     <div class="filter-box">
                                         <h4 class="filter-box-title">CREATOR'S COUNTRY</h4>
-                                       
+
                                         <select class="form-control" ng-model="CreatorFillterModal.CountyId" ng-options="item.CountryId as item.Name for item in Country" ng-change="GetCreatorByFillter(CreatorFillterModal)">
                                             <option value="">All</option>
-                                           
+
                                         </select>
                                     </div>
 
@@ -84,22 +90,22 @@
                                             <div class="col-md-6" ng-repeat="obj in CreatorModal">
                                                 <div class="creator-card">
                                                     <div class="creator-card-title">
-                                                       
+
                                                         <div class="creator-card-title-media">
                                                             <img class="imgProfile" ng-src="{{obj.ProfileImage}}" /> <br />
                                                             <span ng-show="imgLoader">Uploading <img src="~/Images/grid_loader.gif" style="width:100px" /></span>
                                                         </div>
 
                                                         <div class="creator-card-title-text">
-                                                           
+
                                                             <h5 class="creator-card-name">{{obj.FullName}}</h5>
                                                             <h5 class="creator-card-name">Gender : {{obj.Gender}}</h5>
                                                             <h5 class="creator-card-name">Age : {{obj.DOB}}</h5>
                                                             <div class="creator-card-rating"><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i><i class="fa fa-star"></i></div>
-                                                            
+
                                                         </div>
                                                     </div>
-                                                   
+
                                                     <ul class="list-unstyled creator-card-body">
                                                         <li class="d-flex justify-content-between"><span>Language  </span><strong>{{obj.Language}}</strong></li>
                                                         <li class="d-flex justify-content-between"><span>Categories  </span><strong>{{obj.Categories}}</strong></li>

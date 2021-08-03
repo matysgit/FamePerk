@@ -519,7 +519,7 @@ p {
             }
 
             .top-tab-holder .nav-pills .nav-link.active, .top-tab-holder .nav-pills .nav-pills .show > .nav-link {
-                background: transparent;
+               /* background: transparent;*/
                 border-bottom-color: #fff;
             }
 

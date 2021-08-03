@@ -137,12 +137,19 @@
                                             <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreatedDate}}</a>
                                         </td>
 
-                                        @*<td>
-                                                <a ng-click="fn_ViewProject(lst.CampaignId)" href="#v-pills-2">    {{lst.CreateBy}}</a>
-                                            </td>*@
+                                       
 
                                     </tr>
-
+                                    <tr ng-show="lstProjects.length < 1 && !gridLoader">
+                                        <td colspan="3">
+                                            <span>No record found</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="gridLoader">
+                                        <td colspan="3">
+                                            <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

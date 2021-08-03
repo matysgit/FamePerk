@@ -97,9 +97,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 tab-holder messages-tab-holder">
-                        <ul class="nav flex-column  nav-messages-tab">
+                        @*<ul class="nav flex-column  nav-messages-tab">
                             <li><a class="nav-link">Inbox <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>
-                        </ul>
+                        </ul>*@
                         <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <li class="" style=""><a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllMailbox(0)"><i class="fa fa-fw fa-circle"></i> All</a></li>
                             <li class="" style=""><a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(1)"><i class="fa fa-fw fa-circle"></i> Proposals</a></li>
@@ -107,10 +107,18 @@
                             <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(3)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Pending Approval</a></li>
                             <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(4)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Project Updates</a></li>
                             <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(5)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Completed</a></li>
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>
+
                         </ul>
-                        <ul class="nav flex-column nav-messages-tab">
-                            <li class="" style=""><a class="nav-link" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1">Sent</a></li>
-                        </ul>
+                        <!--<ul class="nav flex-column nav-messages-tab">
+                            <li><a class="nav-link">Sent <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>-->
+                            @*<li class="" style=""><a class="nav-link" role="tab" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1">Sent</a></li>
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>*@
+
+                        <!--</ul>
+                        <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>
+                        </ul>-->
                     </div>
                     <div class="col-md-8 pl-md-0  tab-content">
                         <div class="tab-content" id="v-pills-tabContent">
