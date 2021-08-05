@@ -10,12 +10,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace FP.Controllers
 {
     public class CreatorController : Controller
     {
         // GET: Creator
 
+        public ActionResult GetCurrencyType(string value)
+        {
+            Session["CurrencyType"] = value;
+            Index();
+            return View();
+        }
         #region CreatorBasic Profile
 
         public ActionResult Profile()
@@ -69,8 +76,12 @@ namespace FP.Controllers
             }
             if(fileName!="")
             fileName= "~/Upload/Profile/" + userId + "/" + fileName;
-
-            var result = objCreator.SaveCreator(objData, userId, fileName);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = objCreator.SaveCreator(objData, userId, fileName, currencyType);
             return Json(new
             {
                 statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
@@ -120,7 +131,8 @@ namespace FP.Controllers
                 {
                     userId = UserId;
                 }
-                var result = objCreator.GetCreatorInfo(userId);
+            string currencyType = Session["CurrencyType"].ToString();
+                var result = objCreator.GetCreatorInfo(userId, currencyType);
 
                 return Json(new
                 {
@@ -492,9 +504,15 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
+           
             string userId = Session["UserId"].ToString();
+            string convertTocurrency = "USD";
+            if(Session["CurrencyType"] != null)
+            {
+                convertTocurrency = Session["CurrencyType"].ToString();
+            }
             Projects obj = new Projects();
-            var result = obj.GetCampaignListForCreator();
+            var result = obj.GetCampaignListForCreator(convertTocurrency);
 
             return Json(new
             {
@@ -583,7 +601,12 @@ namespace FP.Controllers
             Projects obj = new Projects();
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProjectProposalById(ProjectId, userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProjectProposalById(ProjectId, userId, convertToCurrency);
             return Json(new
             {
                 data = result,
@@ -797,6 +820,74 @@ namespace FP.Controllers
             return Json(new
             {
                 data = result,
+                statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetCurrencyType()
+        {
+            var currentCureency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currentCureency=Session["CurrencyType"].ToString();
+                
+            }
+            else
+            {
+                Session["CurrencyType"] = currentCureency;
+            }
+
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            var result = objCreator.GetCurrencyType();
+
+            return Json(new
+            {
+                data = result,
+                currentCureency,
+                statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult SetCurrencyType( CurrencyTypeModal Currency)
+        {
+            var currentCureency = Currency.CurrencyId;
+            if (currentCureency == null)
+            {
+                
+                if (Session["CurrencyType"] == null)
+                {
+                    Session["CurrencyType"] = "USD";
+                }
+                currentCureency = Session["CurrencyType"].ToString();
+            }
+            else
+                Session["CurrencyType"] = currentCureency;
+
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            var result = objCreator.GetCurrencyType();
+
+            return Json(new
+            {
+                data = result,
+                currentCureency,
                 statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
             }, JsonRequestBehavior.AllowGet);
         }

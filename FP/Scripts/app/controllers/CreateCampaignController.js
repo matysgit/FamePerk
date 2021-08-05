@@ -22,7 +22,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
     $scope.fn_DefaultCampaignSettings = function () {
         $scope.ShowSaveCampaign = true;
 
-       
+        $scope.fn_GetCurrencyType();
         //$scope.fn_GetYouTubeType();
         //$scope.fn_GetSupplementalChannel();
         $("#divYouTubeVideoType").hide();
@@ -50,7 +50,33 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
         }
        
     };
-   
+
+
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Country = {};
+        $scope.example1data = {};
+        fpService.getData($_Creator.GetCountry, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Country = responseJson.data;
+                //  $scope.CreateCampaignModal.CountryId = $scope.Country[0].CountryId;
+
+                $scope.CountryModal = [];
+                // console.log(responseJson.data);
+                $scope.CountryList = responseJson.data;
+
+
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+    };
+
     $scope.fn_GetSupplementalChannel = function () {
 
         $scope.SupplementalChannelModal = [];

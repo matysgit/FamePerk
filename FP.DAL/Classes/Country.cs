@@ -28,7 +28,24 @@ namespace FP.DAL
             }
         }
 
-       
+        public List<CurrencyTypeModal> GetCurrency()
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+                    string query = "SELECT CurrencyId, CurrencyName FROM CurrencyType";
+                    List<CurrencyTypeModal> _objData = _dbDapperContext.Query<CurrencyTypeModal>(query).ToList();
+
+                    return _objData;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
     }
 }

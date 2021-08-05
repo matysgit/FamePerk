@@ -144,11 +144,9 @@
                                 </div>
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Country</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Message" maxlength="1000" placeholder="" required width="20">*@
                                     <select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country">
                                         <option value="0" label="Please Select Country"></option>
-                                        @*<option ng-repeat="Country" ng-model="CreatorModal.Country" value="{{Country.CountryId}}" ng-selected="{{Country.Selected==true}}">{{Country.Name}}</option>*@
-
+                                       
                                     </select>
                                 </div>
 

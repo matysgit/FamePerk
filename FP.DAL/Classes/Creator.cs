@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FP.DAL.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace FP.DAL
             return output;
         }
     
-        public int SaveCreator(CreatorModal objData, string UserId, string fileName)
+        public int SaveCreator(CreatorModal objData, string UserId, string fileName, string currencyType)
         {
             try
             {
@@ -51,8 +52,8 @@ namespace FP.DAL
                     });
 
 
-                    query = @"Insert into CreatorProfile(FullName, ContactNumber, State, YouTube, Instagram, Facebook, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, UserId, CountryId, ProfileImage, DOB, Language, Categories, Gender) 
-                            values(@FullName, @ContactNumber, @State, @YouTube, @Instagram, @Facebook, @MinimumBudgetedProject,  @PastWorkExperience, @Summary, @TargetAudience, @UserId, @CountryId, @ProfileImage, @DOB, @Language, @Categories, @Gender)";
+                    query = @"Insert into CreatorProfile(FullName, ContactNumber, State, YouTube, Instagram, Facebook, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, UserId, CountryId, ProfileImage, DOB, Language, Categories, Gender, CurrencyType) 
+                            values(@FullName, @ContactNumber, @State, @YouTube, @Instagram, @Facebook, @MinimumBudgetedProject,  @PastWorkExperience, @Summary, @TargetAudience, @UserId, @CountryId, @ProfileImage, @DOB, @Language, @Categories, @Gender, @CurrencyType)";
 
                     output = _dbDapperContext.Execute(query, new
                     {
@@ -73,7 +74,8 @@ namespace FP.DAL
                         objData.DOB ,
                         objData.Language,
                         objData.Categories,
-                        objData.Gender
+                        objData.Gender,
+                        CurrencyType= currencyType
 
                     });
                     return output;
@@ -86,21 +88,33 @@ namespace FP.DAL
             }
         }
 
-        public CreatorModal GetCreatorInfo(string UserId)
+        public CreatorModal GetCreatorInfo(string UserId,string currencyType)
         {
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                    
-                  string  query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email,FORMAT(CreatorProfile.DOB, 'MM/dd/yyyy ') as  DOB, Language, Categories, Gender from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
+                  string  query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, " +
+                        "CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email," +
+                        "FORMAT(CreatorProfile.DOB, 'MM/dd/yyyy ') as  DOB, Language, Categories, Gender,CurrencyType from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
 
                    CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
                           Id = UserId
                     }).FirstOrDefault();
 
-                    return _objData;
+                    if (_objData.CurrencyType != null)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(_objData.CurrencyType, currencyType, 1);
+                        if (_objData.MinimumBudgetedProject != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(_objData.MinimumBudgetedProject);
+                            _objData.MinimumBudgetedProject = (amount).ToString("0.##");
+                        }
+                    }
+                    
+                            return _objData;
                 }
             }
             catch (Exception ex)
@@ -662,5 +676,29 @@ namespace FP.DAL
             }
         }
         #endregion
+
+        public List<CurrencyTypeModal> GetCurrencyType()
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+
+                    string query = "SELECT CurrencyId, CurrencyName FROM CurrencyType";
+                   
+                    List<CurrencyTypeModal> _objData = _dbDapperContext.Query<CurrencyTypeModal>(query, new
+                    {
+
+                    }).ToList();
+
+                    return _objData;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                return null;
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@ fpApp.controller("CreatorController", function ($scope, fpService, $http) {
     }
 
     $scope.fn_DefaultCreatorSettings = function () {
+        $scope.fn_GetCurrencyType();
         $scope.fn_GetCurrencyRates();
         $scope.fn_GetUnReadMsg();
         $("#divProfile").hide();
@@ -42,6 +43,51 @@ fpApp.controller("CreatorController", function ($scope, fpService, $http) {
         $scope.fn_GetCampaignDuration();
         $scope.fn_GetBudget();
         $scope.fn_GetCreatorList();
+    };
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        //  $scope.CampaignFillterModal = {};
+        //$scope.CampaignModal = {};
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+
+                $scope.fn_GetCampaignList();
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
+
+    $scope.fn_GetCurrencyType = function () {
+
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+                
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+
     };
 
     $scope.fn_GetUnReadMsg = function () {

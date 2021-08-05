@@ -378,7 +378,12 @@ namespace FP.Controllers
             }
             Projects obj = new Projects();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProjectList(userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProjectList(userId, convertToCurrency);
            
             return Json(new
             {
@@ -412,7 +417,12 @@ namespace FP.Controllers
 
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProjectById(ProjectId, userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProjectById(ProjectId, userId, convertToCurrency);
             return Json(new
             {
                 data = result,
@@ -441,7 +451,12 @@ namespace FP.Controllers
             Projects obj = new Projects();
             string ProjectId = Session["ProjectId"].ToString();
             string userId = Session["UserId"].ToString();
-            var result = obj.SaveProposal(objData, ProjectId, userId);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = obj.SaveProposal(objData, ProjectId, userId, currencyType);//todo
             if (result != -1)
             {
                 try {
@@ -511,7 +526,12 @@ namespace FP.Controllers
             Projects obj = new Projects();
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProposalByProjectId(ProjectId, userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProposalByProjectId(ProjectId, userId, convertToCurrency);
             return Json(new
             {
                 data = result,
@@ -1126,9 +1146,15 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+
             Projects obj = new Projects();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetAllProposal(userId);
+            var result = obj.GetAllProposal(userId, convertToCurrency);
 
             return Json(new
             {

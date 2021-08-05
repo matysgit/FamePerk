@@ -349,7 +349,6 @@ namespace FP.Controllers
             {
                 return View();
             }
-
             // Generate the token and send it
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {

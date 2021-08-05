@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -10,11 +11,15 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using System.Text.RegularExpressions;
+using System.Web.Services;
+using FP.DAL.Classes;
+
 namespace FP.DAL
 {
   public  class Projects: ServiceBase
     {
-        public List<CampaignModal> GetProjectList(string UserId)
+        public List<CampaignModal> GetProjectList(string UserId, string convertToCurrency)
         {
             try
             {
@@ -27,12 +32,12 @@ namespace FP.DAL
 
                     query = "SELECT Campaign.CampaignId, ProductCategory.Name AS ProductCategory, " +
                       "CampaignTitle,  Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 0 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , " +
-                      "Budget.Title AS Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy') as CreatedDate, CASE WHEN ProjectProposal.Approved = 1 THEN 'Approved' WHEN ProjectProposal.Approved = 0 THEN 'Reject' ELSE 'Active' END Approve, " +
-                        "ProjectProposal.Status " +
+                      " Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy') as CreatedDate, CASE WHEN ProjectProposal.Approved = 1 THEN 'Approved' WHEN ProjectProposal.Approved = 0 THEN 'Reject' ELSE 'Active' END Approve, " +
+                        "ProjectProposal.Status, Campaign.CurrencyType " +
                       "FROM  Campaign " +
                       "INNER JOIN ProjectProposal ON ProjectProposal.CampaignId = Campaign.CampaignId " +
                     "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                    "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
+                    //"INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                     "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                     "WHERE ProjectProposal.UserId= @UserId " +
                     "ORDER BY Campaign.CreatedDate DESC";
@@ -41,6 +46,18 @@ namespace FP.DAL
                         UserId
 
                     }).ToList();
+
+
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrency, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+
+                    }
                     return _objData;
                        
                 }
@@ -52,7 +69,7 @@ namespace FP.DAL
             }
         }
 
-        public List<CampaignModal> GetProjectById(int ProjectId, string UserId)
+        public List<CampaignModal> GetProjectById(int ProjectId, string UserId, string convertToCurrency)
         {
             try
             {
@@ -61,20 +78,29 @@ namespace FP.DAL
                 {
 
                     string query = @"Select CampaignId, UserId, CampaignTypeId, SupplementalChannels,ProductCategory.ProductCategoryId, ProductCategory.Name AS ProductCategory, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, 
-                                    CampaignTitle, AboutYourBrand, CampaignGoal,CampaignDuration.CampaignDurationId , CampaignDuration.Duration AS CampaignDuration, PrivateCampaign, AudienceAgeId,Budget.BudgetId, Budget.Title AS Budget, Campaign.CreatedDate, ModifyDate, Status, 
-                                    AudienceGender, YouTube, YouTubeVideoType, Country FROM Campaign 
+                                    CampaignTitle, AboutYourBrand, CampaignGoal,CampaignDuration.CampaignDurationId , CampaignDuration.Duration AS CampaignDuration, PrivateCampaign, AudienceAgeId,  Budget, Campaign.CreatedDate, ModifyDate, Status, 
+                                    AudienceGender, YouTube, YouTubeVideoType, Country,CurrencyType FROM Campaign 
                                     INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId 
                                     INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId 
-                                    INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId Where Campaign.CampaignId =@CampaignId 
-                                    ";// and Status=@Status ";
+                                   
+                                    Where Campaign.CampaignId =@CampaignId 
+                                    ";// and Status=@Status ";// INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId 
 
-                List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
+                    List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
                     {
-                        CampaignId = ProjectId//,
-                                              // Status = "Publish"
-
+                        CampaignId = ProjectId
                     }).ToList();
 
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrency, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+
+                    }
                     return _objData;
                 }
             }
@@ -86,7 +112,7 @@ namespace FP.DAL
         }
 
 
-        public int SaveProposal(ProjectsProposalModal objData, string ProjectId, string userId)
+        public int SaveProposal(ProjectsProposalModal objData, string ProjectId, string userId, string currencyType)
         {
             try
             {
@@ -114,7 +140,8 @@ namespace FP.DAL
                         
                         ClientId = _objData1.UserId;
 
-                        query = "SELECT       ProjectProposalId, CampaignId, ProjectDescription, PaymentType, Milestone1, Milestone2, Milestone3, Status, UserId, Approved, Milestone, ProposalAmount, ReceivedAmount, ProposalDate" +
+                        query = "SELECT       ProjectProposalId, CampaignId, ProjectDescription, PaymentType, Milestone1, Milestone2, Milestone3, Status, UserId, " +
+                            "Approved, Milestone, ProposalAmount, ReceivedAmount, ProposalDate" +
                                    " FROM ProjectProposal Where CampaignId =@CampaignId and UserId=@UserId " + "";
                         List<ProjectsProposalModal> _objData = _dbDapperContext.Query<ProjectsProposalModal>(query, new
                         {
@@ -126,7 +153,13 @@ namespace FP.DAL
                         {
                            
 
-                            query = @"Update ProjectProposal set ProjectDescription=@ProjectDescription, PaymentType=@PaymentType, Milestone1=@Milestone1, Milestone2=@Milestone2, Milestone3=@Milestone3, Status=@Status,   Milestone=@Milestone, ProposalAmount=@ProposalAmount, ProposalDate=GetUtcDate(), Milestone1Amount=@Milestone1Amount, Milestone2Amount=@Milestone2Amount , Milestone3Amount=@Milestone3Amount, NoOfMilestone=@NoOfMilestone where UserId=@UserId and CampaignId=@CampaignId; ; SELECT CAST(SCOPE_IDENTITY() as int)";
+                            query = @"Update ProjectProposal set ProjectDescription=@ProjectDescription, 
+                                    PaymentType=@PaymentType, Milestone1=@Milestone1, Milestone2=@Milestone2, 
+                                    Milestone3=@Milestone3, Status=@Status,   Milestone=@Milestone, 
+                                    ProposalAmount=@ProposalAmount, ProposalDate=GetUtcDate(), Milestone1Amount=@Milestone1Amount,
+                                    Milestone2Amount=@Milestone2Amount , Milestone3Amount=@Milestone3Amount, NoOfMilestone=@NoOfMilestone ,
+                                    CurrencyType= @CurrencyType
+                                    where UserId=@UserId and CampaignId=@CampaignId; ; SELECT CAST(SCOPE_IDENTITY() as int)";
                             output = _dbDapperContext.Execute(query, new
                             {
                                 CampaignId = projectId,
@@ -142,7 +175,8 @@ namespace FP.DAL
                                 objData.Milestone1Amount,
                                 objData.Milestone2Amount,
                                 objData.Milestone3Amount, 
-                                objData.NoOfMilestone
+                                objData.NoOfMilestone,
+                                CurrencyType=currencyType
 
                             });
 
@@ -155,7 +189,15 @@ namespace FP.DAL
                         }
                         else
                         {
-                            query = @"Insert into ProjectProposal(CampaignId, ProjectDescription, PaymentType, Milestone1, Milestone2, Milestone3, Status, UserId,  Milestone, ProposalAmount, ProposalDate, Milestone1Amount, Milestone2Amount, Milestone3Amount, NoOfMilestone) values(@CampaignId,@ProjectDescription, @PaymentType,@Milestone1, @Milestone2, @Milestone3,@Status, @UserId, @Milestone,@ProposalAmount, GetUtcDate(), @Milestone1Amount, @Milestone2Amount, @Milestone3Amount, @NoOfMilestone); SELECT CAST(SCOPE_IDENTITY() as int)";
+                            query = @"Insert into ProjectProposal
+                                        (CampaignId, ProjectDescription, PaymentType, 
+                                        Milestone1, Milestone2, Milestone3, Status, UserId,  Milestone, 
+                                        ProposalAmount, ProposalDate, Milestone1Amount, Milestone2Amount, 
+                                        Milestone3Amount, NoOfMilestone, CurrencyType) 
+                                        values(@CampaignId,@ProjectDescription, @PaymentType,
+                                        @Milestone1, @Milestone2, @Milestone3,@Status, @UserId, @Milestone,
+                                        @ProposalAmount, GetUtcDate(), @Milestone1Amount, @Milestone2Amount, 
+                                        @Milestone3Amount, @NoOfMilestone, @CurrencyType); SELECT CAST(SCOPE_IDENTITY() as int)";
                             var id = _dbDapperContext.Query<int>(query, new
                             {
                                 CampaignId = projectId,
@@ -171,43 +213,17 @@ namespace FP.DAL
                                 objData.Milestone1Amount,
                                 objData.Milestone2Amount,
                                 objData.Milestone3Amount,
-                                objData.NoOfMilestone
+                                objData.NoOfMilestone,
+                                CurrencyType= currencyType
                             }).Single();
 
                             output = id;
                         }
-                        //output = _dbDapperContext.Execute(query, new
-                        //{
-                        //    ProjectId = projectId,
-                        //    objData.ProjectDescription,
-                        //    objData.PaymentType,
-                        //    objData.Milestone1,
-                        //    objData.Milestone2,
-                        //    objData.Milestone3,
-                        //    objData.Status,
-                        //    UserId = userId,
-                        //    objData.Milestone,
-                        //    objData.ProposalAmount
-                        //});
-
-
-
                         //output = 0;
                         if (objData.Status == "Publish")
                         {
                             query = @"Insert into BrandMail(MailTypeId,Subject, Message, CreatedDate, MailFrom, UserId, IsDeleted, IsRead, ProjectProposalId) values(@MailTypeId,@Subject, @Message, GetUtcDate(),@MailFrom,@UserId, @IsDeleted, @IsRead, @ProjectProposalId); SELECT CAST(SCOPE_IDENTITY() as int)"; ;
-                            //output = _dbDapperContext.Execute(query, new
-                            //{
-                            //    MailTypeId = 1,
-                            //    Subject = "Project Proposal",
-                            //    Message = objData.ProjectDescription,
-                            //    MailFrom = userId,
-                            //    UserId = CreatorId,
-                            //    IsDeleted = 0,
-                            //    IsRead = 0,
-                            //    ProjectProposalId = output
-                            //});
-
+                            
                             var id = _dbDapperContext.Query<int>(query, new
                             {
                                 MailTypeId = 1,
@@ -219,11 +235,7 @@ namespace FP.DAL
                                 IsRead = 0,
                                 ProjectProposalId = output
                             }).Single();
-
-                           // output = id;
-
                         }
-
                         return output;
                     }
                     else
@@ -239,15 +251,18 @@ namespace FP.DAL
             }
         }
 
-        public List<ProjectsProposalModal> GetProposalByProjectId(int ProjectId, string UserId)
+        public List<ProjectsProposalModal> GetProposalByProjectId(int ProjectId, string UserId, string convertToCurrency)
         {
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
 
-                    string query = "SELECT       ProjectProposalId, CampaignId, ProjectDescription, PaymentType, NoOfMilestone , Milestone1, Milestone2, Milestone3, Status, UserId, Approved, Milestone, ProposalAmount, ReceivedAmount, ProposalDate" +
-                                    ", Milestone1Amount, Milestone2Amount, Milestone3Amount FROM ProjectProposal Where CampaignId =@CampaignId and UserId=@UserId " + "";
+                    string query = "SELECT       ProjectProposalId, CampaignId, ProjectDescription, PaymentType, " +
+                                    "NoOfMilestone , Milestone1, Milestone2, Milestone3, Status, UserId, Approved, Milestone, " +
+                                    "ProposalAmount, ReceivedAmount, ProposalDate" +
+                                    ", Milestone1Amount, Milestone2Amount, Milestone3Amount, CurrencyType " +
+                                    "FROM ProjectProposal Where CampaignId =@CampaignId and UserId=@UserId " + "";
                     List<ProjectsProposalModal> _objData = _dbDapperContext.Query<ProjectsProposalModal>(query, new
                     {
                         UserId = UserId,
@@ -255,6 +270,31 @@ namespace FP.DAL
 
                     }).ToList();
 
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrency, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.ProposalAmount);
+                            objList.ProposalAmount = (amount).ToString("0.##");
+                            if (objList.Milestone1Amount != null)
+                            {
+                                amount = exchangeRate * Convert.ToDouble(objList.Milestone1Amount);
+                                objList.Milestone1Amount = (amount).ToString("0.##");
+                            }
+                            if (objList.Milestone2Amount != null)
+                            {
+                                amount = exchangeRate * Convert.ToDouble(objList.Milestone2Amount);
+                                objList.Milestone2Amount = (amount).ToString("0.##");
+                            }
+                            if (objList.Milestone3Amount != null)
+                            {
+                                amount = exchangeRate * Convert.ToDouble(objList.Milestone3Amount);
+                                objList.Milestone3Amount = (amount).ToString("0.##");
+                            }
+                        }
+
+                    }
                     return _objData;
                 }
             }
@@ -290,7 +330,7 @@ namespace FP.DAL
             }
         }
 
-        public List<CampaignModal> GetCampaignListForCreator()
+        public List<CampaignModal> GetCampaignListForCreator(string convertToCurrecny)
         {
             try
             {
@@ -303,12 +343,12 @@ namespace FP.DAL
 
                     
                     query=  "SELECT CampaignId, UserId, CampaignTypeId, ProductCategory.Name AS ProductCategory, CASE WHEN ShippingProduct=0 THEN 'Yes' ELSE 'No' END AS ShippingProduct, " +
-                            "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget.Title AS Budget, " +
-                            "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Country AS Country  " +
+                            "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget," + //Budget.Title AS Budget, " +
+                            "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Country AS Country,CurrencyType  " +
                             "FROM  Campaign "+
                             //"inner join Country on Country.CountryId=Campaign.CountryId  " +
                             "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                            "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId "+
+                            //"INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId "+
                             "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId "+
                             
                             "WHERE Status = @Status and Approved=@Approved " +
@@ -320,7 +360,22 @@ namespace FP.DAL
                         Approved=1
 
                     }).ToList();
+                    //
 
+
+
+                    //string to = Session["CurrencyType"].ToString();
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrecny, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+                        
+                    }
+//
                     return _objData;
 
                 }
@@ -445,14 +500,18 @@ namespace FP.DAL
                 return null;
             }
         }
-        public List<ProjectsModal> GetProjectProposalById(int ProjectId, string UserId)
+        public List<ProjectsModal> GetProjectProposalById(int ProjectId, string UserId, string convertToCurrency)
         {
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
 
-                    string query = "SELECT Project.ProjectId, Project.ProjectTitle, Project.ProjectDescription, Project.Budget, Project.IsActive, CreatorProfile.FullName AS CreateBy, ProjectProposal.ProjectProposalId as ProjectProposalId, ProjectProposal.Status as Status  FROM Project INNER JOIN CreatorProfile on CreatorProfile.UserId = Project.CreateBy left join  ProjectProposal on  Project.ProjectId=ProjectProposal.ProjectId and ProjectProposal.UserId=@UserId Where Project.ProjectId =@ProjectId and IsActive=@IsActive ";
+                    string query = @"SELECT Project.ProjectId, Project.ProjectTitle, Project.ProjectDescription, Project.Budget, Project.IsActive, CreatorProfile.FullName AS CreateBy, 
+                                    ProjectProposal.ProjectProposalId as ProjectProposalId, ProjectProposal.Status as Status, CurrencyType  
+                                    FROM Project INNER JOIN CreatorProfile on CreatorProfile.UserId = Project.CreateBy 
+                                    left join  ProjectProposal on  Project.ProjectId=ProjectProposal.ProjectId and ProjectProposal.UserId=@UserId 
+                                    Where Project.ProjectId =@ProjectId and IsActive=@IsActive ";
                     List<ProjectsModal> _objData = _dbDapperContext.Query<ProjectsModal>(query, new
                     {
                         UserId = UserId,
@@ -461,28 +520,19 @@ namespace FP.DAL
 
                     }).ToList();
 
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrency, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+
+                    }
+
                     return _objData;
-                    //int CampaignId = 2002;
-                    ////string query = "Select CampaignId, UserId, CampaignTypeId, SupplementalChannels, ProductCategoryId, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, CampaignTitle, AboutYourBrand, CampaignGoal, "
-                    ////        +" CampaignDurationId, PrivateCampaign, AudienceAgeId, BudgetId, CreatedDate, ModifyDate, Status, AudienceGender, YouTube, YouTubeVideoType"
-                    ////        + " FROM Campaign Where Campaign.CampaignId =@CampaignId and Status=@Status ";
-
-
-                    //string query = "Select CampaignId, UserId, CampaignTypeId, SupplementalChannels, ProductCategory.Name AS ProductCategory, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, " +
-                    //                "CampaignTitle, AboutYourBrand, CampaignGoal, CampaignDuration.Duration AS CampaignDuration, PrivateCampaign, AudienceAgeId, Budget.Title AS Budget, Campaign.CreatedDate, ModifyDate, Status, " +
-                    //                "AudienceGender, YouTube, YouTubeVideoType FROM Campaign " +
-                    //                "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
-                    //                "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                    //                "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId Where Campaign.CampaignId =@CampaignId and Status=@Status ";
-
-                    //List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
-                    //{
-                    //    CampaignId = CampaignId,
-                    //    Status = "Publish"
-
-                    //}).ToList();
-
-                    //return _objData;
+                  
                 }
             }
             catch (Exception ex)
@@ -541,7 +591,7 @@ namespace FP.DAL
                 return null;
             }
         }
-        public List<CampaignModal> GetAllProposal(string UserId)
+        public List<CampaignModal> GetAllProposal(string UserId, string convertToCurrency)
         {
             try
             {
@@ -555,11 +605,11 @@ namespace FP.DAL
 
                     query = "SELECT Campaign.CampaignId, ProductCategory.Name AS ProductCategory, " +
                       "CampaignTitle,  Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 0 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , " +
-                      "Budget.Title AS Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, " +
-                        "Status ,CASE WHEN Campaign.Approved = 1 THEN 'Approved' WHEN Campaign.Rejected = 1 THEN 'Rejected' ELSE 'Under Review' END Approved " +
+                      "Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, " +
+                        "Status ,CASE WHEN Campaign.Approved = 1 THEN 'Approved' WHEN Campaign.Rejected = 1 THEN 'Rejected' ELSE 'Under Review' END Approved ,CurrencyType" +
                       "FROM  Campaign " +
                     "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                    "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
+                   // "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                     "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                     "WHERE Campaign.UserId= @UserId " +
                     "ORDER BY Campaign.CreatedDate DESC";
@@ -568,6 +618,19 @@ namespace FP.DAL
                         UserId
 
                     }).ToList();
+
+                    
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, convertToCurrency, 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+
+                    }
+
                     return _objData;
 
                 }
@@ -802,7 +865,19 @@ namespace FP.DAL
                                      youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
                         if (youTubeIds.Count > 4)
                         {
-                            //https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+                            var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
+
+                            ////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+                            //https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
+
+                            var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
+                            // var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                            WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
+                            requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                            WebResponse responseInsta = requestInsta.GetResponse();
+                            StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
+                            string responseTextInsta = readerinsta.ReadToEnd();
+                            ///
                             var youTubeId = youTubeIds[4];
                             var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
                             var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;

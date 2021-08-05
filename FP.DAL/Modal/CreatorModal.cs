@@ -8,6 +8,7 @@ namespace FP.DAL
 {
    public class CreatorModal
     {
+        public string CurrencyType { get; set; }
       public string IsApproved { get; set; } 
             public int CreatorId { get; set; }
             public string Email { get; set; }
