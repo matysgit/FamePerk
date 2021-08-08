@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FP.DAL.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -111,14 +112,12 @@ namespace FP.DAL
             }
         }
 
-        public MailboxModal GetMailboxById(int MailboxId, string UserId)
+        public MailboxModal GetMailboxById(int MailboxId, string UserId, string currencyType)
         {
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    //string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
                     int BrandMailId = MailboxId;
                     
                     string  query = "Update BrandMail set IsRead=@IsRead where BrandMailId=@BrandMailId and UserId=@UserId";
@@ -129,12 +128,12 @@ namespace FP.DAL
                         IsRead = 1
                     }).FirstOrDefault();
 
-                   // query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, MailFrom, MailTypeId from BrandMail where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
-                    query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, Email as MailFrom, MailTypeId, ProjectProposalId, ProjectProposalUpdateId from BrandMail INNER JOIN  AspNetUsers on AspNetUsers.Id=MailFrom where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
+                    query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, " +
+                        "Email as MailFrom, MailTypeId, ProjectProposalId, ProjectProposalUpdateId from BrandMail " +
+                        "INNER JOIN  AspNetUsers on AspNetUsers.Id=MailFrom where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
 
                     _objData = _dbDapperContext.Query<MailboxModal>(query, new
                     {
-                      //  UserId = UserId,
                         BrandMailId= BrandMailId,
                         IsDeleted = 1
                     }).FirstOrDefault();
@@ -142,27 +141,37 @@ namespace FP.DAL
                     if (_objData.ProjectProposalId != "" && _objData.ProjectProposalId != null)
                     {
                         query = "select ProjectProposal.ProjectProposalId, CampaignId, ProjectDescription,CASE WHEN  PaymentType=1 THEN 'FixedCost' ELSE 'Milestone' END as PaymentType, NoOfMilestone, " +
-                                "Milestone1, Milestone2, Milestone3, Status, ProjectProposal.UserId, Approved, Milestone1Amount, Milestone2Amount, Milestone3Amount, " + 
-                                "Milestone, ProposalAmount, ReceivedAmount, ProposalDate, BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, "+ 
-                                " Email as MailFrom, MailTypeId from ProjectProposal inner join BrandMail on BrandMail.ProjectProposalId = ProjectProposal.ProjectProposalId INNER JOIN AspNetUsers on AspNetUsers.Id = MailFrom where BrandMailId = @BrandMailId and IsDeleted != @IsDeleted";
+                                "Milestone1, Milestone2, Milestone3, Status, ProjectProposal.UserId, Approved, Milestone1Amount, Milestone2Amount, Milestone3Amount, " +
+                                "Milestone, ProposalAmount, ReceivedAmount, ProposalDate, BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, " +
+                                " Email as MailFrom, MailTypeId, CurrencyType from ProjectProposal inner join BrandMail on BrandMail.ProjectProposalId = ProjectProposal.ProjectProposalId INNER JOIN AspNetUsers on AspNetUsers.Id = MailFrom where BrandMailId = @BrandMailId and IsDeleted != @IsDeleted";
 
                         _objData = _dbDapperContext.Query<MailboxModal>(query, new
                         {
-                            //  UserId = UserId,
                             BrandMailId = BrandMailId,
                             IsDeleted = 1
                         }).FirstOrDefault();
+
+                        
+                        if (_objData.CurrencyType != null)
+                        {
+                            float exchangeRate = CurrencyConverter.GetExchangeRate(_objData.CurrencyType, currencyType, 1);
+                            double amount = exchangeRate * Convert.ToDouble(_objData.ProposalAmount);
+                            _objData.ProposalAmount = (amount).ToString("0.##");
+                           // _objData.ReceivedAmount = (amount).ToString("0.##");
+                        }
+
                     }
                     else if (_objData.ProjectProposalUpdateId != "" && _objData.ProjectProposalUpdateId != null)
                     {
                         query = "select  ProjectProposalUpdateId, " +
                                "Url, ProjectProposalUpdate.UserId, " +
                                " BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate," +
-                               " Email as MailFrom, MailTypeId, ProjectProposalUpdate.IsApproved As Status from ProjectProposalUpdate inner join BrandMail on BrandMail.ProjectProposalUpdateId = ProjectProposalUpdate.Id INNER JOIN AspNetUsers on AspNetUsers.Id = MailFrom where BrandMailId = @BrandMailId and IsDeleted != @IsDeleted";
+                               " Email as MailFrom, MailTypeId, ProjectProposalUpdate.IsApproved As Status " +
+                               "from ProjectProposalUpdate inner join BrandMail on BrandMail.ProjectProposalUpdateId = ProjectProposalUpdate.Id" +
+                               " INNER JOIN AspNetUsers on AspNetUsers.Id = MailFrom where BrandMailId = @BrandMailId and IsDeleted != @IsDeleted";
 
                         _objData = _dbDapperContext.Query<MailboxModal>(query, new
                         {
-                            //  UserId = UserId,
                             BrandMailId = BrandMailId,
                             IsDeleted = 1
                         }).FirstOrDefault();

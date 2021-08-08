@@ -20,6 +20,7 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
     $scope.CreateCampaignModal={ };
     $scope.fn_DefaultCampaignSettings = function () {
+        $scope.fn_GetCurrencyType();
         $scope.ShowSaveCampaign = true;
 
         $scope.fn_GetCurrencyType();
@@ -51,24 +52,39 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
        
     };
 
-
-    $scope.fn_GetCurrencyType = function () {
-        $scope.Country = {};
-        $scope.example1data = {};
-        fpService.getData($_Creator.GetCountry, "", function (response) {
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
             var responseJson = response.data;
             if (responseJson.statusCode === 200) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                $scope.Country = responseJson.data;
-                //  $scope.CreateCampaignModal.CountryId = $scope.Country[0].CountryId;
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
 
-                $scope.CountryModal = [];
-                // console.log(responseJson.data);
-                $scope.CountryList = responseJson.data;
+                $scope.fn_DefaultCampaignSettings();
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
 
-
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
             }
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');

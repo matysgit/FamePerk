@@ -201,7 +201,7 @@ namespace FP.DAL
                     {
                         query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender FROM CreatorProfile";
+                             Categories, Gender FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                            
@@ -215,7 +215,7 @@ namespace FP.DAL
                     {
                         query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId)";
+                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId)";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                             CountryId = countryId
@@ -228,7 +228,7 @@ namespace FP.DAL
                     {
                         query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile WHERE CountryId = isNULL(@CountryId, CountryId) and TargetAudience LIKE @TargetAudience ";
+                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) and TargetAudience LIKE @TargetAudience ";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                             CountryId = countryId,

@@ -111,7 +111,8 @@
             <li><input type="submit" class="btn btn-red" value="Sign Up" /></li>
 
             <li class="">Already have an account?</li>
-            <li><input type="submit" class="btn " value="Sign in" /></li>
+            @*<li><input type="submit" class="btn " value="Sign in" /></li>*@
+            <li class="btn">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
         </ul>
 
 

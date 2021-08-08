@@ -7,19 +7,21 @@
 
 
 <div class="login-box">
-    <div id="divLoginCreator" >
+    <div id="divLoginCreator">
         <div class="col-md-12">
-           
+
             <section id="socialLoginForm">
 
                 @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                 @Html.ActionLink("Back", "Login", null, new { @class = "btn btn-md", })
+
 
                 <p>&copy; @DateTime.Now.Year - Fame Perks</p>
             </section>
+
         </div>
+        @*@Html.ActionLink("Back", "Login", null, new { @class = "btn btn-md", })*@
     </div>
 </div>

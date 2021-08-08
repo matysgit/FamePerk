@@ -60,6 +60,7 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
 
                 $scope.fn_GetAllProjects();
+                $scope.fn_GetAllProposal();
             }
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');
@@ -68,7 +69,6 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
     }
 
     $scope.fn_GetCurrencyType = function () {
-
         $scope.Currency = {};
         $scope.CurrencyTypeModal = {};
         fpService.getData($_Creator.GetCurrencyType, "", function (response) {
@@ -79,7 +79,6 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
                 }
                 $scope.Currency = responseJson.data;
                 $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
-
             }
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');

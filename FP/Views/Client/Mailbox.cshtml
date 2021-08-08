@@ -63,12 +63,12 @@
 
             </div>
 
-            @*<ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
-                    <li class="nav-item ">
-                        <button class="btn btn-success " type="button">Create Campaign</button>
-                    </li>
+            <div class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
 
-                </ul>*@
+                <label class="mr-2">Currency : </label>
+                <select class="form-control" ng-model="CurrencyTypeModal.CurrencyId" ng-options="item.CurrencyId as item.CurrencyName for item in Currency" ng-change="fn_ChangeCurrencyType(CurrencyTypeModal)">
+                </select>
+            </div>
 
         </div>
         <div class="card card-full">
@@ -97,9 +97,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 tab-holder messages-tab-holder">
-                        @*<ul class="nav flex-column  nav-messages-tab">
-                            <li><a class="nav-link">Inbox <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>
-                        </ul>*@
+                        
                         <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <li class="" style=""><a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllMailbox(0)"><i class="fa fa-fw fa-circle"></i> All</a></li>
                             <li class="" style=""><a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(1)"><i class="fa fa-fw fa-circle"></i> Proposals</a></li>
@@ -110,15 +108,6 @@
                             <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>
 
                         </ul>
-                        <!--<ul class="nav flex-column nav-messages-tab">
-                            <li><a class="nav-link">Sent <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>-->
-                            @*<li class="" style=""><a class="nav-link" role="tab" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1">Sent</a></li>
-                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>*@
-
-                        <!--</ul>
-                        <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i>Sent</a></li>
-                        </ul>-->
                     </div>
                     <div class="col-md-8 pl-md-0  tab-content">
                         <div class="tab-content" id="v-pills-tabContent">
@@ -127,7 +116,7 @@
                                 <div class="inbox-body">
                                     <div class="mail-option row m-0 d-none">
                                         <ul class="list-inline inbox-pagination pull-right mb-0">
-                                            <li class="list-inline-item"><span>1-50 of 234</span></li>
+                                            @*<li class="list-inline-item"><span>1-50 of 234</span></li>*@
                                             <li class="list-inline-item">
                                                 <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
                                             </li>

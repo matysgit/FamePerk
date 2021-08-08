@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
-using System.Web.Services;
+//using System.Web.Services;
 using FP.DAL.Classes;
 
 namespace FP.DAL
@@ -41,6 +41,8 @@ namespace FP.DAL
                     "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                     "WHERE ProjectProposal.UserId= @UserId " +
                     "ORDER BY Campaign.CreatedDate DESC";
+
+
                     List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
                     {
                         UserId
@@ -606,12 +608,12 @@ namespace FP.DAL
                     query = "SELECT Campaign.CampaignId, ProductCategory.Name AS ProductCategory, " +
                       "CampaignTitle,  Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 0 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , " +
                       "Budget, FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate, " +
-                        "Status ,CASE WHEN Campaign.Approved = 1 THEN 'Approved' WHEN Campaign.Rejected = 1 THEN 'Rejected' ELSE 'Under Review' END Approved ,CurrencyType" +
+                        "Status ,CASE WHEN Campaign.Approved = 1 THEN 'Approved' WHEN Campaign.Rejected = 1 THEN 'Rejected' ELSE 'Under Review' END Approved ,CurrencyType " +
                       "FROM  Campaign " +
                     "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
                    // "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                     "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
-                    "WHERE Campaign.UserId= @UserId " +
+                    "WHERE Campaign.UserId= @UserId AND CurrencyType is not null " +
                     "ORDER BY Campaign.CreatedDate DESC";
                     List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
                     {
@@ -839,7 +841,7 @@ namespace FP.DAL
         {
             try
             {
-                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                using ( IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                     //#TODO: Get UserId from session or user context
                     // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
@@ -849,7 +851,7 @@ namespace FP.DAL
 
                     query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender FROM CreatorProfile";
+                             Categories, Gender FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
 
                     List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
@@ -865,19 +867,19 @@ namespace FP.DAL
                                      youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
                         if (youTubeIds.Count > 4)
                         {
-                            var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
+                            //var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
 
-                            ////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
-                            //https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
+                            //////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+                            ////https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
 
-                            var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
-                            // var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                            WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
-                            requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                            WebResponse responseInsta = requestInsta.GetResponse();
-                            StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
-                            string responseTextInsta = readerinsta.ReadToEnd();
-                            ///
+                            //var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
+                            //// var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                            //WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
+                            //requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                            //WebResponse responseInsta = requestInsta.GetResponse();
+                            //StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
+                            //string responseTextInsta = readerinsta.ReadToEnd();
+                            /////
                             var youTubeId = youTubeIds[4];
                             var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
                             var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;

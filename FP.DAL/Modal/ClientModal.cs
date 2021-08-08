@@ -42,6 +42,8 @@ namespace FP.DAL
         public string ProjectProposalUpdateId { get; set; }
 
          public string Url { get; set; }
+        public string ProjectProposal { get; set; }
+        public string CurrencyType { get; set; }
 
     }
 
@@ -107,6 +109,7 @@ namespace FP.DAL
 
     public class WalletAmountModal
     {
+        public string CurrencyType { get; set; }
         public int ID { get; set; }
         public string Amount { get; set; }
         public string UploadDate { get; set; }
