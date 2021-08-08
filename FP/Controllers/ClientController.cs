@@ -109,7 +109,12 @@ namespace FP.Controllers
             }
             Mailbox obj = new Mailbox();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetMailboxById(MailboxId, userId);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetMailboxById(MailboxId, userId, currencyType);
 
             return Json(new
             {
@@ -774,9 +779,15 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
 
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+
             string userId = Session["UserId"].ToString();
             WalletDetails obj = new WalletDetails();
-            var result = obj.GetWalletAmountList(userId);
+            var result = obj.GetWalletAmountList(userId, currencyType);
 
             return Json(new
             {
@@ -1066,8 +1077,13 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             string userId = Session["UserId"].ToString();
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
             CreateCampaign obj = new CreateCampaign();
-            var result = obj.SaveCampaign(objData, userId);//, SupplementalChannels, YouTubeVideoType);
+            var result = obj.SaveCampaign(objData, userId, currencyType);//, SupplementalChannels, YouTubeVideoType);
             return Json(new
             {
                 statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent

@@ -338,7 +338,14 @@ namespace FP.Controllers
             }
             string userId = Session["UserId"].ToString();
             WalletDetails obj = new WalletDetails();
-            var result = obj.GetWalletAmountList(userId);
+
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+
+            var result = obj.GetWalletAmountList(userId, currencyType);
 
             return Json(new
             {
@@ -763,7 +770,12 @@ namespace FP.Controllers
             {
                 userId = UserId;
             }
-            var result = objCreator.GetCreatorInfo(userId);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = objCreator.GetCreatorInfo(userId, currencyType);
 
             return Json(new
             {
