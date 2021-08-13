@@ -636,10 +636,14 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                 }
                 // $("#divViewProject").show();
                 if (responseJson.data[0].Status != "Draft") {
+
                     $scope.ShowSaveCampaign = false;
                     $("#divDraft").hide();
                     $("#divPublish").hide();
                     $("#divSendToPlatform").hide();
+                    if (responseJson.data[0].Status != "Publish") {
+                        $("#divPublish").show();
+                    }
                 }
 
 

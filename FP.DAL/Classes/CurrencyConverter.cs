@@ -14,7 +14,6 @@ namespace FP.DAL.Classes
         /// </summary>
         public static string[] GetCurrencyTags()
         {
-
             // Hardcoded currency tags neccesairy to parse the ecb xml's
             return new string[] {"eur", "usd", "jpy", "bgn", "czk", "dkk", "gbp", "huf", "ltl", "lvl"
             , "pln", "ron", "sek", "chf", "nok", "hrk", "rub", "try", "aud", "brl", "cad", "cny", "hkd", "idr", "ils"

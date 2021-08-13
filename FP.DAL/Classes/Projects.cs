@@ -764,69 +764,81 @@ namespace FP.DAL
                 {
                     //#TODO: Get UserId from session or user context
                     // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
+                    List<CampaignModal> _objData = new List<CampaignModal>();
                     string query = "";
                     if (Type == "Pending")
                     {
                         query = "SELECT CampaignId, UserId, CampaignTypeId, ProductCategory.Name AS ProductCategory, CASE WHEN ShippingProduct=0 THEN 'Yes' ELSE 'No' END AS ShippingProduct, " +
-                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget.Title AS Budget, " +
-                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status, Approved  " +
+                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign ,  Budget, " +
+                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status, Approved, CurrencyType  " +
                                  "FROM  Campaign " +
                                  "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                                 "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
+                                // "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                                  "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                                  "WHERE Status <> @Status and (Approved is null or Approved=@Approved) and (Rejected is null or Rejected=@Rejected) " +
                                  "ORDER BY Campaign.CreatedDate DESC";
 
-                        List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
+                         _objData = _dbDapperContext.Query<CampaignModal>(query, new
                         {
                             Status = "Draft",
                             Approved="False",
                             Rejected = "False",
 
                         }).ToList();
-                        return _objData;
+                     //   return _objData;
                     }
                     else  if (Type == "Approved")
                     {
                         query = "SELECT CampaignId, UserId, CampaignTypeId, ProductCategory.Name AS ProductCategory, CASE WHEN ShippingProduct=0 THEN 'Yes' ELSE 'No' END AS ShippingProduct, " +
-                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget.Title AS Budget, " +
-                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status, Approved " +
+                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign ,  Budget, " +
+                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status, Approved ,CurrencyType " +
                                  "FROM  Campaign " +
                                  "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                                 "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
+                                // "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                                  "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                                  "WHERE Status <> @Status and Approved =@Approved " +
                                  "ORDER BY Campaign.CreatedDate DESC";
 
-                        List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
+                        _objData = _dbDapperContext.Query<CampaignModal>(query, new
                         {
                             Status = "Draft",
                             Approved="True"
 
                         }).ToList();
-                        return _objData;
+                       // return _objData;
                     }
                     else
                     {
                         query = "SELECT CampaignId, UserId, CampaignTypeId, ProductCategory.Name AS ProductCategory, CASE WHEN ShippingProduct=0 THEN 'Yes' ELSE 'No' END AS ShippingProduct, " +
-                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget.Title AS Budget, " +
-                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status " +
+                                 "AboutYourProduct, CampaignTitle, AboutYourBrand, Duration AS CampaignDuration, CASE WHEN PrivateCampaign = 1 THEN 'Yes' ELSE 'N0' END AS PrivateCampaign , Budget, " +
+                                 "FORMAT(Campaign.CreatedDate, 'dd/MM/yyyy ') as CreatedDate , Status, CurrencyType " +
                                  "FROM  Campaign " +
                                  "INNER JOIN CampaignDuration ON Campaign.CampaignDurationId = CampaignDuration.CampaignDurationId " +
-                                 "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
+                                // "INNER JOIN Budget ON Campaign.BudgetId = Budget.BudgetId " +
                                  "INNER JOIN ProductCategory ON Campaign.ProductCategoryId = ProductCategory.ProductCategoryId " +
                                  "WHERE Status <> @Status and Rejected =@Rejected " +
                                  "ORDER BY Campaign.CreatedDate DESC";
 
-                        List<CampaignModal> _objData = _dbDapperContext.Query<CampaignModal>(query, new
+                        _objData = _dbDapperContext.Query<CampaignModal>(query, new
                         {
                             Status = "Draft",
                             Rejected = "True"
 
                         }).ToList();
-                        return _objData;
+                      //  return _objData;
                     }
+
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate(objList.CurrencyType, "USD", 1);
+                        if (objList.CurrencyType != null)
+                        {
+                            double amount = exchangeRate * Convert.ToDouble(objList.Budget);
+                            objList.Budget = (amount).ToString("0.##");
+                        }
+
+                    }
+                    return _objData;
                 }
             }
             catch (Exception ex)
@@ -855,41 +867,47 @@ namespace FP.DAL
 
                     List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
-                        
 
                     }).ToList();
 
                     foreach (var obj in _objData)
                     {
-                        var youTubeLink = obj.YouTube.ToString();
-                      //  string[] youTubeIds = youTubeLink.Split("/");
-                        List<string> youTubeIds = new List<string>(
-                                     youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
-                        if (youTubeIds.Count > 4)
+                        if (obj.YouTube != "" && obj.YouTube != null)
                         {
-                            //var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
+                            var youTubeLink = obj.YouTube.ToString();
+                            //  string[] youTubeIds = youTubeLink.Split("/");
+                            List<string> youTubeIds = new List<string>(
+                                         youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+                            if (youTubeIds.Count > 4)
+                            {
+                                //var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
 
-                            //////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
-                            ////https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
+                                //////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+                                ////https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
 
-                            //var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
-                            //// var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                            //WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
-                            //requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                            //WebResponse responseInsta = requestInsta.GetResponse();
-                            //StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
-                            //string responseTextInsta = readerinsta.ReadToEnd();
-                            /////
-                            var youTubeId = youTubeIds[4];
-                            var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                            var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
-                            WebRequest request = HttpWebRequest.Create(url);
-                            request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                            WebResponse response = request.GetResponse();
-                            StreamReader reader = new StreamReader(response.GetResponseStream());
-                            string responseText = reader.ReadToEnd();
-                            dynamic data = JObject.Parse(responseText);
-                            obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                                //var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
+                                //// var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                                //WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
+                                //requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                                //WebResponse responseInsta = requestInsta.GetResponse();
+                                //StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
+                                //string responseTextInsta = readerinsta.ReadToEnd();
+                                /////
+                                var youTubeId = youTubeIds[4];
+                                var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                                var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
+                                WebRequest request = HttpWebRequest.Create(url);
+                                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                                WebResponse response = request.GetResponse();
+                                StreamReader reader = new StreamReader(response.GetResponseStream());
+                                string responseText = reader.ReadToEnd();
+                                dynamic data = JObject.Parse(responseText);
+                                obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                            }
+                            else
+                            {
+                                obj.YouTube = "NA";
+                            }
                         }
                         else
                         {

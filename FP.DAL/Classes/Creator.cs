@@ -88,6 +88,41 @@ namespace FP.DAL
             }
         }
 
+        public int InsertCreator(string name, string userId)
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+                    int output = 0;
+
+                    string query = "";
+
+                    output = _dbDapperContext.Execute("Delete  from CreatorProfile Where UserId=@UserId", new
+                    {
+                        UserId = userId
+                    });
+
+
+                    query = @"Insert into CreatorProfile(FullName, UserId) 
+                            values(@FullName, @UserId)";
+
+                    output = _dbDapperContext.Execute(query, new
+                    {
+                        FullName=name,
+                        UserId = userId
+
+
+                    });
+                    return output;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                return -1;
+            }
+        }
         public CreatorModal GetCreatorInfo(string UserId,string currencyType)
         {
             try

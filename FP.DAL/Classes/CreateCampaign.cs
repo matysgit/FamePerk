@@ -58,7 +58,25 @@ namespace FP.DAL.Classes
                     }
                     else
                     {
+                        query = "SELECT   Status FROM Campaign where CampaignId=@CampaignId";
 
+                        var outputStatus = _dbDapperContext.Query<CampaignModal>(query, new
+                        {
+                            CampaignId = objData.CampaignId
+                        }).SingleOrDefault();
+
+                        if(outputStatus.Status == "Send To Platform")
+                        {
+                            query = "Update  Campaign set Status=@Status FROM Campaign where CampaignId=@CampaignId";
+
+                            output = _dbDapperContext.Execute(query, new
+                            {
+                                objData.Status,
+                                CampaignId = objData.CampaignId
+                            });
+
+                            return output;
+                        }
                         query = "Update Campaign set SupplementalChannels=@SupplementalChannels, ProductCategoryId=@ProductCategoryId, ProductURL=@ProductURL, ProductPhoto=@ProductPhoto, ShippingProduct=@ShippingProduct, AboutYourProduct=@AboutYourProduct, CampaignTitle=@CampaignTitle, AboutYourBrand=@AboutYourBrand, CampaignGoal=@CampaignGoal, " +
                                                               "CampaignDurationId=@CampaignDurationId, PrivateCampaign=@PrivateCampaign, AudienceAgeId=@AudienceAgeId, " +
                                                               "Budget=@Budget,  YouTubeVideoType=@YouTubeVideoType, AudienceGender=@AudienceGender, Status=@Status, " +

@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using FP.DAL;
+using FP.DAL.Classes;
 
 namespace FP.Controllers
 {
@@ -107,7 +109,7 @@ namespace FP.Controllers
 
                     else
                     {
-                        ModelState.AddModelError("", "Invalid login attempt.");
+                        ModelState.AddModelError("", "Username or Password incorrect");
                         return View(model);
                     }
                 case SignInStatus.LockedOut:
@@ -116,7 +118,7 @@ namespace FP.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Username or Password incorrect");
                     return View(model);
             }
         }
@@ -407,6 +409,12 @@ namespace FP.Controllers
                     }
                     
                     await ExternalLoginConfirmation(model, null);
+                    if(model.Email== "already exists")
+                    {
+                        //ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                        return View("ExternalLogin");
+                    }
+                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
                     return RedirectToAction("Index", "Creator");
@@ -443,8 +451,18 @@ namespace FP.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        Creator obj = new Creator();
+                        var roleresult = UserManager.AddToRole(user.Id, "Creator");
+                        int output = obj.InsertCreator(info.ExternalIdentity.Name, user.Id );
+                        
+                        //info = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                         return RedirectToLocal(returnUrl);
                     }
+                }
+                else {
+                    model.Email = "already exists";
+                    ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                    return View("ExternalLogin");
                 }
                 AddErrors(result);
             }
