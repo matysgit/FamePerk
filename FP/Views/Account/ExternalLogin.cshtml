@@ -8,8 +8,12 @@
 
 <div class="login-box">
     <div id="divLoginCreator">
+        <div class="col-md-12" style="text-align: left;">
+            <h3>
+                <i>Sign In As Creator</i>
+            </h3>
+        </div>
         <div class="col-md-12">
-            <h5>  <i>  Sign in as Creator</i></h5>
             <section id="socialLoginForm">
 
                 @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })

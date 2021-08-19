@@ -7,8 +7,7 @@
 
 
 <div class="login-box login-md-box text-left">
-    <a href="#" class="logo">@*<h2>@ViewBag.Title.</h2>*@ Fame Perks</a>
-    <h5><i>Register as Brand</i></h5>
+    <h3><i>Register As Brand</i></h3>
     <hr />
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal full-width", role = "form" }))
     {
@@ -121,6 +120,6 @@
     }
 
 </div>
-            @section Scripts {
-                @Scripts.Render("~/bundles/jqueryval")
-            }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
