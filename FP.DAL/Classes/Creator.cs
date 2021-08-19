@@ -3,6 +3,7 @@ using FP.DAL.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -223,7 +224,7 @@ namespace FP.DAL
                     Nullable<int> countryId = null;
                    // int CountyId = null;
                     string ageId = "";
-                  
+                    int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
                     if (obj.CountyId != "0" && obj.CountyId != null)
                     {
                         countryId = Convert.ToInt32(obj.CountyId);
@@ -234,12 +235,12 @@ namespace FP.DAL
                     }
                     if(ageId =="" && countryId == null)
                     {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
+                             Categories, Gender FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
-                           
+                            NoOfYouTubeSubscriber = minimumYouTubeSubscriber
                         }).ToList();
 
                         List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
@@ -248,12 +249,13 @@ namespace FP.DAL
                     }
                    else if ( ageId =="")
                     {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId)";
+                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) AND NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
-                            CountryId = countryId
+                            CountryId = countryId,
+                            NoOfYouTubeSubscriber = minimumYouTubeSubscriber
                         }).ToList();
 
                      List<CreatorModal> objFilnalCreatorData=   GetCreatorDetails(_objData);
@@ -261,14 +263,14 @@ namespace FP.DAL
                     }
                     else
                     {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) and TargetAudience LIKE @TargetAudience ";
+                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) and NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber and TargetAudience LIKE @TargetAudience ";
                         List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                         {
                             CountryId = countryId,
-                            TargetAudience = "%" + ageId + "%"// ageId
-
+                            TargetAudience = "%" + ageId + "%",// ageId
+                            NoOfYouTubeSubscriber= minimumYouTubeSubscriber
                         }).ToList();
 
                         List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
@@ -287,29 +289,15 @@ namespace FP.DAL
 
         public List<CreatorModal> GetCreatorDetails(List<CreatorModal> objData)
         {
-            foreach (var objList in objData)
+            foreach (var obj in objData)
             {
-                var youTubeLink = objList.YouTube.ToString();
-                //  string[] youTubeIds = youTubeLink.Split("/");
-                List<string> youTubeIds = new List<string>(
-                             youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
-                if (youTubeIds.Count > 4)
+                if (obj.YouTube != "" && obj.YouTube != null)
                 {
-                    //https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
-                    var youTubeId = youTubeIds[4];
-                    var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                    var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
-                    WebRequest request = HttpWebRequest.Create(url);
-                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                    WebResponse response = request.GetResponse();
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    string responseText = reader.ReadToEnd();
-                    dynamic data = JObject.Parse(responseText);
-                    objList.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                    obj.YouTube = FormatNumber(Convert.ToInt32(obj.YouTube));
                 }
                 else
                 {
-                    objList.YouTube = "NA";
+                    obj.YouTube = "0";
                 }
             }
             return objData;
@@ -734,6 +722,113 @@ namespace FP.DAL
                 //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
+        }
+
+        public List<CreatorModal> GetCreatorList()
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+                    //#TODO: Get UserId from session or user context
+                    // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
+
+                    string query = "";
+
+                    int minimumYouTubeSubscriber =Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
+
+
+                    query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber AS YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
+                             Categories, Gender FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE NoOfYouTubeSubscriber >=@NoOfYouTubeSubscriber";
+
+                    List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
+                    {
+                        NoOfYouTubeSubscriber = minimumYouTubeSubscriber
+                    }).ToList();
+
+
+                    foreach (var obj in _objData)
+                    {
+                        if (obj.YouTube != "" && obj.YouTube != null)
+                        {
+                            obj.YouTube = FormatNumber(Convert.ToInt32(obj.YouTube));
+                        }
+                        else
+                        {
+                            obj.YouTube = "0";
+                        }
+                    }
+
+                    return _objData;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                return null;
+            }
+        }
+
+        public int UpdateCreatorSubscriber()
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+                    string query = @"SELECT CreatorId, UserId,  YouTube, Instagram, Facebook FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
+
+                    List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
+                    {
+
+                    }).ToList();
+
+                    string youTubeApi = ConfigurationManager.AppSettings.Get("YouTubeAPI");
+
+                    foreach (var obj in _objData)
+                    {
+                        int subscriberCount = 0;// Convert.ToInt32(data.items[0].statistics.subscriberCount);
+                        if (obj.YouTube != "" && obj.YouTube != null)
+                        {
+                            var youTubeLink = obj.YouTube.ToString();
+                            List<string> youTubeIds = new List<string>(
+                                         youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+                            if (youTubeIds.Count > 4)
+                            {
+                                var youTubeId = youTubeIds[4];
+                                //var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                                var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + youTubeApi;
+                                WebRequest request = HttpWebRequest.Create(url);
+                                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                                WebResponse response = request.GetResponse();
+                                StreamReader reader = new StreamReader(response.GetResponseStream());
+                                string responseText = reader.ReadToEnd();
+                                dynamic data = JObject.Parse(responseText);
+                                subscriberCount =  Convert.ToInt32(data.items[0].statistics.subscriberCount);
+                                //obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                            }
+                            
+                        }
+
+                        query = "Update CreatorProfile set NoOfYouTubeSubscriber=@NoOfYouTubeSubscriber where  UserId=@UserId";
+                        CreatorModal _objUpdateData = _dbDapperContext.Query<CreatorModal>(query, new
+                        {
+                            UserId = obj.UserId,
+                            NoOfYouTubeSubscriber = subscriberCount
+
+                        }).FirstOrDefault();
+                    }
+                  //  return _objData;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                return -1;
+            }
+            return 1;
         }
     }
 }

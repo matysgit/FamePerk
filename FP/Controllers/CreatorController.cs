@@ -738,7 +738,7 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
            
-            Projects obj = new Projects();
+            Creator obj = new Creator();
             var result = obj.GetCreatorList();
 
             return Json(new
@@ -903,5 +903,16 @@ namespace FP.Controllers
                 statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
             }, JsonRequestBehavior.AllowGet);
         }
+
+        #region BankDetails
+        public ActionResult BankDetails()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", controllerName: "Account");
+            }
+            return View();
+        }
+        #endregion
     }
 }

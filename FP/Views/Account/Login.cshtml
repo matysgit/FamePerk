@@ -43,6 +43,10 @@
                     <li><input type="submit" value="Log in" class="btn btn-red" /></li>
 
                     @*<li class="forgot-password"><a href="javascript:void(0)">Forgot Password</a></li>*@
+                    <li>
+                        @Html.ActionLink("Forgot Password", "ForgotPassword", null, new { @class = "forgot-password" })
+                    </li>
+
                     <li class="no-ac">No account yet?</li>
 
                     <li> @Html.ActionLink("Sign Up As a Brand", "Register", null, new { @class = "btn btn-md" })</li>

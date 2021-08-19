@@ -15,6 +15,8 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using FP.DAL;
 using FP.DAL.Classes;
+using System.Configuration;
+using System.Net.Mail;
 
 namespace FP.Controllers
 {
@@ -251,16 +253,50 @@ namespace FP.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                //  For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                //Send an email with this link
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                //Create URL with above token
+                string  UserID = ConfigurationManager.AppSettings.Get("EmailFrom");
+                string Password = ConfigurationManager.AppSettings.Get("Password");
+                string SMTPPort = ConfigurationManager.AppSettings.Get("SMTPPort");
+                string Host = ConfigurationManager.AppSettings.Get("Host");
+
+                //var lnkHref = "<a href='" + Url.Action("ResetPassword", "Account", new { email = model.Email, code = code }, "https://localhost:44330/") + "'>Reset Password</a>";
+                //HTML Template for Send email
+                string subject = "Reset password";
+                string body = "<b>Please find the Password Reset Link. </b><br/>" + callbackUrl;
+                //Get and set the AppSettings using configuration manager.
+                //EmailManager.AppSettings(out UserID, out Password, out SMTPPort, out Host);
+                //Call send email methods.
+                SendEmail(UserID, subject, body, model.Email, UserID, Password, SMTPPort, Host);
+
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public static void SendEmail(string From, string Subject, string Body, string To, string UserID, string Password, string SMTPPort, string Host)
+        {
+            using (MailMessage mail = new MailMessage(From, To))
+            {
+                mail.Subject = Subject;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = Host;// "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                NetworkCredential NetworkCred = new NetworkCredential(UserID, Password);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = NetworkCred;
+                smtp.Port =Convert.ToInt32( SMTPPort);// 587;
+                smtp.Send(mail);
+            }
         }
 
         //

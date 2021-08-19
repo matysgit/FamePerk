@@ -26,13 +26,12 @@ namespace FP.DAL
             public string Summary { get; set; }
             public string TargetAudience { get; set; }
             public string ProfileImage { get; set; }
-
-        public string Categories { get; set; }
-        public string DOB { get; set; }
-        public string Language { get; set; }
-
-        public string Gender { get; set; }
-        public int CurrentAge { get; set; }
+            public string Categories { get; set; }
+            public string DOB { get; set; }
+            public string Language { get; set; }
+            public string Gender { get; set; }
+            public int NoOfYouTubeSubscriber { get; set; }
+            public int NoOfInstagramFollower { get; set; }
     }
 
     public class CountryModal

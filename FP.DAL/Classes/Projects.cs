@@ -849,81 +849,80 @@ namespace FP.DAL
         }
 
 
-        public List<CreatorModal> GetCreatorList()
-        {
-            try
-            {
-                using ( IDbConnection _dbDapperContext = GetDefaultConnection())
-                {
-                    //#TODO: Get UserId from session or user context
-                    // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
+        //public List<CreatorModal> GetCreatorList()
+        //{
+        //    try
+        //    {
+        //        using ( IDbConnection _dbDapperContext = GetDefaultConnection())
+        //        {
+        //            //#TODO: Get UserId from session or user context
+        //            // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
 
-                    string query = "";
+        //            string query = "";
 
 
-                    query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
-                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
+        //            query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+        //                        Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
+        //                     Categories, Gender FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id";
 
-                    List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
-                    {
+        //            List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
+        //            {
 
-                    }).ToList();
+        //            }).ToList();
 
-                    foreach (var obj in _objData)
-                    {
-                        if (obj.YouTube != "" && obj.YouTube != null)
-                        {
-                            var youTubeLink = obj.YouTube.ToString();
-                            //  string[] youTubeIds = youTubeLink.Split("/");
-                            List<string> youTubeIds = new List<string>(
-                                         youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
-                            if (youTubeIds.Count > 4)
-                            {
-                                //var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
+        //            foreach (var obj in _objData)
+        //            {
+        //                if (obj.YouTube != "" && obj.YouTube != null)
+        //                {
+        //                    var youTubeLink = obj.YouTube.ToString();
+        //                    List<string> youTubeIds = new List<string>(
+        //                                 youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+        //                    if (youTubeIds.Count > 4)
+        //                    {
+        //                        //var client_id = "38f9daf408f9cd0e21662ef453c230a7";// ConfigurationManager.AppSettings["instagram.clientid"].ToString();
 
-                                //////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
-                                ////https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
+        //                        //////https://api.instagram.com/v1/users/{user-id}/follows?access_token=ACCESS-TOKEN
+        //                        ////https://api.instagram.com/v1/users/search?q=[USERNAME]&client_id=[CLIENT ID]
 
-                                //var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
-                                //// var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                                //WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
-                                //requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                                //WebResponse responseInsta = requestInsta.GetResponse();
-                                //StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
-                                //string responseTextInsta = readerinsta.ReadToEnd();
-                                /////
-                                var youTubeId = youTubeIds[4];
-                                var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
-                                var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
-                                WebRequest request = HttpWebRequest.Create(url);
-                                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                                WebResponse response = request.GetResponse();
-                                StreamReader reader = new StreamReader(response.GetResponseStream());
-                                string responseText = reader.ReadToEnd();
-                                dynamic data = JObject.Parse(responseText);
-                                obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
-                            }
-                            else
-                            {
-                                obj.YouTube = "NA";
-                            }
-                        }
-                        else
-                        {
-                            obj.YouTube = "NA";
-                        }
-                    }
-                    return _objData;
+        //                        //var instagramUrl = "https://api.instagram.com/v1/users/search?q=gauravranadoon&client_id=" + client_id + "";
+        //                        //// var instagramApi = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+        //                        //WebRequest requestInsta = HttpWebRequest.Create(instagramUrl);
+        //                        //requestInsta.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+        //                        //WebResponse responseInsta = requestInsta.GetResponse();
+        //                        //StreamReader readerinsta = new StreamReader(responseInsta.GetResponseStream());
+        //                        //string responseTextInsta = readerinsta.ReadToEnd();
+        //                        /////
+        //                        var youTubeId = youTubeIds[4];
+        //                        var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+        //                        var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + api;
+        //                        WebRequest request = HttpWebRequest.Create(url);
+        //                        request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+        //                        WebResponse response = request.GetResponse();
+        //                        StreamReader reader = new StreamReader(response.GetResponseStream());
+        //                        string responseText = reader.ReadToEnd();
+        //                        dynamic data = JObject.Parse(responseText);
+        //                        obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+        //                    }
+        //                    else
+        //                    {
+        //                        obj.YouTube = "NA";
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    obj.YouTube = "NA";
+        //                }
+        //            }
+        //            return _objData;
 
-                }
-            }
-            catch (Exception ex)
-            {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                return null;
-            }
-        }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+        //        return null;
+        //    }
+        //}
 
         static string FormatNumber(int num)
         {

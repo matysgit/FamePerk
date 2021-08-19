@@ -67,9 +67,14 @@
          ApproveProposal: "@Url.Action("ApproveProposal", "Client", new { @Area  ="" })",
          SendProposalUpdate: "@Url.Action("SendProposalUpdate", "Client", new { @Area  ="" })",
          GetCreatorInfoMail: "@Url.Action("GetCreatorInfoMail", "Client", new { @Area  ="" })",
-         GetUnReadMsg: "@Url.Action("GetUnReadMsg", "Client", new { @Area  ="" })"
+         GetUnReadMsg: "@Url.Action("GetUnReadMsg", "Client", new { @Area  ="" })",
+         UpdateCreatorSubscriber: "@Url.Action("UpdateCreatorSubscriber", "Client", new { @Area  ="" })"
      }
 
+    var $_Client = {
+        PageUrl: "@Url.Action("Index", "Client")",
+         UpdateCreator: "@Url.Action("UpdateCreatorSubscriber", "Client", new { @Area  ="" })"
+    }
     var $_Creator = {
         PageUrl: "@Url.Action("Index", "Creator")",
           GetCreatorList : "@Url.Action("GetCreatorList", "Creator", new { @Area  ="" })",

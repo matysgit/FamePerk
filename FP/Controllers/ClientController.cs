@@ -1,5 +1,8 @@
 ﻿using FP.DAL;
 using FP.DAL.Classes;
+using FP.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using static FP.Controllers.ManageController;
 
 namespace FP.Controllers
 {
@@ -49,6 +52,12 @@ namespace FP.Controllers
             {
                 return RedirectToAction("Login", controllerName: "Account");
             }
+
+            Creator objCreator = new Creator();
+            //string userId = Session["UserId"].ToString();
+
+            int result = objCreator.UpdateCreatorSubscriber();
+
             return View();
         }
 
@@ -746,22 +755,12 @@ namespace FP.Controllers
         #region Wallet
         public ActionResult Wallet()
         {
-            //ViewBag.StripePublishKey = ConfigurationManager.AppSettings["stripePublishableKey"];
-            //if (Session["UserId"] == null)
-            //{
-            //    return RedirectToAction("Login", controllerName: "Account");
-            //}
             return View();
         }
 
         public ActionResult CheckUserSession()
         {
             return RedirectToAction("Login", controllerName: "Account");
-            //return Json(new
-            //{
-            //    data = "logOut",
-            //    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
-            //}, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// Used to get list of Mailbox
@@ -1247,5 +1246,62 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             
         }
+
+
+        #region update creator subscriber/follower
+        [HttpPost]
+        public JsonResult UpdateCreatorSubscriber()
+        {
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            string userId = Session["UserId"].ToString();
+
+            var result = objCreator.UpdateCreatorSubscriber();
+            return Json(new
+            {
+                statusCode = result > -1 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
+            });
+        }
+
+        #endregion
+
+        //
+        // GET: /Manage/ChangePassword
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        ////
+        //// POST: /Manage/ChangePassword
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+        //    if (result.Succeeded)
+        //    {
+        //        var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+        //        if (user != null)
+        //        {
+        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //        }
+        //        return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+        //    }
+        //    AddErrors(result);
+        //    return View(model);
+        //}
+
     }
 }
