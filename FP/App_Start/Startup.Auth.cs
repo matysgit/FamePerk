@@ -54,9 +54,9 @@ namespace FP
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-               appId: "830691827582398",
-               appSecret: "704244fc8b77d8329798be10bd93f506");
+            //app.UseFacebookAuthentication(
+            //   appId: "830691827582398",
+            //   appSecret: "704244fc8b77d8329798be10bd93f506");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {

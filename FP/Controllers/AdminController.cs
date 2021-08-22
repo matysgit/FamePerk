@@ -3,7 +3,7 @@ using FP.DAL.Classes;
 using FP.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNetCore.Identity;
+
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;

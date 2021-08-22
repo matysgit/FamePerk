@@ -447,11 +447,11 @@ namespace FP.Controllers
                     }
                     
                     await ExternalLoginConfirmation(model, null);
-                    if(model.Email== "already exists")
-                    {
-                        //ModelState.AddModelError("", "Eamil already exists. Please try different account.");
-                        return View("ExternalLogin");
-                    }
+                    //if(model.Email== "already exists")
+                    //{
+                    //    //ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                    //    return View("ExternalLogin");
+                    //}
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
