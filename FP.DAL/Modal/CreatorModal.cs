@@ -30,6 +30,7 @@ namespace FP.DAL
             public string DOB { get; set; }
             public string Language { get; set; }
             public string Gender { get; set; }
+            public int CurrentAge { get; set; }
             public int NoOfYouTubeSubscriber { get; set; }
             public int NoOfInstagramFollower { get; set; }
     }

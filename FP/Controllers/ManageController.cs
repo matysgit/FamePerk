@@ -238,10 +238,14 @@ namespace FP.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return  RedirectToAction("Login", "Account");// RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
-            return View(model);
+            if (Session["Role"].ToString() == "Admin")
+                return View("ChangePassword", "Admin", model);
+                //return View(model);
+                    else
+                        return View("ChangePassword", "Client");
         }
 
         //

@@ -1,6 +1,11 @@
 ﻿using FP.DAL;
 using FP.DAL.Classes;
+using FP.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNetCore.Identity;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace FP.Controllers
@@ -923,5 +928,11 @@ namespace FP.Controllers
                 statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
             });
         }
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+       
     }
 }
