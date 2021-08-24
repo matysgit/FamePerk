@@ -407,15 +407,26 @@ namespace FP.Controllers
             {
                 return RedirectToAction("Login");
             }
-
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
-                    Session["UserId"] = user.Identity.GetUserId();
-                    return RedirectToAction("Index", "Creator");
+                    string userID= user.Identity.GetUserId();
+                    Creator obj = new Creator();
+                    int output = obj.GetCreatorSubscriber(userID);
+                    if (output > -1)
+                    {
+                        Session["UserId"] = userID;// user.Identity.GetUserId();
+                        return RedirectToAction("Index", "Creator");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Your account not eligible for login.");
+                        return View("ExternalLogin");
+                    }
+                    
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

@@ -242,10 +242,11 @@ namespace FP.Controllers
             }
             AddErrors(result);
             if (Session["Role"].ToString() == "Admin")
-                return View("ChangePassword", "Admin", model);
+                return View("../Admin/ChangePassword", model);
                 //return View(model);
-                    else
-                        return View("ChangePassword", "Client");
+             else
+                return View("../Client/ChangePassword", model);
+            
         }
 
         //

@@ -1278,8 +1278,7 @@ namespace FP.Controllers
         {
             return View();
         }
-
-        ////
+       
         //// POST: /Manage/ChangePassword
         //[HttpPost]
         //[ValidateAntiForgeryToken]

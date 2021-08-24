@@ -830,5 +830,49 @@ namespace FP.DAL
             }
             return 1;
         }
+
+        public int GetCreatorSubscriber(string userId)
+        {
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+                    int output = 0;
+
+                    string query = "";
+
+                    int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
+
+
+                    query = @"SELECT  NoOfYouTubeSubscriber AS YouTube, Instagram
+                            FROM CreatorProfile  
+                            INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id 
+                            WHERE NoOfYouTubeSubscriber >=@NoOfYouTubeSubscriber and UserId=@UserId";
+
+
+                    CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
+                    {
+                        NoOfYouTubeSubscriber = minimumYouTubeSubscriber,
+                        UserId = userId
+                    }).FirstOrDefault();
+
+                    if (_objData != null)
+                    {
+                        if (_objData.YouTube != null)
+                            return output;
+                        else
+                            return -1;
+                    }
+                    else
+                        return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                return -1;
+            }
+        }
+
     }
 }
