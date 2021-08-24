@@ -101,7 +101,7 @@ namespace FP.Controllers
                         Session["Role"] = "Client";
                         return RedirectToAction("Projects", "Client");
                     }
-                    else if (user.IsInRole("Creator"))
+                    else if (user.IsInRole("Creator")) //to be remove
                     {
                         return RedirectToAction("Index", "Creator");
                     }
@@ -443,11 +443,9 @@ namespace FP.Controllers
                     if (User.Identity.IsAuthenticated)
                     {
                         //var userID = User.Identity.GetUserId();
-                        
                         //var d=await UserManager.GetClaims(model, userID);
-                        ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                        ModelState.AddModelError("", "Email already exists.");
                         return View("ExternalLogin");
-                      // return RedirectToAction("ExternalLogin", "ExternalLogin");
                     }
 
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
@@ -458,17 +456,11 @@ namespace FP.Controllers
                     }
                     
                     await ExternalLoginConfirmation(model, null);
-                    //if(model.Email== "already exists")
-                    //{
-                    //    //ModelState.AddModelError("", "Eamil already exists. Please try different account.");
-                    //    return View("ExternalLogin");
-                    //}
+                   
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
                     return RedirectToAction("Index", "Creator");
-
-
             }
         }
 
@@ -509,8 +501,8 @@ namespace FP.Controllers
                     }
                 }
                 else {
-                    model.Email = "already exists";
-                    ModelState.AddModelError("", "Eamil already exists. Please try different account.");
+                   // model.Email = "already exists";
+                    //ModelState.AddModelError("", "Email already exists. Please try different account.");
                     return View("ExternalLogin");
                 }
                 AddErrors(result);
