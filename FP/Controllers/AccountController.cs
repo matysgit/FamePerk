@@ -437,16 +437,15 @@ namespace FP.Controllers
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
 
-                    //
                     ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
                     model.Email = loginInfo.Email;
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        //var userID = User.Identity.GetUserId();
-                        //var d=await UserManager.GetClaims(model, userID);
-                        ModelState.AddModelError("", "Email already exists.");
-                        return View("ExternalLogin");
-                    }
+                    //if (User.Identity.IsAuthenticated)
+                    //{
+                    //    //var userID = User.Identity.GetUserId();
+                    //    //var d=await UserManager.GetClaims(model, userID);
+                    //    ModelState.AddModelError("", "Email already exists.");
+                    //    return View("ExternalLogin");
+                    //}
 
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     var info = await AuthenticationManager.GetExternalLoginInfoAsync();
