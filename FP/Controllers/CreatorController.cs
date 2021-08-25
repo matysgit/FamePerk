@@ -72,10 +72,10 @@ namespace FP.Controllers
             }
             catch
             {
-               
+
             }
-            if(fileName!="")
-            fileName= "~/Upload/Profile/" + userId + "/" + fileName;
+            if (fileName != "")
+                fileName = "~/Upload/Profile/" + userId + "/" + fileName;
             string currencyType = "USD";
             if (Session["CurrencyType"] != null)
             {
@@ -122,24 +122,24 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             Creator objCreator = new Creator();
-                string userId = "";
-                if (UserId == "" || UserId == null)
-                {
-                    userId = Session["UserId"].ToString();
-                }
-                else
-                {
-                    userId = UserId;
-                }
+            string userId = "";
+            if (UserId == "" || UserId == null)
+            {
+                userId = Session["UserId"].ToString();
+            }
+            else
+            {
+                userId = UserId;
+            }
             string currencyType = Session["CurrencyType"].ToString();
-                var result = objCreator.GetCreatorInfo(userId, currencyType);
+            var result = objCreator.GetCreatorInfo(userId, currencyType);
 
-                return Json(new
-                {
-                    data = result,
-                    statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
-                }, JsonRequestBehavior.AllowGet);
-           
+            return Json(new
+            {
+                data = result,
+                statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            }, JsonRequestBehavior.AllowGet);
+
         }
 
         [HttpGet]
@@ -379,13 +379,13 @@ namespace FP.Controllers
             });
         }
 
-       
+
         #endregion
 
         /// <summary>
         /// Used to get profile Image
         /// </summary>
-         /// <returns></returns>
+        /// <returns></returns>
         //[HttpGet]
         public JsonResult GetProfileImg(string UserId)
         {
@@ -455,7 +455,7 @@ namespace FP.Controllers
             bool ISValidUpload = true;
             if (Request.Files != null)
             {
-                
+
                 string OriginalFilePath = Server.MapPath("\\Upload\\Profile\\" + userId);
                 if (Directory.Exists(OriginalFilePath))
                 {
@@ -477,7 +477,7 @@ namespace FP.Controllers
                     fileName[j] = Path.GetFileNameWithoutExtension(file.FileName.Replace(" ", "").Replace("'", "").Trim()) + "_" + Guid.NewGuid() + Path.GetExtension(file.FileName);
                     try
                     {
-                      
+
                         string originalfilePathName = Path.Combine(OriginalFilePath, fileName[i]);
                         file.SaveAs(originalfilePathName);
 
@@ -494,8 +494,8 @@ namespace FP.Controllers
             {
                 ISValidUpload,
                 UplodedFileName = fileName,
-                ActualFileName = actualFileName, 
-                UserId= userId
+                ActualFileName = actualFileName,
+                UserId = userId
             });
         }
 
@@ -511,10 +511,10 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
-           
+
             string userId = Session["UserId"].ToString();
             string convertTocurrency = "USD";
-            if(Session["CurrencyType"] != null)
+            if (Session["CurrencyType"] != null)
             {
                 convertTocurrency = Session["CurrencyType"].ToString();
             }
@@ -727,7 +727,7 @@ namespace FP.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetCreatorList( )
+        public JsonResult GetCreatorList()
         {
             if (Session["UserId"] == null)
             {
@@ -737,7 +737,7 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
-           
+
             Creator obj = new Creator();
             var result = obj.GetCreatorList();
 
@@ -746,7 +746,7 @@ namespace FP.Controllers
                 data = result,
                 statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
             }, JsonRequestBehavior.AllowGet);
-                   
+
         }
 
         [HttpGet]
@@ -842,8 +842,8 @@ namespace FP.Controllers
             var currentCureency = "USD";
             if (Session["CurrencyType"] != null)
             {
-                currentCureency=Session["CurrencyType"].ToString();
-                
+                currentCureency = Session["CurrencyType"].ToString();
+
             }
             else
             {
@@ -870,12 +870,12 @@ namespace FP.Controllers
         }
 
         [HttpGet]
-        public JsonResult SetCurrencyType( CurrencyTypeModal Currency)
+        public JsonResult SetCurrencyType(CurrencyTypeModal Currency)
         {
             var currentCureency = Currency.CurrencyId;
             if (currentCureency == null)
             {
-                
+
                 if (Session["CurrencyType"] == null)
                 {
                     Session["CurrencyType"] = "USD";
