@@ -124,70 +124,65 @@
                                 <div class="row">
                                     <div class="form-group custom-form-group col-lg-12">
                                         <label class="control-label">Date Of Birth</label>
-                                        @*<md-datepicker ng-model="CreatorModal.myDate" md-placeholder="Enter date"></md-datepicker> ng-model="CreatorModal.DOB"*@
                                         <input type="date" date='dd-MM-yyyy' id="txtDOB" class="form-control datepicker" ng-model="CreatorDOB.DOB" maxlength="1000" placeholder="" required width="20">
                                     </div>
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">E-Mail</label>
-                                    @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })*@
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Email" maxlength="1000" placeholder="" ng-view="true" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.Email" maxlength="50" placeholder="Email Address" ng-view="true" required width="20">
                                 </div>
+
                                 <div class="form-group custom-form-group">
-                                    <label class="control-label">ContactNumber</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.ContactNumber" maxlength="1000" placeholder="" required width="20">
+                                    <label class="control-label">Contact Number</label>
+                                    <input type="text" class="form-control" ng-model="CreatorModal.ContactNumber" maxlength="10" placeholder="Contact Number" required width="20">
                                 </div>
+
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">State</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.State" maxlength="1000" placeholder="" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.State" maxlength="50" placeholder="State" required width="20">
                                 </div>
+
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Country</label>
-                                    <select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country">
-                                        <option value="0" label="Please Select Country"></option>
-                                       
+                                    <select class="form-control" ng-model="CreatorModal.CountryId" ng-options="item.CountryId as item.Name for item in Country">                                       
                                     </select>
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Languages</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20" multiple>*@
-                                    <textarea class="form-control" ng-model="CreatorModal.Language" maxlength="1000" placeholder="" required width="20"></textarea>
+                                    <textarea class="form-control" ng-model="CreatorModal.Language" maxlength="200" placeholder="" required width="20"></textarea>
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">YouTube</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="1000" placeholder="" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="200" placeholder="YouTube" required width="20">
                                 </div>
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Instagram</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Instagram" maxlength="1000" placeholder="" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.Instagram" maxlength="200" placeholder="Instagram" required width="20">
                                 </div>
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Facebook</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Facebook" maxlength="1000" placeholder="" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.Facebook" maxlength="200" placeholder="Facebook" required width="20">
                                 </div>
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Minimum Budgeted Project</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.MinimumBudgetedProject" maxlength="1000" placeholder="" required width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.MinimumBudgetedProject" maxlength="10" placeholder="Minimum Budgeted" required width="20">
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Summary</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.Summary" maxlength="1000" placeholder="" width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.Summary" maxlength="500" placeholder="Summary" width="20">
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">PastWork Experience</label>
-                                    <input type="text" class="form-control" ng-model="CreatorModal.PastWorkExperience" maxlength="1000" placeholder="" width="20">
+                                    <input type="text" class="form-control" ng-model="CreatorModal.PastWorkExperience" maxlength="500" placeholder="Experience" width="20">
                                 </div>
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Categories</label>
-                                    @*<select id="EmpList" class="form-control" ng-model="CreateCampaignModal.ProductCategoryId" ng-options="item.ProductCategoryId as item.Name for item in ProductCategory" checkboxes="true">
-                                        </select>*@
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
                                     <div ng-repeat="obj in ProductCategory" class="custom-control custom-checkbox col-3 mb-3">
 
                                         <input type="checkbox" class="custom-control-input" name="chkCategories" id="cat_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
@@ -197,7 +192,6 @@
 
                                 <div class="form-group custom-form-group">
                                     <label class="control-label">Target Audience Age</label>
-                                    @*<input type="text" class="form-control" ng-model="CreatorModal.TargetAudience" maxlength="1000" placeholder="" required width="20">*@
                                     <div ng-repeat="obj in AudienceAgeModal" class="custom-control custom-checkbox col-3 mb-3">
 
                                         <input type="checkbox" class="custom-control-input" name="chkAudienceAge" id="aud_{{$index}}" ng-model="obj.checked" ng-checked="obj.isChecked">
@@ -206,8 +200,6 @@
                                 </div>
                                 <div class="form-group custom-form-group text-right">
                                     <button type="submit" ng-disabled="!frmCreatorModal.$valid" class="btn btn-primary">Update</button>
-
-                                    @*<button type="button" ng-click="fn_DefaultCreatorSettings()" class="btn btn-primary">Back</button>*@
                                 </div>
                             </div>
                         </form>

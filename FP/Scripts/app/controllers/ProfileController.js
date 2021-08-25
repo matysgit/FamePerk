@@ -171,6 +171,7 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
+                responseJson.data.unshift({ CountryId: 0, Name: 'Select Country' })
                 $scope.Country = responseJson.data;
             }
             if (responseJson.statusCode === 204) {
@@ -210,7 +211,6 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
                 }
                 $scope.CreatorModal = responseJson.data;
 
-               // $scope.CreatorModal.DOB = $filter(responseJson.data.DOB)(item.date, "dd/MM/yyyy");
                 $scope.CreatorDOB = {
                     DOB: new Date(responseJson.data.DOB)
                 };
@@ -304,7 +304,7 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
 
         CreatorModal.TargetAudience = age;
         CreatorModal.Categories = categories;
-       // CreatorModal.DOB = $scope.CreatorDOB;
+
         fpService.postData($_Creator.Save, CreatorModal, function (response) {
             var responseJson = response.data;
             if (responseJson.statusCode === 200) {
