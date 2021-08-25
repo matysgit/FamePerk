@@ -47,14 +47,17 @@ namespace FP.DAL
 
                     string query = "";
 
-                     output = _dbDapperContext.Execute("Delete  from CreatorProfile Where UserId=@UserId", new
-                    {
-                        UserId = UserId
-                    });
+                    // output = _dbDapperContext.Execute("Delete  from CreatorProfile Where UserId=@UserId", new
+                    //{
+                    //    UserId = UserId
+                    //});
+                    query= @"Update CreatorProfile set FullName = @FullName , ContactNumber= @ContactNumber, State= @State, YouTube= @YouTube, Instagram=@Instagram, Facebook=@Facebook,
+                            PastWorkExperience=@PastWorkExperience, TargetAudience=@TargetAudience, CountryId=@CountryId, ProfileImage=@ProfileImage, DOB=@DOB, Language=@Language, Categories=@Categories, Gender=@Gender,
+                            CurrencyType=@CurrencyType
+                            where  UserId = @UserId";
 
-
-                    query = @"Insert into CreatorProfile(FullName, ContactNumber, State, YouTube, Instagram, Facebook, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, UserId, CountryId, ProfileImage, DOB, Language, Categories, Gender, CurrencyType) 
-                            values(@FullName, @ContactNumber, @State, @YouTube, @Instagram, @Facebook, @MinimumBudgetedProject,  @PastWorkExperience, @Summary, @TargetAudience, @UserId, @CountryId, @ProfileImage, @DOB, @Language, @Categories, @Gender, @CurrencyType)";
+                    //query = @"Insert into CreatorProfile(FullName, ContactNumber, State, YouTube, Instagram, Facebook, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, UserId, CountryId, ProfileImage, DOB, Language, Categories, Gender, CurrencyType) 
+                    //        values(@FullName, @ContactNumber, @State, @YouTube, @Instagram, @Facebook, @MinimumBudgetedProject,  @PastWorkExperience, @Summary, @TargetAudience, @UserId, @CountryId, @ProfileImage, @DOB, @Language, @Categories, @Gender, @CurrencyType)";
 
                     output = _dbDapperContext.Execute(query, new
                     {
@@ -71,7 +74,6 @@ namespace FP.DAL
                         UserId=UserId,
                         objData.CountryId ,
                         ProfileImage = fileName,
-
                         objData.DOB ,
                         objData.Language,
                         objData.Categories,
@@ -84,7 +86,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
         }
@@ -96,24 +97,14 @@ namespace FP.DAL
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                     int output = 0;
-
-                    string query = "";
-
-                    output = _dbDapperContext.Execute("Delete  from CreatorProfile Where UserId=@UserId", new
-                    {
-                        UserId = userId
-                    });
-
-
-                    query = @"Insert into CreatorProfile(FullName, UserId) 
+                    
+                    string query = @"Insert into CreatorProfile(FullName, UserId) 
                             values(@FullName, @UserId)";
 
                     output = _dbDapperContext.Execute(query, new
                     {
                         FullName=name,
                         UserId = userId
-
-
                     });
                     return output;
                 }
@@ -150,7 +141,7 @@ namespace FP.DAL
                         }
                     }
                     
-                            return _objData;
+                  return _objData;
                 }
             }
             catch (Exception ex)
@@ -166,8 +157,6 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-
-                    //string query = "Select CountryId , Name , IsActive, CreatedBy, CreatedDate, IsDeleted, DeletedBy, DeletedDate  from Country";
                     string query = "Select CountryId as id , Name as label, CountryId, Name  from Country";
 
                     List<CountryModal> _objData = _dbDapperContext.Query<CountryModal>(query, new
@@ -217,13 +206,9 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
                     string query = "";
                     Nullable<int> countryId = null;
-                   // int CountyId = null;
-                    string ageId = "";
+                    string ageId = null;
                     int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
                     if (obj.CountyId != "0" && obj.CountyId != null)
                     {
@@ -231,58 +216,28 @@ namespace FP.DAL
                     }
                     if (obj.TargetAudienceId != "0" && obj.TargetAudienceId !=null)
                     {
-                        ageId = obj.TargetAudienceId;
+                        ageId = "%" + obj.TargetAudienceId + "%";
                     }
-                    if(ageId =="" && countryId == null)
-                    {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
-                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber";
-                        List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
-                        {
-                            NoOfYouTubeSubscriber = minimumYouTubeSubscriber
-                        }).ToList();
 
-                        List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
-                        return objFilnalCreatorData;
-                       
-                    }
-                   else if ( ageId =="")
-                    {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                    query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) AND NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber";
-                        List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
-                        {
-                            CountryId = countryId,
-                            NoOfYouTubeSubscriber = minimumYouTubeSubscriber
-                        }).ToList();
-
-                     List<CreatorModal> objFilnalCreatorData=   GetCreatorDetails(_objData);
-                        return objFilnalCreatorData;
-                    }
-                    else
+                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id 
+                            WHERE CountryId = ISNULL(@CountryId, CountryId) and NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber and (TargetAudience=ISNULL(@TargetAudience,TargetAudience) or TargetAudience like @TargetAudience)  ";
+                    List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
-                        query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber as YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
-                                Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
-                             Categories, Gender  FROM CreatorProfile INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE CountryId = isNULL(@CountryId, CountryId) and NoOfYouTubeSubscriber>@NoOfYouTubeSubscriber and TargetAudience LIKE @TargetAudience ";
-                        List<CreatorModal> _objData = _dbDapperContext.Query<CreatorModal>(query, new
-                        {
-                            CountryId = countryId,
-                            TargetAudience = "%" + ageId + "%",// ageId
-                            NoOfYouTubeSubscriber= minimumYouTubeSubscriber
-                        }).ToList();
+                        CountryId = countryId,
+                        TargetAudience = ageId,
+                        NoOfYouTubeSubscriber = minimumYouTubeSubscriber
+                    }).ToList();
 
-                        List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
-                        return objFilnalCreatorData;
-                    }
+                    List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
+                    return objFilnalCreatorData;
+
                    
-
                 }
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -352,9 +307,6 @@ namespace FP.DAL
                 int MailBoxFilterBy = Convert.ToInt32(MailBoxFilter);
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    //string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
                     string query = "";
                     if (MailTypeId == 0)
                     {
