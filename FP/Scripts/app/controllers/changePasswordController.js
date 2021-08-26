@@ -52,7 +52,7 @@ fpApp.controller("ChangePasswordController", function ($scope, fpService, $http)
         fpService.postData($_ChangePassword.Save, changePasswordModel, function (response) {
             var responseJson = response.data;
             if (responseJson.statusCode === 200) {
-                toastr.success('Admin password changed successfully.', "Success");
+                toastr.success('Password changed successfully.', "Success");
             }
             if (responseJson.statusCode === 204) {
                 toastr.warning('Invalid current password.', "Warning");

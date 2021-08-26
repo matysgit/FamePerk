@@ -531,6 +531,7 @@
     <Content Include="Views\Creator\BankDetails.cshtml" />
     <Content Include="Views\Creator\Profile.cshtml" />
     <Content Include="Views\Shared\_LayoutPage1.cshtml" />
+    <Content Include="Views\Common\_ChangePasswordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
