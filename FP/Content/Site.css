@@ -461,10 +461,6 @@ p {
             border-bottom: 1px solid #ddd;
         }
 
-        .card .card-body {
-            padding: 0;
-        }
-
     @media only screen and (min-width: 768px) {
         .card .form-inline .form-group {
             display: inline-block;

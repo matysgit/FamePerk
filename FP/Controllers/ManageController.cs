@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FP.Models;
+using System.Net;
 
 namespace FP.Controllers
 {
@@ -238,15 +239,33 @@ namespace FP.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return  RedirectToAction("Login", "Account");// RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return  RedirectToAction("Login", "Account");
             }
             AddErrors(result);
             if (Session["Role"].ToString() == "Admin")
                 return View("../Admin/ChangePassword", model);
-                //return View(model);
              else
                 return View("../Client/ChangePassword", model);
             
+        }
+
+        [HttpPost]
+        [ActionName("change-password")]
+        public async Task<JsonResult> ChangeAdminPassword(ChangePasswordViewModel model)
+        {
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+            }
+            return Json(new
+            {
+                statusCode = result.Succeeded ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            });
         }
 
         //

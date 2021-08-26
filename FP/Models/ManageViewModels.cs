@@ -43,20 +43,22 @@ namespace FP.Models
     {
         //[Required]
         [DataType(DataType.Password)]
-        [Required(ErrorMessage = "Current password required")]
-        [Display(Name = "Current password")]
+        [Required(ErrorMessage = "Current password cannot be blank")]
+        [Display(Name = "Current password*")]
         public string OldPassword { get; set; }
 
         //[Required]
-        [Required(ErrorMessage = "New password required")]
+        [Required(ErrorMessage = "New password cannot be blank")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "New password*")]
         public string NewPassword { get; set; }
 
+        //[Required]
+        [Required(ErrorMessage = "Confirm new password cannot be blank")]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "New password and confirmation password do not match.")]
+        [Display(Name = "Confirm new password*")]
+        [Compare("NewPassword", ErrorMessage = "New password and confirm password not matching.")]
         public string ConfirmPassword { get; set; }
     }
 

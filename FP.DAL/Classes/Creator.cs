@@ -11,7 +11,7 @@ using System.Net;
 
 namespace FP.DAL
 {
-  public  class Creator : ServiceBase
+    public class Creator : ServiceBase
     {
 
         public string GetClientDetail(string userId)
@@ -21,8 +21,8 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                     string query = @"Select IsApproved From AspNetUsers Where Id=@UserId";
-                   
+                    string query = @"Select IsApproved From AspNetUsers Where Id=@UserId";
+
                     CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
                         UserId = userId
@@ -36,7 +36,7 @@ namespace FP.DAL
             }
             return output;
         }
-    
+
         public int SaveCreator(CreatorModal objData, string UserId, string fileName, string currencyType)
         {
             try
@@ -47,17 +47,25 @@ namespace FP.DAL
 
                     string query = "";
 
-                    // output = _dbDapperContext.Execute("Delete  from CreatorProfile Where UserId=@UserId", new
-                    //{
-                    //    UserId = UserId
-                    //});
-                    query= @"Update CreatorProfile set FullName = @FullName , ContactNumber= @ContactNumber, State= @State, YouTube= @YouTube, Instagram=@Instagram, Facebook=@Facebook,
-                            PastWorkExperience=@PastWorkExperience, TargetAudience=@TargetAudience, CountryId=@CountryId, ProfileImage=@ProfileImage, DOB=@DOB, Language=@Language, Categories=@Categories, Gender=@Gender,
-                            CurrencyType=@CurrencyType
-                            where  UserId = @UserId";
 
-                    //query = @"Insert into CreatorProfile(FullName, ContactNumber, State, YouTube, Instagram, Facebook, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, UserId, CountryId, ProfileImage, DOB, Language, Categories, Gender, CurrencyType) 
-                    //        values(@FullName, @ContactNumber, @State, @YouTube, @Instagram, @Facebook, @MinimumBudgetedProject,  @PastWorkExperience, @Summary, @TargetAudience, @UserId, @CountryId, @ProfileImage, @DOB, @Language, @Categories, @Gender, @CurrencyType)";
+                    query = @"UPDATE CreatorProfile
+                                    SET FullName = @FullName
+	                                    ,ContactNumber = @ContactNumber
+	                                    ,STATE = @State
+	                                    ,YouTube = @YouTube
+	                                    ,Instagram = @Instagram
+	                                    ,Facebook = @Facebook
+	                                    ,PastWorkExperience = @PastWorkExperience
+	                                    ,TargetAudience = @TargetAudience
+	                                    ,CountryId = @CountryId
+	                                    ,ProfileImage = @ProfileImage
+	                                    ,DOB = @DOB
+	                                    ,LANGUAGE = @Language
+	                                    ,Categories = @Categories
+	                                    ,Gender = @Gender
+	                                    ,CurrencyType = @CurrencyType
+                                    WHERE UserId = @UserId";
+
 
                     output = _dbDapperContext.Execute(query, new
                     {
@@ -67,18 +75,18 @@ namespace FP.DAL
                         objData.YouTube,
                         objData.Instagram,
                         objData.Facebook,
-                        objData.MinimumBudgetedProject, 
+                        objData.MinimumBudgetedProject,
                         objData.PastWorkExperience,
                         objData.Summary,
                         objData.TargetAudience,
-                        UserId=UserId,
-                        objData.CountryId ,
+                        UserId = UserId,
+                        objData.CountryId,
                         ProfileImage = fileName,
-                        objData.DOB ,
+                        objData.DOB,
                         objData.Language,
                         objData.Categories,
                         objData.Gender,
-                        CurrencyType= currencyType
+                        CurrencyType = currencyType
 
                     });
                     return output;
@@ -97,13 +105,13 @@ namespace FP.DAL
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                     int output = 0;
-                    
+
                     string query = @"Insert into CreatorProfile(FullName, UserId) 
                             values(@FullName, @UserId)";
 
                     output = _dbDapperContext.Execute(query, new
                     {
-                        FullName=name,
+                        FullName = name,
                         UserId = userId
                     });
                     return output;
@@ -111,24 +119,23 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
         }
-        public CreatorModal GetCreatorInfo(string UserId,string currencyType)
+        public CreatorModal GetCreatorInfo(string UserId, string currencyType)
         {
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                   
-                  string  query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, " +
-                        "CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email," +
-                        "FORMAT(CreatorProfile.DOB, 'MM/dd/yyyy ') as  DOB, Language, Categories, Gender,CurrencyType from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
 
-                   CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
+                    string query = "Select CreatorProfile.FullName, ContactNumber, State, CountryId, YouTube, Instagram, Facebook, " +
+                          "CategoryId, MinimumBudgetedProject, PastWorkExperience, Summary, TargetAudience, Email," +
+                          "FORMAT(CreatorProfile.DOB, 'MM/dd/yyyy ') as  DOB, Language, Categories, Gender,CurrencyType from AspNetUsers left join CreatorProfile on CreatorProfile.UserId = AspNetUsers.Id where Id = @Id";
+
+                    CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
                     {
-                          Id = UserId
+                        Id = UserId
                     }).FirstOrDefault();
 
                     if (_objData.CurrencyType != null)
@@ -140,13 +147,12 @@ namespace FP.DAL
                             _objData.MinimumBudgetedProject = (amount).ToString("0.##");
                         }
                     }
-                    
-                  return _objData;
+
+                    return _objData;
                 }
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -161,7 +167,7 @@ namespace FP.DAL
 
                     List<CountryModal> _objData = _dbDapperContext.Query<CountryModal>(query, new
                     {
-                       
+
                     }).ToList();
 
                     return _objData;
@@ -169,7 +175,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -186,7 +191,7 @@ namespace FP.DAL
 
                     List<CreatorFeedbackModal> _objData = _dbDapperContext.Query<CreatorFeedbackModal>(query, new
                     {
-                        CreatorId= UserId
+                        CreatorId = UserId
                     }).ToList();
 
                     return _objData;
@@ -194,7 +199,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -214,7 +218,7 @@ namespace FP.DAL
                     {
                         countryId = Convert.ToInt32(obj.CountyId);
                     }
-                    if (obj.TargetAudienceId != "0" && obj.TargetAudienceId !=null)
+                    if (obj.TargetAudienceId != "0" && obj.TargetAudienceId != null)
                     {
                         ageId = "%" + obj.TargetAudienceId + "%";
                     }
@@ -233,7 +237,7 @@ namespace FP.DAL
                     List<CreatorModal> objFilnalCreatorData = GetCreatorDetails(_objData);
                     return objFilnalCreatorData;
 
-                   
+
                 }
             }
             catch (Exception ex)
@@ -294,7 +298,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -394,7 +397,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -405,25 +407,19 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    //string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-                    int BrandMailId = MailboxId;
-
                     string query = "Update BrandMail set IsRead=@IsRead where BrandMailId=@BrandMailId and UserId=@UserId";
                     MailboxModal _objData = _dbDapperContext.Query<MailboxModal>(query, new
                     {
                         UserId = UserId,
-                        BrandMailId = BrandMailId,
+                        BrandMailId = MailboxId,
                         IsRead = 1
                     }).FirstOrDefault();
 
-                    // query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, MailFrom, MailTypeId from BrandMail where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
                     query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, Email as MailFrom, MailTypeId from BrandMail INNER JOIN  AspNetUsers on AspNetUsers.Id=MailFrom where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
 
                     _objData = _dbDapperContext.Query<MailboxModal>(query, new
                     {
-                        //  UserId = UserId,
-                        BrandMailId = BrandMailId,
+                        BrandMailId = MailboxId,
                         IsDeleted = 1
                     }).FirstOrDefault();
 
@@ -432,7 +428,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -455,7 +450,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
         }
@@ -505,7 +499,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
         }
@@ -621,7 +614,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
 
@@ -633,20 +625,19 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                        string query1 = "select count(*) AS Message  from BrandMail where UserId=@UserId and IsRead !=@IsDeleted";
-                        var _objData = _dbDapperContext.Query<MailboxModal>(query1, new
-                        {
-                            
-                            UserId ,
-                            IsDeleted = 1
-                        }).FirstOrDefault();
+                    string query1 = "select count(*) AS Message  from BrandMail where UserId=@UserId and IsRead !=@IsDeleted";
+                    var _objData = _dbDapperContext.Query<MailboxModal>(query1, new
+                    {
+
+                        UserId,
+                        IsDeleted = 1
+                    }).FirstOrDefault();
 
                     return _objData;
                 }
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -660,7 +651,7 @@ namespace FP.DAL
                 {
 
                     string query = "SELECT CurrencyId, CurrencyName FROM CurrencyType";
-                   
+
                     List<CurrencyTypeModal> _objData = _dbDapperContext.Query<CurrencyTypeModal>(query, new
                     {
 
@@ -671,7 +662,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -687,7 +677,7 @@ namespace FP.DAL
 
                     string query = "";
 
-                    int minimumYouTubeSubscriber =Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
+                    int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
 
 
                     query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber AS YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
@@ -718,7 +708,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return null;
             }
         }
@@ -740,7 +729,7 @@ namespace FP.DAL
 
                     foreach (var obj in _objData)
                     {
-                        int subscriberCount = 0;// Convert.ToInt32(data.items[0].statistics.subscriberCount);
+                        int subscriberCount = 0;
                         if (obj.YouTube != "" && obj.YouTube != null)
                         {
                             var youTubeLink = obj.YouTube.ToString();
@@ -749,7 +738,7 @@ namespace FP.DAL
                             if (youTubeIds.Count > 4)
                             {
                                 var youTubeId = youTubeIds[4];
-                                //var api = "AIzaSyDB3tjtbUZNKcraqOhvMMC-HAeJ3yXYvxw";
+                                
                                 var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + youTubeApi;
                                 WebRequest request = HttpWebRequest.Create(url);
                                 request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
@@ -757,10 +746,10 @@ namespace FP.DAL
                                 StreamReader reader = new StreamReader(response.GetResponseStream());
                                 string responseText = reader.ReadToEnd();
                                 dynamic data = JObject.Parse(responseText);
-                                subscriberCount =  Convert.ToInt32(data.items[0].statistics.subscriberCount);
-                                //obj.YouTube = FormatNumber(Convert.ToInt32(data.items[0].statistics.subscriberCount));
+                                subscriberCount = Convert.ToInt32(data.items[0].statistics.subscriberCount);
+
                             }
-                            
+
                         }
 
                         query = "Update CreatorProfile set NoOfYouTubeSubscriber=@NoOfYouTubeSubscriber where  UserId=@UserId";
@@ -771,13 +760,12 @@ namespace FP.DAL
 
                         }).FirstOrDefault();
                     }
-                  //  return _objData;
+                    //  return _objData;
 
                 }
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
             return 1;
@@ -821,7 +809,6 @@ namespace FP.DAL
             }
             catch (Exception ex)
             {
-                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 return -1;
             }
         }
