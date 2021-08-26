@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using FP.DAL.Classes;
 using Newtonsoft.Json.Linq;
 using System;
@@ -48,23 +48,13 @@ namespace FP.DAL
                     string query = "";
 
 
-                    query = @"UPDATE CreatorProfile
-                                    SET FullName = @FullName
-	                                    ,ContactNumber = @ContactNumber
-	                                    ,STATE = @State
-	                                    ,YouTube = @YouTube
-	                                    ,Instagram = @Instagram
-	                                    ,Facebook = @Facebook
-	                                    ,PastWorkExperience = @PastWorkExperience
-	                                    ,TargetAudience = @TargetAudience
-	                                    ,CountryId = @CountryId
-	                                    ,ProfileImage = @ProfileImage
-	                                    ,DOB = @DOB
-	                                    ,LANGUAGE = @Language
-	                                    ,Categories = @Categories
-	                                    ,Gender = @Gender
-	                                    ,CurrencyType = @CurrencyType
-                                    WHERE UserId = @UserId";
+                   
+                    query= @"Update CreatorProfile set FullName = @FullName , ContactNumber= @ContactNumber, State= @State, YouTube= @YouTube, Instagram=@Instagram, Facebook=@Facebook,
+                            PastWorkExperience=@PastWorkExperience, TargetAudience=@TargetAudience, CountryId=@CountryId, ProfileImage=@ProfileImage, DOB=@DOB, Language=@Language, Categories=@Categories, Gender=@Gender,
+                            CurrencyType=@CurrencyType
+                            where  UserId = @UserId";
+                    
+
 
 
                     output = _dbDapperContext.Execute(query, new
@@ -747,7 +737,6 @@ namespace FP.DAL
                                 string responseText = reader.ReadToEnd();
                                 dynamic data = JObject.Parse(responseText);
                                 subscriberCount = Convert.ToInt32(data.items[0].statistics.subscriberCount);
-
                             }
 
                         }
