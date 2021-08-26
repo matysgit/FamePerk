@@ -325,6 +325,9 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
         location.href = '/Creator/Profile';
     }
 
+    //$scope.fn_AuthenticateSocialLogin = function (providerName) {
+    //    alert(providerName);
+    //}
 
     $scope.fn_ImageUploadCreator = function (uploadedFile) {
         $scope.imgLoader = true;
