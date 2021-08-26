@@ -324,6 +324,7 @@
     <Content Include="Scripts\app\controllers\AdminClientController.js" />
     <Content Include="Scripts\app\controllers\AudienceAgeController.js" />
     <Content Include="Scripts\app\controllers\BankDetailsController.js" />
+    <Content Include="Scripts\app\controllers\changePasswordController.js" />
     <Content Include="Scripts\app\controllers\ClientCreatorController.js" />
     <Content Include="Scripts\app\controllers\CreateCampaignController.js" />
     <Content Include="Scripts\app\controllers\CreatorController.js" />
