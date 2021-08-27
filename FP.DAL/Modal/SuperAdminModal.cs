@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace FP.DAL
 {
+    public class CurrencyTypeModal
+    {
+        public string CurrencyId { get; set; }
+        public string CurrencyName { get; set; }
+    }
+    //public class Rate
+    //{
+    //    public string to { get; set; }
+    //    public string from { get; set; }
+    //    public double rate { get; set; }
+    //}
     public class ProductCategoryModal
     {
         public int ProductCategoryId { get; set; }

@@ -1,5 +1,8 @@
 ﻿using FP.DAL;
 using FP.DAL.Classes;
+using FP.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using static FP.Controllers.ManageController;
 
 namespace FP.Controllers
 {
@@ -49,6 +52,12 @@ namespace FP.Controllers
             {
                 return RedirectToAction("Login", controllerName: "Account");
             }
+
+            Creator objCreator = new Creator();
+            //string userId = Session["UserId"].ToString();
+
+            int result = objCreator.UpdateCreatorSubscriber();
+
             return View();
         }
 
@@ -109,7 +118,12 @@ namespace FP.Controllers
             }
             Mailbox obj = new Mailbox();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetMailboxById(MailboxId, userId);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetMailboxById(MailboxId, userId, currencyType);
 
             return Json(new
             {
@@ -135,7 +149,7 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             Mailbox obj = new Mailbox();
-            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString());
+            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString(), Session["UserId"].ToString());
 
             return Json(new
             {
@@ -378,7 +392,12 @@ namespace FP.Controllers
             }
             Projects obj = new Projects();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProjectList(userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProjectList(userId, convertToCurrency);
            
             return Json(new
             {
@@ -412,7 +431,12 @@ namespace FP.Controllers
 
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProjectById(ProjectId, userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProjectById(ProjectId, userId, convertToCurrency);
             return Json(new
             {
                 data = result,
@@ -441,7 +465,12 @@ namespace FP.Controllers
             Projects obj = new Projects();
             string ProjectId = Session["ProjectId"].ToString();
             string userId = Session["UserId"].ToString();
-            var result = obj.SaveProposal(objData, ProjectId, userId);
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+            var result = obj.SaveProposal(objData, ProjectId, userId, currencyType);//todo
             if (result != -1)
             {
                 try {
@@ -511,7 +540,12 @@ namespace FP.Controllers
             Projects obj = new Projects();
             Session["ProjectId"] = ProjectId;
             string userId = Session["UserId"].ToString();
-            var result = obj.GetProposalByProjectId(ProjectId, userId);
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+            var result = obj.GetProposalByProjectId(ProjectId, userId, convertToCurrency);
             return Json(new
             {
                 data = result,
@@ -721,22 +755,12 @@ namespace FP.Controllers
         #region Wallet
         public ActionResult Wallet()
         {
-            //ViewBag.StripePublishKey = ConfigurationManager.AppSettings["stripePublishableKey"];
-            //if (Session["UserId"] == null)
-            //{
-            //    return RedirectToAction("Login", controllerName: "Account");
-            //}
             return View();
         }
 
         public ActionResult CheckUserSession()
         {
             return RedirectToAction("Login", controllerName: "Account");
-            //return Json(new
-            //{
-            //    data = "logOut",
-            //    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
-            //}, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// Used to get list of Mailbox
@@ -754,9 +778,15 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
 
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
+
             string userId = Session["UserId"].ToString();
             WalletDetails obj = new WalletDetails();
-            var result = obj.GetWalletAmountList(userId);
+            var result = obj.GetWalletAmountList(userId, currencyType);
 
             return Json(new
             {
@@ -1046,8 +1076,13 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             string userId = Session["UserId"].ToString();
+            string currencyType = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                currencyType = Session["CurrencyType"].ToString();
+            }
             CreateCampaign obj = new CreateCampaign();
-            var result = obj.SaveCampaign(objData, userId);//, SupplementalChannels, YouTubeVideoType);
+            var result = obj.SaveCampaign(objData, userId, currencyType);//, SupplementalChannels, YouTubeVideoType);
             return Json(new
             {
                 statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
@@ -1126,9 +1161,15 @@ namespace FP.Controllers
                     statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
                 }, JsonRequestBehavior.AllowGet);
             }
+            string convertToCurrency = "USD";
+            if (Session["CurrencyType"] != null)
+            {
+                convertToCurrency = Session["CurrencyType"].ToString();
+            }
+
             Projects obj = new Projects();
             string userId = Session["UserId"].ToString();
-            var result = obj.GetAllProposal(userId);
+            var result = obj.GetAllProposal(userId, convertToCurrency);
 
             return Json(new
             {
@@ -1205,5 +1246,61 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             
         }
+
+
+        #region update creator subscriber/follower
+        [HttpPost]
+        public JsonResult UpdateCreatorSubscriber()
+        {
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            string userId = Session["UserId"].ToString();
+
+            var result = objCreator.UpdateCreatorSubscriber();
+            return Json(new
+            {
+                statusCode = result > -1 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
+            });
+        }
+
+        #endregion
+
+        //
+        // GET: /Manage/ChangePassword
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+       
+        //// POST: /Manage/ChangePassword
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+        //    if (result.Succeeded)
+        //    {
+        //        var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+        //        if (user != null)
+        //        {
+        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //        }
+        //        return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+        //    }
+        //    AddErrors(result);
+        //    return View(model);
+        //}
+
     }
 }

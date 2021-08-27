@@ -121,7 +121,7 @@ namespace FP.DAL.Classes
             }
         }
 
-        public List<WalletAmountModal> GetWalletAmountList(string userId)
+        public List<WalletAmountModal> GetWalletAmountList(string userId, string currencyType)
         {
             try
             {
@@ -136,29 +136,42 @@ namespace FP.DAL.Classes
                         UserId = userId
                     }).FirstOrDefault();
 
-                    
+
                     //foreach (var data in output)
                     //{
                     //    roleId =Convert.ToInt32( data.RoleId);
                     //}
+                    List<WalletAmountModal> _objData ;
                     if (output.RoleId == "3")
                     {
                         string query = "Select ID,  Amount, FORMAT(UploadDate, 'dd/MM/yyyy ') as UploadDate, UploadedBy from WalletAmount where UploadedBy=@UploadedBy order by ID desc ";
-                        List<WalletAmountModal> _objData = _dbDapperContext.Query<WalletAmountModal>(query, new
+                        _objData = _dbDapperContext.Query<WalletAmountModal>(query, new
                         {
                             UploadedBy = userId
                         }).ToList();
-                        return _objData;
+                      //  return _objData;
                     }
                     else
                     {
                         string query = "Select ID,  Amount, FORMAT(UploadDate, 'dd/MM/yyyy ') as UploadDate, UploadedBy from ClientWalletAmount where UploadedBy=@UploadedBy order by ID desc ";
-                        List<WalletAmountModal> _objData = _dbDapperContext.Query<WalletAmountModal>(query, new
+                         _objData = _dbDapperContext.Query<WalletAmountModal>(query, new
                         {
                             UploadedBy = userId
                         }).ToList();
-                        return _objData;
+                       // return _objData;
                     }
+
+                    foreach (var objList in _objData)
+                    {
+                        float exchangeRate = CurrencyConverter.GetExchangeRate("USD", currencyType, 1);
+                        //if (objList.CurrencyType != null)
+                        //{
+                            double amount = exchangeRate * Convert.ToDouble(objList.Amount);
+                            objList.Amount = (amount).ToString("0.##");
+                       // }
+
+                    }
+                    return _objData;
                 }
             }
             catch (Exception ex)

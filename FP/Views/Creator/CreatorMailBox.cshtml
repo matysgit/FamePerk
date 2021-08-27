@@ -42,14 +42,11 @@
 
     <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
 
-    <!---->
     <div class="">
         <div class="page-header">
             <div class="top-tab-holder">
 
             </div>
-
-           
 
         </div>
         <div class="card card-full">
@@ -74,9 +71,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 tab-holder messages-tab-holder">
-                        @*<ul class="nav flex-column  nav-messages-tab">
-                            <li><a class="nav-link">Inbox <b class="badge bg-primary pull-right text-light text-hide">0</b></a></li>
-                        </ul>*@
                         <ul class="nav flex-column index-tab-list" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <li class="" style=""><a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true" ng-click="fn_GetAllMailbox(0)"><i class="fa fa-fw fa-circle"></i> All</a></li>
                             <li class="" style=""><a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(1)"><i class="fa fa-fw fa-circle"></i> Proposals</a></li>
@@ -87,9 +81,6 @@
                             <li class="" style=""><a class="nav-link" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-2" aria-selected="false" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1"><i class="fa fa-fw fa-circle"></i> Sent</a></li>
 
                         </ul>
-                        @*<ul class="nav flex-column nav-messages-tab">
-                            <li class="" style=""><a class="nav-link" ng-click="fn_GetAllMailbox(6)" href="#v-pills-1">Sent</a></li>
-                        </ul>*@
                     </div>
                     <div class="col-md-8 pl-md-0  tab-content">
                         <div class="tab-content" id="v-pills-tabContent">
@@ -114,8 +105,8 @@
                                                     <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
                                                     @*<td>
 
-                                                            <a ng-click="fn_ViewMailbox(lst.BrandMailId)"> {{lst.BrandMailId}} </a>
-                                                        </td>*@
+                <a ng-click="fn_ViewMailbox(lst.BrandMailId)"> {{lst.BrandMailId}} </a>
+            </td>*@
                                                     <td>
                                                         <a ng-click="fn_ViewMailbox(lst.BrandMailId)" href="#v-pills-2">  {{lst.Subject}}</a>
                                                     </td>
@@ -128,6 +119,16 @@
                                                     </td>
                                                 </tr>
 
+                                                <tr ng-show="lstMailbox.length < 1 && !gridLoader">
+                                                    <td colspan="3">
+                                                        <span>No record found</span>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-show="gridLoader">
+                                                    <td colspan="3">
+                                                        <span>Fetching data... Please wait </span><img style="width:80px" src="~/Images/grid_loader.gif" />
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -137,7 +138,7 @@
                             <!--End-->
                             <!--Tab pannel 1-->
 
-                            <div id="divViewmailBox" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                            <div id="divViewMailBox" role="tabpanel" aria-labelledby="v-pills-2-tab">
                                 <div class="mailbox-read">
                                     <div class="mailbox-read-info">
                                         <h3><label for="MailboxModal">{{MailboxModal.Subject}}</label></h3>
@@ -190,12 +191,10 @@
                                     <div class="mailbox-read-footer">
                                         <div class="pull-right">
                                             <button class="btn btn-outline-primary btn-sm" ng-click="fn_ReplyMailbox(MailboxModal.BrandMailId)"><i class="fa fa-reply"></i> Reply</button>
-                                            @*<button class="btn btn-outline-secondary btn-sm" ><i class="fa fa-share"></i> Forward</button>*@
                                         </div>
                                         <button class="btn btn-outline-secondary btn-sm" ng-click="fn_GetAllMailbox(0)"> Back</button>
 
                                         <button class="btn btn-outline-secondary btn-sm" ng-click="fn_RemoveMailbox(MailboxModal.BrandMailId, MailboxModal.MailTypeId)"><i class="fa fa-trash-o"></i> Delete</button>
-                                        @*<button class="btn btn-outline-secondary btn-sm"><i class="fa fa-print"></i> Print</button>*@
                                     </div>
 
                                 </div>
@@ -262,7 +261,6 @@
                                             <input type="file" multiple class="upload" onchange="angular.element(this).scope().fn_DocumentUpload(this.files)" />
                                         </div>
                                     </div>
-                                    @*<div class="clearfix"></div>*@
                                 </form>
                             </div>
 
@@ -275,10 +273,3 @@
     </div>
 </div>
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-@*<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="js/popper.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" src="js/easing.js"></script>*@
-
-<!--<script type="text/javascript" src="js/script.js"></script>-->

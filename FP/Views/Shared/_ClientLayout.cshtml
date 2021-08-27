@@ -17,7 +17,10 @@
 <body class="" ng-app="fpApp">
     <div class="header-backdrop"> </div>
     <div class="header-main">
-	   <div class=" container top-main-menu text-right">  @Html.Partial("_LoginPartial")</div>
+        @*<div class=" container top-main-menu text-right">  @Html.Partial("_RestsetPassword")</div>*@
+        
+        
+        <div class=" container top-main-menu text-right">  @Html.Partial("_LoginPartial")</div>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 @Html.ActionLink("Fame Perks", "Projects", "Client", new { area = "" }, new { @class = "navbar-brand white" })
@@ -30,7 +33,7 @@
                         <li class="nav-item d-block d-md-none">
                             <button class="btn btn-success " type="button">Create Campaign</button>
                         </li>
-                       
+
                         <li class="nav-item">@Html.ActionLink("Campaigns", "Projects", "Client", new { @class = "nav-link" })</li>
 
                         <li class="nav-item mr-3">@Html.ActionLink("Messages", "Mailbox", "Client", new { @class = "nav-link" })</li>
@@ -40,9 +43,12 @@
                         @*<li class="nav-item">@Html.ActionLink("Content", "Content", "Client", new { @class = "nav-link" })</li>*@
 
                     </ul>
-                    
-                    <ul class="navbar-nav d-none">
-                        <li class="nav-item">
+
+                    <ul class="navbar-nav ">
+                        
+                            <li class="nav-item">@Html.ActionLink("Change Password", "ChangePassword", "Manage", new { @class = "nav-link" })</li>
+                        
+                        @*<li class="nav-item">
                             <a class="nav-link" href="#" tabindex="-1"><i class="fa fa-2x fa-envelope"></i></a>
                         </li>
                         <li class="nav-item dropdown">
@@ -56,7 +62,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Logout</a>
                             </div>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>

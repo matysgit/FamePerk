@@ -13,6 +13,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using FP.DAL;
+using FP.DAL.Classes;
+using System.Configuration;
+using System.Net.Mail;
 
 namespace FP.Controllers
 {
@@ -94,20 +98,22 @@ namespace FP.Controllers
                     Session["UserId"] = user.Identity.GetUserId();
                     if (user.IsInRole("Client"))
                     {
+                        Session["Role"] = "Client";
                         return RedirectToAction("Projects", "Client");
                     }
-                    else if (user.IsInRole("Creator"))
+                    else if (user.IsInRole("Creator")) //to be remove
                     {
                         return RedirectToAction("Index", "Creator");
                     }
                     else if (user.IsInRole("Admin"))
                     {
+                        Session["Role"] = "Admin";
                         return RedirectToAction("ProductCategory", "Admin");
                     }
 
                     else
                     {
-                        ModelState.AddModelError("", "Invalid login attempt.");
+                        ModelState.AddModelError("", "Username or Password incorrect");
                         return View(model);
                     }
                 case SignInStatus.LockedOut:
@@ -116,7 +122,7 @@ namespace FP.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Username or Password incorrect");
                     return View(model);
             }
         }
@@ -249,16 +255,50 @@ namespace FP.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                //  For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                //Send an email with this link
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                //Create URL with above token
+                string  UserID = ConfigurationManager.AppSettings.Get("EmailFrom");
+                string Password = ConfigurationManager.AppSettings.Get("Password");
+                string SMTPPort = ConfigurationManager.AppSettings.Get("SMTPPort");
+                string Host = ConfigurationManager.AppSettings.Get("Host");
+
+                //var lnkHref = "<a href='" + Url.Action("ResetPassword", "Account", new { email = model.Email, code = code }, "https://localhost:44330/") + "'>Reset Password</a>";
+                //HTML Template for Send email
+                string subject = "Reset password";
+                string body = "<b>Please find the Password Reset Link. </b><br/>" + callbackUrl;
+                //Get and set the AppSettings using configuration manager.
+                //EmailManager.AppSettings(out UserID, out Password, out SMTPPort, out Host);
+                //Call send email methods.
+                SendEmail(UserID, subject, body, model.Email, UserID, Password, SMTPPort, Host);
+
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public static void SendEmail(string From, string Subject, string Body, string To, string UserID, string Password, string SMTPPort, string Host)
+        {
+            using (MailMessage mail = new MailMessage(From, To))
+            {
+                mail.Subject = Subject;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = Host;// "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                NetworkCredential NetworkCred = new NetworkCredential(UserID, Password);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = NetworkCred;
+                smtp.Port =Convert.ToInt32( SMTPPort);// 587;
+                smtp.Send(mail);
+            }
         }
 
         //
@@ -349,7 +389,6 @@ namespace FP.Controllers
             {
                 return View();
             }
-
             // Generate the token and send it
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
@@ -368,15 +407,35 @@ namespace FP.Controllers
             {
                 return RedirectToAction("Login");
             }
-
             // Sign in the user with this external login provider if the user already has a login
+            int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
-                    Session["UserId"] = user.Identity.GetUserId();
-                    return RedirectToAction("Index", "Creator");
+                    string userID= user.Identity.GetUserId();
+                    Creator obj = new Creator();
+                    var output = obj.GetCreatorSubscriber(userID);
+                    if (output.YouTube =="" || output.YouTube==null)
+                    {
+                        Session["UserId"] = userID;
+                        return RedirectToAction("YouTube", "Account");
+                    }
+                    else
+                    {
+                        if (minimumYouTubeSubscriber > output.NoOfYouTubeSubscriber)
+                        {
+                            ModelState.AddModelError("", "Your account not eligible for login.");
+                            return View("ExternalLogin");
+                        }
+                        else
+                        {
+                            Session["UserId"] = userID;
+                            return RedirectToAction("Index", "Creator");
+                        }
+                    }
+                    
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -387,18 +446,15 @@ namespace FP.Controllers
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
 
-                    //
                     ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
                     model.Email = loginInfo.Email;
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        //var userID = User.Identity.GetUserId();
-                        
-                        //var d=await UserManager.GetClaims(model, userID);
-                        ModelState.AddModelError("", "Eamil already exists. Please try different account.");
-                        return View("ExternalLogin");
-                      // return RedirectToAction("ExternalLogin", "ExternalLogin");
-                    }
+                    //if (User.Identity.IsAuthenticated)
+                    //{
+                    //    //var userID = User.Identity.GetUserId();
+                    //    //var d=await UserManager.GetClaims(model, userID);
+                    //    ModelState.AddModelError("", "Email already exists.");
+                    //    return View("ExternalLogin");
+                    //}
 
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     var info = await AuthenticationManager.GetExternalLoginInfoAsync();
@@ -408,11 +464,11 @@ namespace FP.Controllers
                     }
                     
                     await ExternalLoginConfirmation(model, null);
+                   
+                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
-                    return RedirectToAction("Index", "Creator");
-
-
+                    return RedirectToAction("YouTube", "Account");
             }
         }
 
@@ -444,8 +500,18 @@ namespace FP.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        Creator obj = new Creator();
+                        var roleresult = UserManager.AddToRole(user.Id, "Creator");
+                        int output = obj.InsertCreator(info.ExternalIdentity.Name, user.Id );
+                        //info = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                         return RedirectToLocal(returnUrl);
+                        
                     }
+                }
+                else {
+                   // model.Email = "already exists";
+                    //ModelState.AddModelError("", "Email already exists. Please try different account.");
+                    return View("ExternalLogin");
                 }
                 AddErrors(result);
             }
@@ -492,6 +558,35 @@ namespace FP.Controllers
             base.Dispose(disposing);
         }
 
+        public ActionResult YouTube()
+        {
+            return View();
+        }
+
+      
+        [HttpPost]
+        public JsonResult SaveYoutubeUrl(CreatorModal objData)
+        {
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            var result = objCreator.SaveCreatorYoutubeUrl(objData.YouTube, Session["UserId"].ToString());
+            //return Json(new
+            //{
+            //    statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
+            //});
+            return Json(new
+            {
+                data = result,
+                statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            }, JsonRequestBehavior.AllowGet);
+        }
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

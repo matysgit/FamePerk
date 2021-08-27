@@ -5,10 +5,54 @@ fpApp.controller("WalletDetailsController", function ($scope, fpService, $http) 
         $scope.fn_GetUnReadMsg();
     }, 5000);
     $scope.fn_DefaultWalletSettings = function () {
+        $scope.fn_GetCurrencyType();
         $scope.fn_GetUnReadMsg();
         $scope.fn_GetAllWalletAmount();
         $scope.WalletAmountModal = {};
     };
+
+
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+
+                $scope.fn_GetAllWalletAmount();
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
+
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+    };
+
 
     $scope.fn_GetUnReadMsg = function () {
         $scope.UnReadMsgModal = {};
@@ -43,7 +87,7 @@ fpApp.controller("WalletDetailsController", function ($scope, fpService, $http) 
                 angular.forEach($scope.lstWalletAmount, function (item) {
                     totalAmount += parseFloat(item.Amount);
                 });
-                $scope.TotalAmount = "$ "+totalAmount;
+                $scope.TotalAmount = totalAmount;
             }
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');

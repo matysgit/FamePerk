@@ -8,7 +8,8 @@ namespace FP.DAL
 {
    public class CreatorModal
     {
-      public string IsApproved { get; set; } 
+            public string CurrencyType { get; set; }
+            public string IsApproved { get; set; } 
             public int CreatorId { get; set; }
             public string Email { get; set; }
             public string UserId { get; set; }
@@ -25,13 +26,13 @@ namespace FP.DAL
             public string Summary { get; set; }
             public string TargetAudience { get; set; }
             public string ProfileImage { get; set; }
-
-        public string Categories { get; set; }
-        public string DOB { get; set; }
-        public string Language { get; set; }
-
-        public string Gender { get; set; }
-        public int CurrentAge { get; set; }
+            public string Categories { get; set; }
+            public string DOB { get; set; }
+            public string Language { get; set; }
+            public string Gender { get; set; }
+            public int CurrentAge { get; set; }
+            public int NoOfYouTubeSubscriber { get; set; }
+            public int NoOfInstagramFollower { get; set; }
     }
 
     public class CountryModal

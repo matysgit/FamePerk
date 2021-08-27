@@ -6,6 +6,7 @@ fpApp.controller("ClientCreatorController", function ($scope, fpService, $http) 
     }, 5000);
     $scope.fn_DefaultCreatorSettings = function () {
         $scope.fn_GetUnReadMsg();
+        $scope.fn_UpdateCreatorSubscriber();
         //$("#divProfile").hide();
         $("#divAllCreator").show();
         $("#divCreatorProfile").hide();
@@ -59,6 +60,22 @@ fpApp.controller("ClientCreatorController", function ($scope, fpService, $http) 
             if (responseJson.statusCode === 204) {
                 toastr.error('Error in getting data.');
             }
+        });
+    };
+
+    $scope.fn_UpdateCreatorSubscriber = function () {
+      //  $scope.UnReadMsgModal = {};
+        fpService.getData($_Mailbox.UpdateCreatorSubscriber, function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                //$scope.UnReadMsgModal = responseJson.data;
+            }
+            //if (responseJson.statusCode === 204) {
+            //    toastr.error('Error in getting data.');
+            //}
         });
     };
 

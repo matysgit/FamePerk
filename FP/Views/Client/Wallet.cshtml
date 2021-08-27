@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Wallet";
+    ViewBag.Title = " Wallet";
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
 
@@ -12,26 +12,25 @@
 <div class="container position-relative" ng-controller="WalletDetailsController" ng-init="fn_DefaultWalletSettings()" ng-cloak>
     <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
 
-    <!--<div class="page-header">
+    <div class="page-header">
         <div class="top-tab-holder">
-
         </div>
 
-        <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
-            <li class="nav-item ">-->
-                <!--<button class="btn btn-success " type="button">Create Campaign</button>-->
-            <!--</li>
-        </ul>
+        <div class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+        </div>
 
-    </div>-->
+    </div>
     <div class="card full-width">
         <div class="card-header">
-            <h4 class="card-title">Wallet Details</h4>
+            <div style="width: 50%; float:left">
+                <h4 class="card-title">Wallet Details</h4>
+            </div>
+            <div style="width: 50%; float:right">
+                <select style="width: 25%; float: right;" class="form-control" ng-model="CurrencyTypeModal.CurrencyId" ng-options="item.CurrencyId as item.CurrencyName for item in Currency" ng-change="fn_ChangeCurrencyType(CurrencyTypeModal)">
+                </select>
+            </div>
         </div>
         <div class="card-body">
-           
-            @*<input type="text" ng-disabled="d" class="form-control" maxlength="100" ng-model="TotalAmount" placeholder="Amount" >*@
-
             <div class="form-horizontal border p-4 mb-5 mt-4">
                 <h5 class="border-bottom mb-4 pb-3">Add Amount Details</h5>
                 <div>
@@ -39,12 +38,9 @@
                     <form id="myForm">
                         <div class="border-box">
                             <div class="form-inline justify-content-center my-4">
-                                @*<article>*@
-                                @*<label>Amount: $5</label>*@
                                 <input type="number" id="txtAmount" value="10.00" class="form-control" maxlength="100" placeholder="Amount" ng-model="txtWalletAmount" required>
-                                @*</article>*@
                                 &nbsp;
-                                <button  class="btn btn-primary btn-lg ml-4" id="customButton" >
+                                <button class="btn btn-primary btn-lg ml-4" id="customButton">
                                     Add  <span class="glyphicon glyphicon-shopping-cart"></span>
                                 </button>
 
@@ -52,22 +48,9 @@
                         </div>
                     </form>
                 </div>
-                @*<form name="frmWallet" ng-submit="frmWallet.$valid && fn_SaveWalletDetails(WalletAmountModal)" novalidate>
-
-                        <div class="form-inline justify-content-center my-4">
-                            <div class="form-group d-flex">
-                                <label class="mr-3">Add Amount</label>
-                                <input type="text" class="form-control" maxlength="100" ng-model="WalletAmountModal.Amount" placeholder="Amount" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary pull-right" ng-disabled="!frmWallet.$valid">Save</button>
-                            </div>
-                        </div>
-
-                    </form>*@
             </div>
             <div class="form-horizontal px-0">
-                <h5>   <label class="border-bottom mb-4 pb-3">Total Available Amount : </label><label class="border-bottom mb-4 pb-3" ng-model="TotalAmount"> {{TotalAmount}}</label></h5>
+                <h5>   <label class="border-bottom mb-4 pb-3">Total Available Amount ({{CurrencyTypeModal.CurrencyId}}): </label><label class="border-bottom mb-4 pb-3" ng-model="TotalAmount"> {{TotalAmount}} </label></h5>
                 <div class="table-responsive">
                     <table class="table">
                         <thead class=" text-primary">
@@ -76,19 +59,11 @@
                                     S NO.
                                 </th>
                                 <th class="w-25">
-                                    Amount
+                                    Amount ({{CurrencyTypeModal.CurrencyId}})
                                 </th>
                                 <th class="w-25">
                                     Uploaded Date
                                 </th>
-
-                                @*<th>
-                            Uploaded By
-                        </th>*@
-
-                                @*<th style="text-align:center">
-                            Action (Edit/Delete)
-                        </th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -102,13 +77,6 @@
                                 <td>
                                     {{lst.UploadDate}}
                                 </td>
-                                @*<td>
-                            {{lst.UploadedBy}}
-                        </td>*@
-                                @*<td class="text-primary" align="center">
-                            <a href="javascript:void(0)" ng-click="fn_Edit_WalletDetails(lst.ID)"><i class="fa fa-pencil" aria-hidden="true" title="Edit"></i></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                            <a href="javascript:void(0)" ng-click="fn_RemoveWalletAmount(lst.ID)"><i class="fa fa-trash" aria-hidden="true" title="Remove"></i></a>
-                        </td>*@
                             </tr>
 
                             <tr ng-show="lstWalletAmount.length < 1 && !gridLoader">
@@ -133,72 +101,72 @@
 
 
 <script>
-        // check if the amount entered is a valid dollar amount
-        var isDollarAmt = function (amt) {
-            // matches nnnn.nn
-            // amt = 100;
-            var regex = /^\d+(\.\d{0,2})?$/;
-            return regex.test(amt.replace(/ /g, ''));
+    // check if the amount entered is a valid dollar amount
+    var isDollarAmt = function (amt) {
+        // matches nnnn.nn
+        // amt = 100;
+        var regex = /^\d+(\.\d{0,2})?$/;
+        return regex.test(amt.replace(/ /g, ''));
+    }
+
+    // checkout handler
+    var handler = StripeCheckout.configure({
+        key: 'pk_test_51ISlIhLdK4kakFbtgwXzBofdRl3AVlh0bEfZGsoryeqc3R4YXD9fulNki6zE3m7s5r5e7EGIAeoEicctZWJI889400H4EouFx7',
+        // image: '/img/documentation/checkout/marketplace.png',
+        token: function (token) {
+            /* Use the token to create the charge with a server-side script.
+             You can access the token ID with `token.id`
+
+             Pass along various parameters you get from the token response
+             and your form.
+            */
+            var myData = {
+                token: token.id,
+                email: token.email,
+                amount: Math.round($("#txtAmount").val() * 100)//,
+                // checkbox: $("#checkbox").val(),
+                // message: $("#message").val()
+            };
+
+            /*
+             Make an AJAX post request using JQuery,
+             change the first parameter to your charge script
+            */
+            $.post("/client/charge/", myData,
+                function (data) {
+
+                    toastr.success('Amount added successfully.', "Success");
+
+                    setTimeout(function () {
+                        location.href = '/Client/Wallet';
+                    }, 5000);
+                }).fail(function () {
+                    toastr.error('Amount added fail.', "Error");
+                })
         }
+    });
 
-        // checkout handler
-        var handler = StripeCheckout.configure({
-            key: 'pk_test_51ISlIhLdK4kakFbtgwXzBofdRl3AVlh0bEfZGsoryeqc3R4YXD9fulNki6zE3m7s5r5e7EGIAeoEicctZWJI889400H4EouFx7',
-            // image: '/img/documentation/checkout/marketplace.png',
-            token: function (token) {
-                /* Use the token to create the charge with a server-side script.
-                 You can access the token ID with `token.id`
+    $('#myForm').on('submit', function (e) {
 
-                 Pass along various parameters you get from the token response
-                 and your form.
-                */
-                var myData = {
-                    token: token.id,
-                    email: token.email,
-                    amount: Math.round($("#txtAmount").val()*100 )//,
-                    // checkbox: $("#checkbox").val(),
-                    // message: $("#message").val()
-                };
+        // is dollar amount valid, open check out
+        if (isDollarAmt($("#txtAmount").val())) {
+            // Open Checkout with further options
+            handler.open({
+                name: 'Pay Amount',
+                //description: '2 widgets',
+                amount: Math.round($("#txtAmount").val() * 100),
+            });
 
-                /*
-                 Make an AJAX post request using JQuery,
-                 change the first parameter to your charge script
-                */
-                $.post("/client/charge/", myData,
-                    function (data) {
+        }
+        // if not throw an error
+        else {
+            $(".results").text("That is not a valid dollar amount!");
+        }
+        e.preventDefault();
+    });
 
-                        toastr.success('Amount added successfully.',"Success");
-                        
-                        setTimeout(function () {
-                            location.href = '/Client/Wallet';
-                        }, 5000);
-                    }).fail(function () {
-                        toastr.error('Amount added fail.', "Error");
-                    })
-            }
-        });
-
-        $('#myForm').on('submit', function (e) {
-
-            // is dollar amount valid, open check out
-            if (isDollarAmt($("#txtAmount").val())) {
-                // Open Checkout with further options
-                handler.open({
-                    name: 'Pay Amount',
-                    //description: '2 widgets',
-                    amount: Math.round($("#txtAmount").val() * 100),
-                });
-
-            }
-            // if not throw an error
-            else {
-                $(".results").text("That is not a valid dollar amount!");
-            }
-            e.preventDefault();
-        });
-
-        // Close Checkout on page navigation
-        $(window).on('popstate', function () {
-            handler.close();
-        });
-    </script>
+    // Close Checkout on page navigation
+    $(window).on('popstate', function () {
+        handler.close();
+    });
+</script>

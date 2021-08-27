@@ -108,6 +108,7 @@
     <Compile Include="Classes\Country.cs" />
     <Compile Include="Classes\CreateCampaign.cs" />
     <Compile Include="Classes\Creator.cs" />
+    <Compile Include="Classes\CurrencyConverter.cs" />
     <Compile Include="Classes\Level.cs" />
     <Compile Include="Classes\Mailbox.cs" />
     <Compile Include="Classes\Budget.cs" />

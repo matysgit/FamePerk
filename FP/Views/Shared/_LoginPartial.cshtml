@@ -7,7 +7,8 @@
 
 <ul class="list-inline ml-auto mb-0">
     <li class="list-inline-item">
-        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        @Html.ActionLink("Hello " + User.Identity.GetUserName() +"", null, null, new { @class = "nav-link", @Href = "#" })
+       
     </li>
     @*<li class="list-inline-item"><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Log off</a></li>*@
 <li class="list-inline-item">@Html.ActionLink("Log Off", "Index", "Home", new { area = "" }, new { @class = "navbar-brand white" })</li>

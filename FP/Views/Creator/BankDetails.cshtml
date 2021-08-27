@@ -1,21 +1,15 @@
 ﻿
 @{
     ViewBag.Title = "BankDetails";
-    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    Layout = "~/Views/Shared/_CreatorLayout.cshtml";
 }
+
 
 <script src="~/Scripts/app/controllers/BankDetailsController.js"></script>
 <div class="container position-relative" ng-controller="BankDetailsController" ng-init="fn_DefaultBankSettings()" ng-cloak>
 
+
     <label class="notification-icon" for="UnReadMsgModal">{{UnReadMsgModal.Message}}</label>
-
-    <div class="page-header">
-        <div class="top-tab-holder">
-        </div>
-
-        <div class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
-        </div>
-    </div>
 
     <div class="card full-width">
         <div class="card-header">
@@ -100,11 +94,11 @@
 
 
                         <div class="form-group custom-form-group">
-                            <div class="form-group" ng-class="{ 'has-error' : frmBank.accountNumber.$invalid && !frmBank.accountNumber.$pristine }">
+                            <div class="form-group" ng-class="{ 'has-error' : frmBank.accountNumber.$invalid && !frmBank.AccountNumber.$pristine }">
 
                                 <label class="control-label">Account Number</label>
                                 <input type="number" class="form-control" maxlength="100" name="accountNumber" ng-model="BankDetailModal.AccountNumber" placeholder="Account Number" required>
-                                <p ng-show="frmBank.accountNumber.$invalid && !frmBank.accountNumber$pristine" class="help-block">Account Number is required</p>
+                                <p ng-show="frmBank.accountNumber.$invalid && !frmBank.AccountNumber.$pristine" class="help-block">Account Number is required</p>
                             </div>
                         </div>
 
@@ -145,4 +139,5 @@
 
 
 </div>
+
 

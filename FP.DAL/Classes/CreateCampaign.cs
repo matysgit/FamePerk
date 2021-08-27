@@ -9,7 +9,7 @@ namespace FP.DAL.Classes
    public class CreateCampaign : ServiceBase
     {
 
-        public int SaveCampaign(CampaignModal objData, string userId)
+        public int SaveCampaign(CampaignModal objData, string userId, string currencyType)
         {
             try
             {
@@ -24,9 +24,9 @@ namespace FP.DAL.Classes
                     {
                         
                             query = "Insert into Campaign( UserId, CampaignTypeId, SupplementalChannels, ProductCategoryId, ProductURL, ProductPhoto, ShippingProduct, AboutYourProduct, CampaignTitle, AboutYourBrand, CampaignGoal, "+
-                                                           "CampaignDurationId, PrivateCampaign, AudienceAgeId, BudgetId, CreatedDate, YouTubeVideoType, AudienceGender, Status, Country)" +
+                                                           "CampaignDurationId, PrivateCampaign, AudienceAgeId, Budget, CreatedDate, YouTubeVideoType, AudienceGender, Status, Country, CurrencyType )" +
                                     "values( @UserId, @CampaignTypeId, @SupplementalChannels, @ProductCategoryId, @ProductURL, @ProductPhoto, @ShippingProduct, @AboutYourProduct, @CampaignTitle, @AboutYourBrand, @CampaignGoal,"+
-                                            "@CampaignDurationId, @PrivateCampaign, @AudienceAgeId, @BudgetId, getutcDate(), @YouTubeVideoType, @AudienceGender, @Status, @Country)";
+                                            "@CampaignDurationId, @PrivateCampaign, @AudienceAgeId, @Budget, getutcDate(), @YouTubeVideoType, @AudienceGender, @Status, @Country, @CurrencyType)";
                         output = _dbDapperContext.Execute(query, new
                         {
                             UserId = userId,
@@ -45,20 +45,42 @@ namespace FP.DAL.Classes
                             objData.CampaignDurationId,
                             objData.PrivateCampaign,
                             objData.AudienceAgeId,
-                            objData.BudgetId,
+                            objData.Budget,
+                            //objData.BudgetId,
                             objData.YouTubeVideoType,
                             objData.AudienceGender,
                             objData.Status,
-                            objData.Country
+                            objData.Country,
+                            CurrencyType= currencyType
                         }); 
                         
 
                     }
                     else
                     {
+                        query = "SELECT   Status FROM Campaign where CampaignId=@CampaignId";
 
+                        var outputStatus = _dbDapperContext.Query<CampaignModal>(query, new
+                        {
+                            CampaignId = objData.CampaignId
+                        }).SingleOrDefault();
+
+                        if(outputStatus.Status == "Send To Platform")
+                        {
+                            query = "Update  Campaign set Status=@Status FROM Campaign where CampaignId=@CampaignId";
+
+                            output = _dbDapperContext.Execute(query, new
+                            {
+                                objData.Status,
+                                CampaignId = objData.CampaignId
+                            });
+
+                            return output;
+                        }
                         query = "Update Campaign set SupplementalChannels=@SupplementalChannels, ProductCategoryId=@ProductCategoryId, ProductURL=@ProductURL, ProductPhoto=@ProductPhoto, ShippingProduct=@ShippingProduct, AboutYourProduct=@AboutYourProduct, CampaignTitle=@CampaignTitle, AboutYourBrand=@AboutYourBrand, CampaignGoal=@CampaignGoal, " +
-                                                              "CampaignDurationId=@CampaignDurationId, PrivateCampaign=@PrivateCampaign, AudienceAgeId=@AudienceAgeId, BudgetId=@BudgetId,  YouTubeVideoType=@YouTubeVideoType, AudienceGender=@AudienceGender, Status=@Status, Country=@Country where CampaignId=@CampaignId";
+                                                              "CampaignDurationId=@CampaignDurationId, PrivateCampaign=@PrivateCampaign, AudienceAgeId=@AudienceAgeId, " +
+                                                              "Budget=@Budget,  YouTubeVideoType=@YouTubeVideoType, AudienceGender=@AudienceGender, Status=@Status, " +
+                                                              "Country=@Country, CurrencyType=@CurrencyType  where CampaignId=@CampaignId";
                                        
                         output = _dbDapperContext.Execute(query, new
                         {
@@ -77,13 +99,15 @@ namespace FP.DAL.Classes
                             objData.CampaignDurationId,
                             objData.PrivateCampaign,
                             objData.AudienceAgeId,
-                            objData.BudgetId,
+                            //objData.BudgetId,
+                            objData.Budget,
                             objData.YouTubeVideoType,
                             objData.AudienceGender,
                             objData.Status,
                             objData.Country,
-                            objData.CampaignId
-                            
+                            objData.CampaignId,
+                            CurrencyType = currencyType
+
                         });
                     }
                     return output;

@@ -5,7 +5,7 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
         $scope.fn_GetUnReadMsg();
     }, 5000);
     $scope.fn_DefaultProjectSettings = function () {
-
+        $scope.fn_GetCurrencyType();
         $scope.fn_GetUnReadMsg();
         // var param1 = $location.search().param1;
 
@@ -42,6 +42,52 @@ fpApp.controller("ProjectController", function ($scope, fpService, $http) {
         }
 
     };
+
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        //  $scope.CampaignFillterModal = {};
+        //$scope.CampaignModal = {};
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+
+                $scope.fn_GetAllProjects();
+                $scope.fn_GetAllProposal();
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
+
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+
+    };
+
 
     function RedirectToLogin() {
         location.href = '/Account/Login';

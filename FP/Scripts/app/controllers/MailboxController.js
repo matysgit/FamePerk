@@ -13,7 +13,7 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
     }
 
     $scope.fn_DefaultMailboxSettings = function () {
-       
+        $scope.fn_GetCurrencyType();
         $scope.fn_GetUnReadMsg();
         $scope.ShowUrl = false;
         $scope.ShowStatus = false;
@@ -41,6 +41,48 @@ fpApp.controller("MailboxController", function ($scope, fpService, $http) {
      //   $scope.fn_GetUnReadMsg();
        
     };
+
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+
+                $scope.fn_GetAllMailbox(0);
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
+
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+    };
+
 
     $scope.fn_GetUnReadMsg = function () {
         $scope.UnReadMsgModal = {};

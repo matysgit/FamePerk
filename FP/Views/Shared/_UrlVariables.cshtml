@@ -67,9 +67,14 @@
          ApproveProposal: "@Url.Action("ApproveProposal", "Client", new { @Area  ="" })",
          SendProposalUpdate: "@Url.Action("SendProposalUpdate", "Client", new { @Area  ="" })",
          GetCreatorInfoMail: "@Url.Action("GetCreatorInfoMail", "Client", new { @Area  ="" })",
-         GetUnReadMsg: "@Url.Action("GetUnReadMsg", "Client", new { @Area  ="" })"
+         GetUnReadMsg: "@Url.Action("GetUnReadMsg", "Client", new { @Area  ="" })",
+         UpdateCreatorSubscriber: "@Url.Action("UpdateCreatorSubscriber", "Client", new { @Area  ="" })"
      }
 
+    var $_Client = {
+        PageUrl: "@Url.Action("Index", "Client")",
+         UpdateCreator: "@Url.Action("UpdateCreatorSubscriber", "Client", new { @Area  ="" })"
+    }
     var $_Creator = {
         PageUrl: "@Url.Action("Index", "Creator")",
           GetCreatorList : "@Url.Action("GetCreatorList", "Creator", new { @Area  ="" })",
@@ -87,10 +92,10 @@
           GetYouTubeType: "@Url.Action("GetYouTubeTypeList", "Creator", new { @Area  ="" })",
         GetCampaignByFillter: "@Url.Action("GetCampaignByFillter", "Creator", new { @Area  ="" })",
         GetCreatorByFillter: "@Url.Action("GetCreatorByFillter", "Creator", new { @Area  ="" })",
-         GetCreatorFeedBack : "@Url.Action("GetCreatorFeedBack", "Creator", new { @Area  ="" })"
-            @* Save: "@Url.Action("SaveWalletDetails", "Creator", new { @Area  ="" })",
-            Edit : "@Url.Action("GetWalletAmountById", "Creator", new { @Area  ="" })",
-            Remove : "@Url.Action("RemoveWalletAmount", "Creator", new { @Area  ="" })*@
+        GetCreatorFeedBack: "@Url.Action("GetCreatorFeedBack", "Creator", new { @Area  ="" })",
+        GetCurrencyType: "@Url.Action("GetCurrencyType", "Creator", new { @Area  ="" })",
+        SetCurrencyType: "@Url.Action("SetCurrencyType", "Creator", new { @Area  ="" })",
+         SaveYoutubeUrl  : "@Url.Action("SaveYoutubeUrl", "Account", new { @Area  ="" })"
     }
 
     @*var $_Country = {
@@ -159,4 +164,7 @@
         Update: "@Url.Action("UpdateCampaignById", "Admin", new { @Area  ="" })"
     }
 
+    var $_ChangePassword = {
+        Save: "@Url.Action("change-password", "Manage", new { @Area  ="" })"
+    }
 </script>

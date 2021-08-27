@@ -65,41 +65,41 @@ namespace FP.Models
     public class RegisterViewModel
     {
         //Account Information
-        [Required]
+        [Required(ErrorMessage = "Please enter website url")]
         [Url(ErrorMessage = "Please enter a valid url")]
         [Display(Name = "Website")]
         public string Website { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter brand name.")]
         [Display(Name = "Brand Name")]
         public string BrandName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter first name.")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter last name.")]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         //Address 
-        [Required]
+        [Required(ErrorMessage = "Please enter address 1.")]
         [Display(Name = "Address Line 1")]
         public string AddressLine1 { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "Address Line 2")]
         public string AddressLine2 { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter city name.")]
         [Display(Name = "City")]
         public string City { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter state name.")]
         [Display(Name = "State")]
         public string State { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter zip.")]
         [Display(Name = "Zip")]
         public string Zip { get; set; }
 
@@ -110,20 +110,20 @@ namespace FP.Models
 
 
         //Contact
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Please enter e-mail.")]
+        [EmailAddress(ErrorMessage = "Please enter valid e-mail.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Please enter password.")]
+        [StringLength(20, ErrorMessage = "{0} must be at least {2} characters and maximum {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 

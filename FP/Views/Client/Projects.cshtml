@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Projects";
+    ViewBag.Title = "Campaign";
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
 
@@ -44,24 +44,29 @@
     <div class="">
         <div class="page-header">
             <div class="top-tab-holder">
+                <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
 
+                    <li class="nav-item">@Html.ActionLink("Create Campaign", "CreateCampaign", "Client", new { @class = "nav-link btn btn-success" })</li>
+
+                </ul>
             </div>
 
-            <ul class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
+            
+
+            <div class="nav justify-content-end ml-auto mb-3 d-none d-md-block">
                
-                <li class="nav-item">@Html.ActionLink("Create Campaign", "CreateCampaign", "Client", new { @class = "nav-link btn btn-success" })</li>
-                
-
-
-            </ul>
-
+                <label class="mr-2">Currency : </label>
+                <select class="form-control" ng-model="CurrencyTypeModal.CurrencyId" ng-options="item.CurrencyId as item.CurrencyName for item in Currency" ng-change="fn_ChangeCurrencyType(CurrencyTypeModal)">
+                </select>
+            </div>
         </div>
         <div class="card card-full">
             <div class="card-head filter-bar rounded-0">
 			    
                 <div class="form-inline my-2 my-lg-0">
                     <div class="input-group col-4 p-0">
-                       <h4 class="card-title">Campaign List</h4>
+                        <h4 class="card-title">Campaign List</h4>                      
+
                     </div>
                     <div class="input-group ml-auto col-4 p-0">
                     </div>

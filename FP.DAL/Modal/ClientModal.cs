@@ -42,6 +42,8 @@ namespace FP.DAL
         public string ProjectProposalUpdateId { get; set; }
 
          public string Url { get; set; }
+        public string ProjectProposal { get; set; }
+        public string CurrencyType { get; set; }
 
     }
 
@@ -57,12 +59,14 @@ namespace FP.DAL
         // public ICollection<ProjectsProposalModal> ProjectsProposalModal { get; set; } //= new List<ProjectsProposalModal>();
         public string Status { get; set; }
         public string ProjectProposalId { get; set; }
+        public string CurrencyType { get; set; }
     }
 
     public class ProjectsProposalModal
     {
         public int ProjectProposalId { get; set; }
         //public int ProjectId { get; set; }
+        public string CurrencyType { get; set; }
         public int CampaignId { get; set; }
         public string PaymentType { get; set; }
         public string NoOfMilestone { get; set; }
@@ -105,6 +109,7 @@ namespace FP.DAL
 
     public class WalletAmountModal
     {
+        public string CurrencyType { get; set; }
         public int ID { get; set; }
         public string Amount { get; set; }
         public string UploadDate { get; set; }
@@ -174,6 +179,8 @@ namespace FP.DAL
 
       //  public string CountryId { get; set; }
         public string Country { get; set; }
+
+        public string CurrencyType { get; set; }
     }
 
     public class CreatorFillterModal

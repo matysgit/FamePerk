@@ -20,9 +20,10 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
 
     $scope.CreateCampaignModal={ };
     $scope.fn_DefaultCampaignSettings = function () {
+        $scope.fn_GetCurrencyType();
         $scope.ShowSaveCampaign = true;
 
-       
+        $scope.fn_GetCurrencyType();
         //$scope.fn_GetYouTubeType();
         //$scope.fn_GetSupplementalChannel();
         $("#divYouTubeVideoType").hide();
@@ -50,7 +51,48 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
         }
        
     };
-   
+
+    $scope.CurrencyTypeModal = {};
+    $scope.fn_ChangeCurrencyType = function (CurrencyTypeModal) {
+        fpService.getData($_Creator.SetCurrencyType, CurrencyTypeModal, function (response) {
+            var responseJson = response.data;
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = {};
+                $scope.CurrencyTypeModal = {};
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+
+                $scope.fn_DefaultCampaignSettings();
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+        });
+    }
+
+    $scope.fn_GetCurrencyType = function () {
+        $scope.Currency = {};
+        $scope.CurrencyTypeModal = {};
+        fpService.getData($_Creator.GetCurrencyType, "", function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                $scope.Currency = responseJson.data;
+                $scope.CurrencyTypeModal.CurrencyId = response.data.currentCureency;
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in getting data.');
+            }
+
+        });
+    };
+
     $scope.fn_GetSupplementalChannel = function () {
 
         $scope.SupplementalChannelModal = [];
@@ -594,10 +636,14 @@ fpApp.controller("CreateCampaignController", function ($scope, fpService, $http)
                 }
                 // $("#divViewProject").show();
                 if (responseJson.data[0].Status != "Draft") {
+
                     $scope.ShowSaveCampaign = false;
                     $("#divDraft").hide();
                     $("#divPublish").hide();
                     $("#divSendToPlatform").hide();
+                    if (responseJson.data[0].Status != "Publish") {
+                        $("#divPublish").show();
+                    }
                 }
 
 

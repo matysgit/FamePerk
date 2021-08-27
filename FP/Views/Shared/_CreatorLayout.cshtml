@@ -16,13 +16,12 @@
     @Scripts.Render("~/bundles/safpApp")
     @{Html.RenderPartial("~/Views/Shared/_UrlVariables.cshtml");}
     <link href="~/Content/font-awesome.css" rel="stylesheet" />
-
     @*@Scripts.Render("~/bundles/jqueryui")*@
 </head>
 <body class="" ng-app="fpApp">
     <div class="header-backdrop"> </div>
     <div class="header-main">
-	   <div class=" container top-main-menu text-right"> @Html.Partial("_LoginPartial")</div>
+        <div class=" container top-main-menu text-right"> @Html.Partial("_LoginPartial")</div>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 @Html.ActionLink("Fame Perks", "Index", "Creator", new { area = "" }, new { @class = "navbar-brand white" })
@@ -39,10 +38,13 @@
                         <li class="nav-item">@Html.ActionLink("Home", "Index", "Creator", new { @class = "nav-link" })</li>
                         <li class="nav-item mr-3">@Html.ActionLink("Messages", "CreatorMailbox", "Creator", new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Project", "Projects", "Creator", new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Bank Details", "BankDetails", "Client", new { @class = "nav-link" })</li>
                         @*<li class="nav-item">@Html.ActionLink("Wallet", "Wallet", "Creator", new { @class = "nav-link" })</li>*@
                         <li class="nav-item">@Html.ActionLink("Profile", "Profile", "Creator", new { @class = "nav-link" })</li>
                     </ul>
-                    
+
+
+                   
                     <ul class="navbar-nav d-none">
                         <li class="nav-item">
                             <a class="nav-link" href="#" tabindex="-1"><i class="fa fa-2x fa-envelope"></i></a>
@@ -71,16 +73,20 @@
     <script src="~/assets/js/core/popper.min.js"></script>
     <script src="~/assets/js/core/bootstrap.min.js"></script>
     <script src="~/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-	
-	  <script>$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+
+    <script>
+    $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
 
 
-$('#YouTubeCheck1').change(function() {
-    $('.ccpg-yt-chnl-type').toggle();
-});
-</script>
+        $('#YouTubeCheck1').change(function () {
+            $('.ccpg-yt-chnl-type').toggle();
+        });
+        function callChangefunc(val) {
+            window.location.href = "/Creator/GetCurrencyType?value=" + val;
+        }
+    </script>
 
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
@@ -91,6 +97,8 @@ $('#YouTubeCheck1').change(function() {
     <link href="~/assets/css/toastr.min.css" rel="stylesheet" />
     <script src="~/assets/js/bootstrap-dialog.js"></script>
     <script src="~/assets/js/toastr.min.js"></script>
+
+    @*<script src="~/Scripts/app/controllers/CreatorController.js"></script>*@
     @RenderSection("scripts", required: false)
 
 
