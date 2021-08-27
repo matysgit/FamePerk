@@ -112,6 +112,93 @@ namespace FP.DAL
                 return -1;
             }
         }
+
+        public CreatorModal SaveCreatorYoutubeUrl(string youTubeUrl, string userId)
+        {
+            //try
+            //{
+            //    using (IDbConnection _dbDapperContext = GetDefaultConnection())
+            //    {
+            //        int output = 0;
+
+            //        string query = @"Insert into CreatorProfile(FullName, UserId) 
+            //                values(@FullName, @UserId)";
+
+            //        output = _dbDapperContext.Execute(query, new
+            //        {
+            //            FullName = name,
+            //            UserId = userId
+            //        });
+            //        return output;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return -1;
+            //}
+
+            try
+            {
+                using (IDbConnection _dbDapperContext = GetDefaultConnection())
+                {
+
+                    string youTubeApi = ConfigurationManager.AppSettings.Get("YouTubeAPI");
+                   
+                        int subscriberCount = 0;
+                        if (youTubeUrl != "" && youTubeUrl != null)
+                        {
+                            var youTubeLink = youTubeUrl;
+                            List<string> youTubeIds = new List<string>(
+                                         youTubeLink.Split(new string[] { "/" }, StringSplitOptions.None));
+                            if (youTubeIds.Count > 4)
+                            {
+                                var youTubeId = youTubeIds[4];
+
+                                var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + youTubeId + "&key=" + youTubeApi;
+                                WebRequest request = HttpWebRequest.Create(url);
+                                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                                WebResponse response = request.GetResponse();
+                                StreamReader reader = new StreamReader(response.GetResponseStream());
+                                string responseText = reader.ReadToEnd();
+                                dynamic data = JObject.Parse(responseText);
+                                subscriberCount = Convert.ToInt32(data.items[0].statistics.subscriberCount);
+                            }
+
+                        }
+
+                       string query = "Update CreatorProfile set YouTube=@YouTube , NoOfYouTubeSubscriber=@NoOfYouTubeSubscriber where  UserId=@UserId";
+                    int output = _dbDapperContext.Execute(query, new
+                    {
+                        YouTube = youTubeUrl,
+                        UserId = userId,
+                        NoOfYouTubeSubscriber = subscriberCount
+                    });
+                        //CreatorModal _objUpdateData = _dbDapperContext.Query<CreatorModal>(query, new
+                        //{
+
+                        //    YouTube = youTubeUrl,
+                        //    UserId = userId,
+                        //    NoOfYouTubeSubscriber = subscriberCount
+                        //}).FirstOrDefault();
+
+                    int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
+                    
+                    query = "SELECT * FROM CreatorProfile WHERE UserId=@UserId and NoOfYouTubeSubscriber >=@NoOfYouTubeSubscriber";
+
+                    CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
+                    {
+                        UserId = userId,
+                        NoOfYouTubeSubscriber=minimumYouTubeSubscriber
+                    }).FirstOrDefault();
+
+                    return _objData;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public CreatorModal GetCreatorInfo(string UserId, string currencyType)
         {
             try
@@ -760,7 +847,7 @@ namespace FP.DAL
             return 1;
         }
 
-        public int GetCreatorSubscriber(string userId)
+        public CreatorModal GetCreatorSubscriber(string userId)
         {
             try
             {
@@ -773,10 +860,10 @@ namespace FP.DAL
                     int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
 
 
-                    query = @"SELECT  NoOfYouTubeSubscriber AS YouTube, Instagram
+                    query = @"SELECT    YouTube, Instagram, NoOfYouTubeSubscriber
                             FROM CreatorProfile  
                             INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id 
-                            WHERE NoOfYouTubeSubscriber >=@NoOfYouTubeSubscriber and UserId=@UserId";
+                            WHERE  UserId=@UserId";
 
 
                     CreatorModal _objData = _dbDapperContext.Query<CreatorModal>(query, new
@@ -785,20 +872,21 @@ namespace FP.DAL
                         UserId = userId
                     }).FirstOrDefault();
 
-                    if (_objData != null)
-                    {
-                        if (_objData.YouTube != null)
-                            return output;
-                        else
-                            return -1;
-                    }
-                    else
-                        return -1;
+                    return _objData;
+                    //if (_objData != null)
+                    //{
+                    //    if (_objData.YouTube != null)
+                    //        return output;
+                    //    else
+                    //        return -1;
+                    //}
+                    //else
+                    //    return -1;
                 }
             }
             catch (Exception ex)
             {
-                return -1;
+                return null;
             }
         }
 

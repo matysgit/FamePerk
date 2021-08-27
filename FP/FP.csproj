@@ -532,6 +532,7 @@
     <Content Include="Views\Creator\Profile.cshtml" />
     <Content Include="Views\Shared\_LayoutPage1.cshtml" />
     <Content Include="Views\Common\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\YouTube.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

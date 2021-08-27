@@ -1,4 +1,5 @@
-﻿
+﻿'use strict';
+
 fpApp.controller("ProfileController", function ($scope, fpService, $http) {
     setInterval(function () {
         $scope.fn_GetUnReadMsg();
@@ -17,7 +18,7 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
         $scope.fn_GetCountry();
         $scope.fn_GetAge();
         $scope.fn_GetProductCategory();
-        $scope.fn_GetCreatorInfo("");
+       // $scope.fn_GetCreatorInfo("");
         $scope.fn_GetProfileImg();
     };
 
@@ -395,4 +396,28 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
             //}
         });
     };
+
+    $scope.fn_SaveCreatorYoutubeUrl = function (CreatorModal) {
+
+        fpService.postData($_Creator.SaveYoutubeUrl, CreatorModal, function (response) {
+            var responseJson = response.data;
+            if (responseJson.statusCode === 200) {
+                if (responseJson.data == "logOut") {
+                    RedirectToLogin();
+                }
+                //toastr.success('Youtube url saved successfully.', "Success");
+                //$scope.fn_DefaultCreatorSettings();
+                location.href = '/Creator/Index';
+            }
+            if (responseJson.statusCode === 409) {
+                toastr.warning('Invalid url.', "Warning");
+            }
+            if (responseJson.statusCode === 204) {
+                toastr.error('Error in saving.', "Error");
+            }
+        });
+
+        
+    }
+
 });

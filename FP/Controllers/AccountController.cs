@@ -408,6 +408,7 @@ namespace FP.Controllers
                 return RedirectToAction("Login");
             }
             // Sign in the user with this external login provider if the user already has a login
+            int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -415,16 +416,24 @@ namespace FP.Controllers
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     string userID= user.Identity.GetUserId();
                     Creator obj = new Creator();
-                    int output = obj.GetCreatorSubscriber(userID);
-                    if (output > -1)
+                    var output = obj.GetCreatorSubscriber(userID);
+                    if (output.YouTube =="" || output.YouTube==null)
                     {
-                        Session["UserId"] = userID;// user.Identity.GetUserId();
-                        return RedirectToAction("Index", "Creator");
+                        Session["UserId"] = userID;
+                        return RedirectToAction("YouTube", "Account");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Your account not eligible for login.");
-                        return View("ExternalLogin");
+                        if (minimumYouTubeSubscriber > output.NoOfYouTubeSubscriber)
+                        {
+                            ModelState.AddModelError("", "Your account not eligible for login.");
+                            return View("ExternalLogin");
+                        }
+                        else
+                        {
+                            Session["UserId"] = userID;
+                            return RedirectToAction("Index", "Creator");
+                        }
                     }
                     
                 case SignInStatus.LockedOut:
@@ -459,7 +468,7 @@ namespace FP.Controllers
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
-                    return RedirectToAction("Index", "Creator");
+                    return RedirectToAction("YouTube", "Account");
             }
         }
 
@@ -494,9 +503,9 @@ namespace FP.Controllers
                         Creator obj = new Creator();
                         var roleresult = UserManager.AddToRole(user.Id, "Creator");
                         int output = obj.InsertCreator(info.ExternalIdentity.Name, user.Id );
-                        
                         //info = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                         return RedirectToLocal(returnUrl);
+                        
                     }
                 }
                 else {
@@ -549,6 +558,35 @@ namespace FP.Controllers
             base.Dispose(disposing);
         }
 
+        public ActionResult YouTube()
+        {
+            return View();
+        }
+
+      
+        [HttpPost]
+        public JsonResult SaveYoutubeUrl(CreatorModal objData)
+        {
+            if (Session["UserId"] == null)
+            {
+                return Json(new
+                {
+                    data = "logOut",
+                    statusCode = "logOut" != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+                }, JsonRequestBehavior.AllowGet);
+            }
+            Creator objCreator = new Creator();
+            var result = objCreator.SaveCreatorYoutubeUrl(objData.YouTube, Session["UserId"].ToString());
+            //return Json(new
+            //{
+            //    statusCode = result > 0 ? HttpStatusCode.OK : result == 0 ? HttpStatusCode.Conflict : HttpStatusCode.NoContent
+            //});
+            return Json(new
+            {
+                data = result,
+                statusCode = result != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            }, JsonRequestBehavior.AllowGet);
+        }
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
