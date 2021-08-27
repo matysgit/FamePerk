@@ -149,7 +149,7 @@ namespace FP.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             Mailbox obj = new Mailbox();
-            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString());
+            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString(), Session["UserId"].ToString());
 
             return Json(new
             {

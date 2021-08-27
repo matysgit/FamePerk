@@ -288,7 +288,7 @@ namespace FP.DAL
             }
         }
 
-        public List<MailboxModal> GetMailBoxByText(string SearchMailBoxByText, string MailTypeId, string MailBoxFilter)
+        public List<MailboxModal> GetMailBoxByText(string SearchMailBoxByText, string MailTypeId, string MailBoxFilter, string UserId)
         {
            
                 try
@@ -297,9 +297,6 @@ namespace FP.DAL
                     int MailBoxFilterBy = Convert.ToInt32(MailBoxFilter);
                     using (IDbConnection _dbDapperContext = GetDefaultConnection())
                     {
-                        //#TODO: Get UserId from session or user context
-                        string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
                         string query = "";
                         if (MailTypeId == "0")
                         {

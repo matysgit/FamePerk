@@ -246,7 +246,7 @@ namespace FP.Controllers
             }
             Creator obj = new Creator();
 
-            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString());
+            var result = obj.GetMailBoxByText(MailBoxSearchByText, HttpContext.Session["MailTypeId"].ToString(), HttpContext.Session["MailBoxFilterBy"].ToString(), Session["UserId"].ToString());
 
             return Json(new
             {

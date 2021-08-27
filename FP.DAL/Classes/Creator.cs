@@ -115,28 +115,7 @@ namespace FP.DAL
 
         public CreatorModal SaveCreatorYoutubeUrl(string youTubeUrl, string userId)
         {
-            //try
-            //{
-            //    using (IDbConnection _dbDapperContext = GetDefaultConnection())
-            //    {
-            //        int output = 0;
-
-            //        string query = @"Insert into CreatorProfile(FullName, UserId) 
-            //                values(@FullName, @UserId)";
-
-            //        output = _dbDapperContext.Execute(query, new
-            //        {
-            //            FullName = name,
-            //            UserId = userId
-            //        });
-            //        return output;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return -1;
-            //}
-
+            
             try
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
@@ -173,13 +152,6 @@ namespace FP.DAL
                         UserId = userId,
                         NoOfYouTubeSubscriber = subscriberCount
                     });
-                        //CreatorModal _objUpdateData = _dbDapperContext.Query<CreatorModal>(query, new
-                        //{
-
-                        //    YouTube = youTubeUrl,
-                        //    UserId = userId,
-                        //    NoOfYouTubeSubscriber = subscriberCount
-                        //}).FirstOrDefault();
 
                     int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
                     
@@ -548,16 +520,14 @@ namespace FP.DAL
                     }
                     else
                     {
-                        string query1 = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, MailFrom, UserId, MailTypeId from BrandMail where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
-                        var _objData = _dbDapperContext.Query<MailboxModal>(query1, new
+                        query = "Select BrandMailId, Subject, Message,  FORMAT(CreatedDate, 'dd/MM/yyyy ') as CreatedDate, MailFrom, UserId, MailTypeId from BrandMail where  BrandMailId=@BrandMailId and IsDeleted !=@IsDeleted";
+                        var _objData = _dbDapperContext.Query<MailboxModal>(query, new
                         {
-                            //  UserId = UserId,
                             BrandMailId = objData.BrandMailId,
                             IsDeleted = 1
                         }).FirstOrDefault();
 
                         query = "Insert into BrandMail(MailTypeId,Subject, Message, CreatedDate, MailFrom, UserId, IsDeleted, IsRead) values(@MailTypeId,@Subject, @Message, GetUtcDate(),@MailFrom,@UserId, @IsDeleted, @IsRead)";
-                        //"Update BrandMail Set Name = @Name, ModifiedBy = @ModifiedBy, ModifiedDate = GetUtcDate() where ProductCategoryId = @ProductCategoryId";
                         output = _dbDapperContext.Execute(query, new
                         {
                             objData.MailTypeId,
@@ -580,7 +550,7 @@ namespace FP.DAL
             }
         }
 
-        public List<MailboxModal> GetMailBoxByText(string SearchMailBoxByText, string MailTypeId, string MailBoxFilter)
+        public List<MailboxModal> GetMailBoxByText(string SearchMailBoxByText, string MailTypeId, string MailBoxFilter, string UserId)
         {
 
             try
@@ -589,9 +559,6 @@ namespace FP.DAL
                 int MailBoxFilterBy = Convert.ToInt32(MailBoxFilter);
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
                     string query = "";
                     if (MailTypeId == "0")
                     {
@@ -749,15 +716,9 @@ namespace FP.DAL
             {
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
-                    //#TODO: Get UserId from session or user context
-                    // string UserId = "f2363ef0-c455-454c-9aa2-2cd923fb598d";
-
-                    string query = "";
-
                     int minimumYouTubeSubscriber = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MinimumYouTubeSubscriber"));
 
-
-                    query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber AS YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
+                    string query = @"SELECT CreatorId, UserId, FullName, ContactNumber, State, CountryId, NoOfYouTubeSubscriber AS YouTube, Instagram, Facebook, CategoryId, MinimumBudgetedProject, PastWorkExperience, 
                                 Summary, TargetAudience, ProfileImage, DATEDIFF(hour, CreatorProfile.DOB, GETDATE()) / 8766 AS CurrentAge, Language,
                              Categories, Gender FROM CreatorProfile  INNER JOIN AspNetUsers on CreatorProfile.UserId = AspNetUsers.Id WHERE NoOfYouTubeSubscriber >=@NoOfYouTubeSubscriber";
 
@@ -765,7 +726,6 @@ namespace FP.DAL
                     {
                         NoOfYouTubeSubscriber = minimumYouTubeSubscriber
                     }).ToList();
-
 
                     foreach (var obj in _objData)
                     {
@@ -836,8 +796,6 @@ namespace FP.DAL
 
                         }).FirstOrDefault();
                     }
-                    //  return _objData;
-
                 }
             }
             catch (Exception ex)
@@ -873,15 +831,6 @@ namespace FP.DAL
                     }).FirstOrDefault();
 
                     return _objData;
-                    //if (_objData != null)
-                    //{
-                    //    if (_objData.YouTube != null)
-                    //        return output;
-                    //    else
-                    //        return -1;
-                    //}
-                    //else
-                    //    return -1;
                 }
             }
             catch (Exception ex)
