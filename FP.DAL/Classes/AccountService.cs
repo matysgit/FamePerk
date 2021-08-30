@@ -17,12 +17,10 @@ namespace FP.DAL
                 using (IDbConnection _dbDapperContext = GetDefaultConnection())
                 {
                     string query = @"SELECT ANU.Id
-	                                     ,FullName AS UserName
                                      FROM AspNetUsers ANU
                                      INNER JOIN AspNetUserRoles ANUR ON ANUR.UserId = ANU.Id
-                                     Inner Join CreatorProfile CP on CP.UserId = ANU.Id
                                      WHERE ANU.Email = @Email
-                                           --AND ANUR.RoleId = 2";
+                                           AND ANUR.RoleId = 2";
                     ClientAccountmodal objData = _dbDapperContext.Query<ClientAccountmodal>(query, new {
                         Email = email
                     }).FirstOrDefault();
