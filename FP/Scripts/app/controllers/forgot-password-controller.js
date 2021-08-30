@@ -17,8 +17,11 @@ fpApp.controller("ForgotPasswordController", function ($scope, fpService) {
                     $scope.txtEmailAddress = "";
                     $scope.isMailSent = true;
                 }
-                if (responseJson.statusCode === 204) {
+                else if (responseJson.statusCode === 204) {
                     toastr.warning('Email not found.', 'Warning');
+                }
+                else {
+                    toastr.error('Server error. Please try again.', 'Error');
                 }
             });
         }

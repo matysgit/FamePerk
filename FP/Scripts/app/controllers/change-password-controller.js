@@ -25,8 +25,6 @@ fpApp.controller("ChangePasswordController", function ($scope, fpService, $http)
         changePasswordModel.isNumeric = false;
         changePasswordModel.isSpecialCharcter = false;
 
-        var upperCase = newPassword.match(/[A-Z]/);
-
         if (newPassword.length > 5) {
             changePasswordModel.isMinLength = true;
         }

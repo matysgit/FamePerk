@@ -308,7 +308,6 @@
     <Content Include="Content\views\ResetPasswordContent.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Content\Site.css.bak" />
     <Content Include="Images\bg06.png" />
     <Content Include="Images\bg07.png" />
     <Content Include="Images\bx_loader.gif" />
@@ -325,7 +324,7 @@
     <Content Include="Scripts\app\controllers\AdminClientController.js" />
     <Content Include="Scripts\app\controllers\AudienceAgeController.js" />
     <Content Include="Scripts\app\controllers\BankDetailsController.js" />
-    <Content Include="Scripts\app\controllers\changePasswordController.js" />
+    <Content Include="Scripts\app\controllers\change-password-controller.js" />
     <Content Include="Scripts\app\controllers\ClientCreatorController.js" />
     <Content Include="Scripts\app\controllers\CreateCampaignController.js" />
     <Content Include="Scripts\app\controllers\CreatorController.js" />
@@ -338,6 +337,7 @@
     <Content Include="Scripts\app\controllers\productCategoryController.js" />
     <Content Include="Scripts\app\controllers\ProfileController.js" />
     <Content Include="Scripts\app\controllers\ProjectController.js" />
+    <Content Include="Scripts\app\controllers\reset-password-controller.js" />
     <Content Include="Scripts\app\controllers\WalletDetailsController.js" />
     <Content Include="Scripts\app\directives\fpDirective.js" />
     <Content Include="Scripts\app\controllers\forgotPasswordController.js" />
@@ -470,15 +470,12 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
