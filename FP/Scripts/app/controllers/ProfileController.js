@@ -405,8 +405,6 @@ fpApp.controller("ProfileController", function ($scope, fpService, $http) {
                 if (responseJson.data == "logOut") {
                     RedirectToLogin();
                 }
-                //toastr.success('Youtube url saved successfully.', "Success");
-                //$scope.fn_DefaultCreatorSettings();
                 location.href = '/Creator/Index';
             }
             if (responseJson.statusCode === 409) {

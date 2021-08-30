@@ -100,14 +100,12 @@ textarea {
     cursor: pointer;
     border: none;
     border-radius: 30px;
-    min-width: 130px;
     outline: 0;
     letter-spacing: 1px;
     font-size: 16px;
     padding: 19px 30px;
     letter-spacing: 0;
     font-weight: 500;
-    min-width: 191px;
     width: 100%;
 }
     .login-container .btn:hover, .login-container .btn-red {

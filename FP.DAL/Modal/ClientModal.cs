@@ -196,4 +196,11 @@ namespace FP.DAL
         public List<CampaignModal> CampaignList { get; set; }
         public List<CampaignModal> AudList { get; set; }
     }
+
+    public class ClientAccountmodal
+    {
+        public string Id { get; set; }
+        public string UserName { get; set; }
+
+    }
 }

@@ -3,41 +3,31 @@
 @{
     ViewBag.Title = "YouTube";
     Layout = "~/Views/Shared/_LayoutPage1.cshtml";
-    //Layout = "~/Views/Shared/_LoginPartial.cshtm";
 }
 <script src="~/Scripts/app/controllers/ProfileController.js"></script>
 
-<div  class="container position-relative" ng-controller="ProfileController" ng-init="fn_DefaultProfileSettings()" ng-cloak>
-    <div >
-        @*<div class="col-md-12" style="text-align: left;">
-            <h3>
-                <i>Youtube channel Url</i>
-            </h3>
-        </div>*@
-        <div >
-           
 
-                <div id="divYoutubeUrl" class="form-horizontal">
-                    <form name="frmYoutube" ng-submit="frmYoutube.$valid && fn_SaveCreatorYoutubeUrl(CreatorModal)" novalidate>
+<div class="login-box login-md-box text-left" ng-controller="ProfileController" ng-cloak>
+    <h3>
+        <i>Youtube Channel Url</i>
+    </h3>
+    <hr />
+    <div class="row">
+        <form name="frmYoutube" ng-submit="frmYoutube.$valid && fn_SaveCreatorYoutubeUrl(CreatorModal)" novalidate>
+            <div class="form-group col-md-12">
+                <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="100" placeholder="Channel Url" required>
+            </div>
 
-                        <div class="form-group custom-form-group">
-                            <h3>
-                                <i>Youtube channel Url</i>
-                            </h3>
-                            <input type="text" class="form-control" ng-model="CreatorModal.YouTube" maxlength="200" placeholder="YouTube channel url" width="100" required>
-                        </div>
-
-                        <div class="form-group custom-form-group">
-                            <button type="submit" class="btn btn-primary" ng-disabled="!frmYoutube.$valid"  style="width:auto" >Next</button>
-
-                        </div>
-
-                    </form>
-                </div>
-            
-
+            <div class="form-group col-md-6">
+                <input type="submit" class="btn btn-primary" ng-disabled="!frmYoutube.$valid" value="Next" style="float:right" />
+            </div>
+        </form>
+    </div>
+    <div class="row" style="margin-top:50px">
+        <div class="form-group col-md-12" style="text-align:center">
+            <p>&copy; @DateTime.Now.Year - Fame Perks</p>
         </div>
-        @*@Html.ActionLink("Back", "Login", null, new { @class = "btn btn-md", })*@
     </div>
 </div>
+
 

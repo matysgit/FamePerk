@@ -164,7 +164,9 @@
         Update: "@Url.Action("UpdateCampaignById", "Admin", new { @Area  ="" })"
     }
 
-    var $_ChangePassword = {
-        Save: "@Url.Action("change-password", "Manage", new { @Area  ="" })"
+    var $_Account = {
+        ForgotPassword: "@Url.Action("forgot-password", "Account", new { @Area  ="" })",
+        ChangePassword: "@Url.Action("change-password", "Manage", new { @Area  ="" })"
     }
+
 </script>

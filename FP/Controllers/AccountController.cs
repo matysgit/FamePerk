@@ -30,7 +30,7 @@ namespace FP.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -42,9 +42,9 @@ namespace FP.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -156,7 +156,7 @@ namespace FP.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -195,13 +195,13 @@ namespace FP.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     var currentUser = UserManager.FindByName(user.UserName);
                     var roleresult = UserManager.AddToRole(currentUser.Id, "Client");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -239,65 +239,78 @@ namespace FP.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        [ActionName("forgot-password")]
+        public async Task<JsonResult> ForgotUserPassword(string email)
         {
-            if (ModelState.IsValid)
+            AccountService objService = new AccountService();
+
+            ClientAccountmodal objData = objService.GetClientDetailByEmail(email);
+
+            if (objData != null)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
+                string pagePath = HttpContext.Server.MapPath("~/Content/views/ResetPasswordContent.html");
+                WebClient client = new WebClient();
+                string htmlCode = client.DownloadString(pagePath);
 
-                //  For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 //Send an email with this link
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                //return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(objData.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new
+                {
+                    userId = objData.Id,
+                    code = code
+                }, protocol: Request.Url.Scheme);
 
-                //Create URL with above token
-                string  UserID = ConfigurationManager.AppSettings.Get("EmailFrom");
-                string Password = ConfigurationManager.AppSettings.Get("Password");
-                string SMTPPort = ConfigurationManager.AppSettings.Get("SMTPPort");
-                string Host = ConfigurationManager.AppSettings.Get("Host");
+                htmlCode = htmlCode.Replace("#passwordUrl#", callbackUrl);
 
-                //var lnkHref = "<a href='" + Url.Action("ResetPassword", "Account", new { email = model.Email, code = code }, "https://localhost:44330/") + "'>Reset Password</a>";
                 //HTML Template for Send email
-                string subject = "Reset password";
-                string body = "<b>Please find the Password Reset Link. </b><br/>" + callbackUrl;
-                //Get and set the AppSettings using configuration manager.
-                //EmailManager.AppSettings(out UserID, out Password, out SMTPPort, out Host);
+                string subject = "[Fame Perks] Please reset your password";
+
                 //Call send email methods.
-                SendEmail(UserID, subject, body, model.Email, UserID, Password, SMTPPort, Host);
+                SendEmail(subject, htmlCode, email);
 
+                // If we got this far, something failed, redisplay form
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return Json(new
+            {
+                statusCode = objData != null ? HttpStatusCode.OK : HttpStatusCode.NoContent
+            });
         }
 
-        public static void SendEmail(string From, string Subject, string Body, string To, string UserID, string Password, string SMTPPort, string Host)
+        public static void SendEmail(string subject, string body, string receiverMail)
         {
-            using (MailMessage mail = new MailMessage(From, To))
+            try
             {
-                mail.Subject = Subject;
-                mail.Body = Body;
-                mail.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = Host;// "smtp.gmail.com";
-                smtp.EnableSsl = true;
-                NetworkCredential NetworkCred = new NetworkCredential(UserID, Password);
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = NetworkCred;
-                smtp.Port =Convert.ToInt32( SMTPPort);// 587;
-                smtp.Send(mail);
+                //Get defualt credentail from webconfig
+                string password = ConfigurationManager.AppSettings.Get("Password");
+                string smtpPort = ConfigurationManager.AppSettings.Get("SMTPPort");
+                string host = ConfigurationManager.AppSettings.Get("Host");
+
+                var senderEmailAddress = new MailAddress(ConfigurationManager.AppSettings.Get("EmailFrom"), "Fame Perks");
+                var receiverMailAddress = new MailAddress(receiverMail);
+
+                var smtp = new SmtpClient
+                {
+                    Host = host,
+                    Port = Convert.ToInt32(smtpPort),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = true,
+                    Credentials = new NetworkCredential(senderEmailAddress.Address, password)
+                };
+                using (var message = new MailMessage(senderEmailAddress, receiverMailAddress)
+                {
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true
+                })
+                {
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -414,10 +427,10 @@ namespace FP.Controllers
             {
                 case SignInStatus.Success:
                     var user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
-                    string userID= user.Identity.GetUserId();
+                    string userID = user.Identity.GetUserId();
                     Creator obj = new Creator();
                     var output = obj.GetCreatorSubscriber(userID);
-                    if (output.YouTube =="" || output.YouTube==null)
+                    if (output.YouTube == "" || output.YouTube == null)
                     {
                         Session["UserId"] = userID;
                         return RedirectToAction("YouTube", "Account");
@@ -435,7 +448,7 @@ namespace FP.Controllers
                             return RedirectToAction("Index", "Creator");
                         }
                     }
-                    
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -462,9 +475,9 @@ namespace FP.Controllers
                     {
                         return View("ExternalLoginFailure");
                     }
-                    
+
                     await ExternalLoginConfirmation(model, null);
-                   
+
                     //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
                     user = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                     Session["UserId"] = user.Identity.GetUserId();
@@ -502,14 +515,15 @@ namespace FP.Controllers
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         Creator obj = new Creator();
                         var roleresult = UserManager.AddToRole(user.Id, "Creator");
-                        int output = obj.InsertCreator(info.ExternalIdentity.Name, user.Id );
+                        int output = obj.InsertCreator(info.ExternalIdentity.Name, user.Id);
                         //info = new ClaimsPrincipal(AuthenticationManager.AuthenticationResponseGrant.Identity);
                         return RedirectToLocal(returnUrl);
-                        
+
                     }
                 }
-                else {
-                   // model.Email = "already exists";
+                else
+                {
+                    // model.Email = "already exists";
                     //ModelState.AddModelError("", "Email already exists. Please try different account.");
                     return View("ExternalLogin");
                 }
@@ -563,7 +577,7 @@ namespace FP.Controllers
             return View();
         }
 
-      
+
         [HttpPost]
         public JsonResult SaveYoutubeUrl(CreatorModal objData)
         {

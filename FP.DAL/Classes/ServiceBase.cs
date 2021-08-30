@@ -19,8 +19,15 @@ namespace FP.DAL
 
         public string GetDefaultConnectionString()
         {
-            var dbConnectionString = @"data source=LAPTOP-3L09R40I\SQLEXPRESS; initial catalog=FPNew21; persist security info=True; user id=sa; password=Test123";
-            //var dbConnectionString = @"data source=KRISHNA-PC; initial catalog=FPNew; persist security info=True; user id=sa; password=Reset123";
+            string dataSource = "DESKTOP-2R2BMUA\\SQLEXPRESS";
+            string dbName = "FPNew21";
+            string username = "sa";
+            string password = "admin";
+
+            var dbConnectionString = @"data source= " + dataSource + "; " +
+                "initial catalog=" + dbName + "; persist security info=True; " +
+                "user id=" + username + "; " +
+                "password=" + password;
 
             return dbConnectionString;
         }

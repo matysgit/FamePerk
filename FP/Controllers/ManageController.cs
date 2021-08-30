@@ -33,9 +33,9 @@ namespace FP.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -239,14 +239,14 @@ namespace FP.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return  RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
             AddErrors(result);
             if (Session["Role"].ToString() == "Admin")
                 return View("../Admin/ChangePassword", model);
-             else
+            else
                 return View("../Client/ChangePassword", model);
-            
+
         }
 
         [HttpPost]
@@ -357,7 +357,7 @@ namespace FP.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -408,6 +408,6 @@ namespace FP.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

@@ -49,7 +49,7 @@ fpApp.controller("ChangePasswordController", function ($scope, fpService, $http)
     }
 
     $scope.fn_SavePassword = function (changePasswordModel) {
-        fpService.postData($_ChangePassword.Save, changePasswordModel, function (response) {
+        fpService.postData($_Account.ChangePassword, changePasswordModel, function (response) {
             var responseJson = response.data;
             if (responseJson.statusCode === 200) {
                 toastr.success('Password changed successfully.', "Success");
