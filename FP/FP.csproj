@@ -305,7 +305,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\views\ResetPasswordHtml.html" />
+    <Content Include="Content\views\ResetPasswordContent.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Content\Site.css.bak" />
